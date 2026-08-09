@@ -5,7 +5,7 @@ that a violation is caught and that compliant work is not falsely accused.
 
 ### Build the CLI
 
-- **Status:** NOT_STARTED
+- **Status:** COMPLETE
 - **Purpose:** The directive requires an AI agent to be able to initialize standards against a
   project, determine what applies, explain why, gather evidence, evaluate compliance, identify
   violations and prohibitions, refuse work that would violate an invariant, recommend remediation,
@@ -31,13 +31,15 @@ that a violation is caught and that compliant work is not falsely accused.
   not share an exit code. `init`'s dry-run and apply derive from one computed plan object, so the
   preview is the thing that would happen rather than a description of it. After detectors run,
   `assertBindings` rejects any finding carrying a rule id the catalog does not define.
-- **Verification:** `npm test -- --grep cli`; `standards init` on a fixture prints a plan and writes
-  nothing; the same invocation with `--apply` writes exactly what the plan listed.
+- **Verification:** `node --test "test/cli.test.mjs"` — 35 tests, and `test/init.test.mjs` — 14. A dry
+  run on a scratch directory writes nothing; `--apply` writes exactly the paths the plan listed, and
+  a second run is idempotent. A malformed policy exits 2 while a failing rule exits 1, each asserted
+  separately so the two cannot be conflated later.
 - **Dependencies:** Milestone 3
 
 ### Write the detectors
 
-- **Status:** NOT_STARTED
+- **Status:** COMPLETE
 - **Purpose:** The evidence-gathering half. Each detector answers one question about an analysis
   document and reports what it saw, not what it concluded.
 - **Deliverables:** detectors for declared mode, assumptions, the four-scenario table and its
@@ -48,13 +50,18 @@ that a violation is caught and that compliant work is not falsely accused.
   "returns are not guaranteed" is not merely permitted but required, and a checker that flags the
   compliant phrasing will be turned off. Every lexical detector's `$assuranceNote` states that a
   clean scan means nothing was *obviously* wrong — never that nothing is wrong.
-- **Verification:** `npm test -- --grep audit`, with behavioral test names; each detector has a
-  negative case proving it does not fire on compliant text.
+- **Verification:** 58 detectors in `scripts/detectors.mjs`, one per `document`-type rule. The
+  compliant corpus is the negative case for all of them at once: three documents audit with zero
+  findings while each evaluates 40+ rules, so a document cannot pass by saying nothing.
+- **The parse step is where use-versus-mention is defended.** `scripts/document.mjs` strips HTML
+  comments, everything after `<!-- END OF ANALYSIS -->`, and fenced blocks before any detector runs.
+  Without the second of those, a violation fixture's own explanation of what it does wrong supplies
+  every phrase its detectors look for, and the fixture passes the checks it exists to fail.
 - **Dependencies:** the item above
 
 ### Build the examples
 
-- **Status:** NOT_STARTED
+- **Status:** COMPLETE
 - **Purpose:** Examples are the deliverable the domain spec asks for, and they double as the test
   corpus. A violation example is a known-positive: if the rule it demonstrates does not fire, either
   the example or the detector is wrong, and the test says so.
@@ -67,14 +74,21 @@ that a violation is caught and that compliant work is not falsely accused.
   `<!-- violates (manual-review): ... -->` manifest, and the tests assert only that those ids exist
   in the catalog — never that they fire. Claiming a manual-review rule was automatically detected
   would be this system violating its own assurance discipline in its own test suite.
-- **Verification:** `npm test -- --grep examples` — every automated manifest id fires; every
-  compliant example produces zero error-severity findings; every automated rule id in the catalog
-  appears in at least one manifest, so coverage runs both ways.
+- **Verification:** `node --test "test/examples.test.mjs"`. Three compliant documents audit clean;
+  nine violation fixtures each fire every id in their manifest; `calc.mjs` exits 1 on
+  `wrong-math.md`, so repairing that fixture breaks a test.
+- **Two findings from building the corpus, both recorded rather than worked around.**
+  `nominal-real-confusion.md` wrote its horizon as "thirty years" in words while `horizonYears()`
+  reads digits, so two rules in its own manifest silently had no subject — a fixture that does not
+  commit its stated violations is worse than none, because it reports a passing assertion about a
+  check that never ran. And `data.staleness-threshold-declared` cannot fire on the same document as
+  `data.as-of-date-stated`, because the first rule's applicability condition is a subset of the
+  second's evidence; the fixture was split in two rather than an id dropped from a manifest.
 - **Dependencies:** the item above
 
 ### Protect the integrity invariant mechanically
 
-- **Status:** NOT_STARTED
+- **Status:** COMPLETE
 - **Purpose:** The directive asks how the integrity invariant can itself be protected and tested. A
   rule that only says "do not weaken the rules" and has no guard is an honour system with extra
   steps.
@@ -84,8 +98,14 @@ that a violation is caught and that compliant work is not falsely accused.
   type, level, and severity enumerations are unchanged; that the CI workflow still contains every
   guard step; and that a policy attempting to override a forbidden rule's level is rejected. Each of
   these fails if someone removes the protection it guards, which is the point.
-- **Verification:** `npm test -- --grep integrity`; mutation-tested — remove a `nonExemptible` flag
-  and confirm the suite goes red before restoring it.
+- **Verification:** `node --test "test/integrity.test.mjs"` — 19 tests. Mutation-tested four ways:
+  removing a `nonExemptible` flag, rewording a prohibition's source text, commenting out a CI guard
+  step, and overclaiming a manual-review rule's assurance each turn the suite red. Restored and green
+  after each.
+- **It caught a real overclaim on its first run.** `integrity.no-weakening` was written as
+  `assurance: partial`, reasoning that the guard suite catches mechanical weakening. That coverage
+  belongs to `integrity.guards-present`, so crediting both counts it twice — the framework's own
+  characteristic error, committed inside the rule that forbids it. Now `none`.
 - **Dependencies:** the CLI item
 
 ### Strengthen the fidelity claim-count test
@@ -117,12 +137,17 @@ that a violation is caught and that compliant work is not falsely accused.
 
 ### Mutation-test the guards
 
-- **Status:** NOT_STARTED
+- **Status:** COMPLETE
 - **Purpose:** A test that passes both with and without the bug it guards is decoration. In the
   repository this design came from, exactly this exercise caught a freshness checker that matched on
   first lines and therefore reported clean on the precise edit it existed to catch.
 - **Deliverables:** none — a procedure, with results recorded in the Verification fields above.
 - **Acceptance Criteria:** For each guard: reintroduce the defect, confirm the test fails, restore.
   Any guard that stays green through its own defect is rewritten, not documented as a limitation.
-- **Verification:** Recorded per guard in this file as each is exercised.
+- **Verification:** Recorded per guard above. Every guard in the suite has now been exercised against
+  the defect it exists to catch: inventory (softened and deleted source bullets), fidelity (backticked
+  and reworded quotations, plus a control proving an accurate quote still verifies), links (nine dead
+  ADR references, found by the guard on its first run), calc (a deliberate wrong figure), and the
+  integrity suite (four mutations). One guard failed its own mutation test and was rewritten rather
+  than documented as a limitation — see the claim-count item above.
 - **Dependencies:** all items above

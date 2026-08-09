@@ -50,6 +50,18 @@ capability that is not implemented.
   ways — removing a `nonExemptible` flag, rewording a prohibition, commenting out a CI step, and
   overclaiming assurance all fail the suite.
 
+- `standards` — the command line: `audit` (evidence, no policy, never gates), `check` (the verdict,
+  requires a policy), `explain` (a rule's requirement, reason, remedy, and what its checker cannot
+  see), `status` (what has gone stale and must be looked at again), and `init` (dry run by default,
+  `--apply` executing the same plan object).
+- 58 detectors in `scripts/detectors.mjs`, one per document-type rule, over a document model that
+  strips HTML comments, fenced blocks, and everything after `<!-- END OF ANALYSIS -->` before any
+  detector runs — the use-versus-mention defence.
+- `examples/` — three compliant analyses that audit clean while each evaluating 40+ rules, and nine
+  violation fixtures that each fire every id in their manifest.
+- `templates/` — `AGENTS.md`, `CLAUDE.md`, `PROJECT.md`, `project-policy.yml`, and
+  `analysis-template.md`, so `init` has something to scaffold.
+
 ### Fixed
 
 - `scripts/inventory.mjs` ran its whole check on import, so importing `extract` for a test executed

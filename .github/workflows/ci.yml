@@ -42,11 +42,27 @@ jobs:
       - name: Tests
         run: npm test
 
-      # Steps enabled as their subjects land, so a red build is always something someone can act on:
+      # Evidence, then verdict. audit is deliberately NOT run with --strict: a step that fails on
+      # advisory findings is a step someone eventually deletes, and a deleted step checks nothing.
+      - name: Audit the published analyses
+        run: npm run audit
+
+      - name: Check this repository against its own policy
+        run: npm run check
+
+      # One step remains disabled until its subject exists:
       #
       #   diagrams  — Milestone 5, once docs/architecture.mmd exists
-      #   audit     — Milestone 4, once the detectors and examples/ exist
-      #   check     — Milestone 4, once the rule catalog exists
       #
-      # The audit step, when it lands, is deliberately NOT run with --strict. A step that fails on
-      # advisory findings is a step someone eventually deletes, and a deleted step checks nothing.
+      # SCOPE OF audit AND check. Both target examples/compliant — the analysis documents this
+      # repository publishes as its own work — rather than every markdown file it contains. Two
+      # categories are excluded and neither goes unchecked:
+      #
+      #   standards/*.md          normative documents, not analyses. Standard 1's modes do not apply
+      #                           to a standard, so auditing one is a category error that produces
+      #                           findings nobody can act on. They are covered by inventory,
+      #                           fidelity, links, and math instead.
+      #   examples/violations/    deliberately non-compliant known-positive fixtures. Including them
+      #                           would make the verdict permanently BLOCKED_BY_INVARIANT, which is
+      #                           not honesty but noise. test/examples.test.mjs asserts every one
+      #                           fires its manifest, so repairing a fixture breaks a test.

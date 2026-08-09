@@ -240,3 +240,35 @@ test("every rule backlinks to a standard that exists", async () => {
     assert.ok(numbers.has(rule.standard), `${rule.id} cites Standard ${rule.standard}, which does not exist`);
   }
 });
+
+// --- Dogfooding ------------------------------------------------------------------------------------
+
+test("this repository passes its own check", async () => {
+  // The repository is its own first adopter. A standards pack that cannot answer for its own
+  // standards is not credible, and a verdict nobody runs against anything is not a verdict.
+  const { execFile } = await import("node:child_process");
+  const { promisify } = await import("node:util");
+  const run = promisify(execFile);
+  const { stdout } = await run(
+    process.execPath,
+    [path.join(ROOT, "scripts/standards.mjs"), "check", "examples/compliant", "--json"],
+    { cwd: ROOT, maxBuffer: 20e6 },
+  );
+  const report = JSON.parse(stdout);
+  assert.equal(report.status, "COMPLIANT");
+  assert.deepEqual(report.invariantBreaches, []);
+});
+
+test("the audit and check steps are scoped to published analyses, and the excluded categories stay checked elsewhere", async () => {
+  // Narrowing what a gate looks at is the shape of a weakening, so the narrowing is asserted rather
+  // than left to a comment. Standards are covered by inventory/fidelity/links/math; the violation
+  // fixtures are covered by test/examples.test.mjs. Neither category is unchecked — they are checked
+  // by something that can actually judge them.
+  const pkg = JSON.parse(await readFile(path.join(ROOT, "package.json"), "utf8"));
+  assert.match(pkg.scripts.audit, /examples\/compliant/);
+  assert.match(pkg.scripts.check, /examples\/compliant/);
+
+  // The fixtures must still be exercised somewhere, or the narrowing IS a weakening.
+  const examples = await readFile(path.join(ROOT, "test/examples.test.mjs"), "utf8");
+  assert.match(examples, /examples\/violations/, "the violation fixtures must remain under test");
+});
