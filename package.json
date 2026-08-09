@@ -1,0 +1,24 @@
+{
+  "name": "financial-standards",
+  "version": "0.1.0",
+  "description": "Numbered financial analysis and decision standards, and the commands that check an analysis against them.",
+  "type": "module",
+  "bin": {
+    "standards": "scripts/standards.mjs"
+  },
+  "scripts": {
+    "test": "node --test \"test/*.test.mjs\"",
+    "audit": "node scripts/standards.mjs audit examples/compliant",
+    "check": "node scripts/standards.mjs check .",
+    "inventory": "node scripts/inventory.mjs",
+    "fidelity": "node scripts/fidelity.mjs",
+    "policy": "node scripts/policy.mjs",
+    "diagrams": "node scripts/diagrams.mjs",
+    "math": "node scripts/calc.mjs standards examples"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "UNLICENSED",
+  "private": true
+}

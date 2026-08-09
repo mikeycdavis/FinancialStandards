@@ -1,0 +1,12 @@
+# This repository has zero third-party dependencies by design, and CI has no install step so that
+# adding one breaks the build rather than passing unnoticed. These entries exist to catch a local
+# `npm install` before it reaches a commit — not to make room for dependencies.
+node_modules/
+package-lock.json
+
+# Editor and OS noise
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
