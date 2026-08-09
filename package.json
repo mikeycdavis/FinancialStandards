@@ -15,7 +15,7 @@
     "links": "node scripts/links.mjs",
     "policy": "node scripts/policy.mjs",
     "diagrams": "node scripts/diagrams.mjs",
-    "math": "node scripts/calc.mjs standards examples"
+    "math": "node scripts/calc.mjs standards examples/compliant"
   },
   "engines": {
     "node": ">=18"

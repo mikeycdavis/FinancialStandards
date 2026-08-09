@@ -59,10 +59,13 @@ capability that is not implemented.
   catches mechanical weakening. That coverage already belongs to `integrity.guards-present`, so
   crediting both counted it twice and overstated what the rule establishes. Now `none`, with the
   reasoning recorded in Standard 29 — the framework's own characteristic error, caught in itself.
-- A guards test asserted `claims <= 8`, true only while three documents existed. It began failing
+- The fidelity claim-count tests asserted `claims <= 8`, true only while three documents existed. It began failing
   when the series was written — a test that goes red for a reason unrelated to the property it
-  defends, which teaches people to edit the number rather than look. Now bounded against the fenced
-  blocks actually present.
+  defends, which teaches people to edit the number rather than look. Bounding against every fence in
+  the repository was then measured and rejected: with the dedup removed fidelity reports 110 claims
+  against 144 fences, so that assertion passes while the defect is live. Now an exact equality
+  against an independent block-first count of claim-bearing blocks — implemented the opposite way
+  round from fidelity, so the two cannot fail together — mutation-tested in both directions.
 - `scripts/fidelity.mjs` tested one line at a time, so a verbatim claim broken across a line wrap
   matched nothing and the block after it went unchecked while the guard reported clean. Widening to a
   lookback window then counted one block once per matching position, inflating the claims total.

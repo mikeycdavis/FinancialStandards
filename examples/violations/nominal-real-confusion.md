@@ -1,4 +1,4 @@
-<!-- violates: math.nominal-real-labeled, math.real-terms-for-long-horizons -->
+<!-- violates: math.nominal-real-labeled, math.real-terms-for-long-horizons, math.projection-precision, prohibited.excessive-precision -->
 <!-- violates (manual-review): prohibited.nominal-real-confusion, prohibited.cross-period-comparison -->
 
 # Your Retirement Outlook
@@ -15,8 +15,8 @@
 
 ## Projection
 
-Starting from $100,000 and earning 8% a year, your portfolio reaches **$1,006,265.69** after thirty
-years.
+Starting from $100,000 and earning 8% a year, your portfolio
+reaches **$1,006,265.69** over 30 years.
 
 ```calc
 { "fn": "futureValue",
@@ -36,6 +36,13 @@ $50,000 in 1995 would be worth far more today, so the long-run case is clear.
 - Ending balance: **$1,006,265.69**
 - Growth: **906%**
 - Annual return: **8%**
+
+<!-- END OF ANALYSIS -->
+
+Everything below this marker is commentary for readers of the repository, not part of the analysis.
+`scripts/document.mjs` truncates the document here before any detector runs — without that, a
+violation fixture's explanation of what it does wrong would supply every phrase its detectors look
+for, and the fixture would pass the checks it exists to fail.
 
 ---
 
@@ -80,3 +87,13 @@ claim only partial.
 
 6. **"Growth: 906%"** is nominal growth presented as though it were gain. In real terms the growth
    is 315%, and after fees and taxes it is roughly 144%.
+
+7. **The ending balance is stated to the cent** (`math.projection-precision`,
+   `prohibited.excessive-precision`). $1,006,265.69 rests on a return assumption given to one
+   significant figure. The cents are not a rounding choice — they are a claim about how well the
+   next thirty years are known, and the claim is false. Note that the horizon here is written as
+   "over 30 years" rather than "over thirty years", and deliberately so: `horizonYears` in
+   `scripts/document.mjs` reads digits, so the spelled-out form left this fixture's long-horizon
+   rules with no subject and silently exempted it from the two rules it most obviously breaks. A
+   fixture that does not actually commit its manifest's violations is worse than no fixture, because
+   it reports a passing assertion about a check that never ran.

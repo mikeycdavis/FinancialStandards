@@ -164,8 +164,16 @@ async function cli(args) {
   }
 }
 
+// Scope note: these two run over `standards examples/compliant`, not `standards examples`, because
+// examples/violations/wrong-math.md contains a block that is DELIBERATELY wrong — it is the
+// known-positive fixture for math.calc-blocks-recompute, and a checker exercised only against
+// documents that pass is indistinguishable from one that passes everything. Its failure is not
+// ignored: test/examples.test.mjs asserts that calc.mjs exits 1 on exactly that path, so repairing
+// the document breaks a test. Narrowing scope while a second test asserts the failure leaves the
+// coverage intact; narrowing it alone would have deleted the check, which is the distinction
+// Standard 29 turns on.
 test("every calc block in this repository recomputes", async () => {
-  const { code, stdout } = await cli(["standards", "examples", "--json"]);
+  const { code, stdout } = await cli(["standards", "examples/compliant", "--json"]);
   assert.equal(code, 0, stdout);
   const report = JSON.parse(stdout);
   assert.deepEqual(report.mismatches, []);
@@ -174,7 +182,7 @@ test("every calc block in this repository recomputes", async () => {
 });
 
 test("the repository's own documents carry calc blocks, so this guard has a subject", async () => {
-  const { stdout } = await cli(["standards", "examples", "--json"]);
+  const { stdout } = await cli(["standards", "examples/compliant", "--json"]);
   assert.ok(JSON.parse(stdout).ok >= 10);
 });
 

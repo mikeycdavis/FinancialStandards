@@ -1,0 +1,60 @@
+# Project policy — the declaration of which financial analysis standards apply here, and at what
+# level. Copied from the FinancialStandards framework by `standards init`; edit it to fit.
+#
+# Four mechanisms live here and they never substitute for one another:
+#
+#   rules          the level a rule carries in this project, overriding the framework default
+#   applicability  the rule has NO SUBJECT here — a claim about this project, not about the rule
+#   exceptions     the rule applies and this project knowingly does not satisfy it
+#   attestations   a person examined a rule a machine cannot, and recorded what they found
+#
+# Nothing in this file asserts compliance. What this project actually meets is the output of
+# `standards check`, which is computed from evidence — not a claim made in its own configuration.
+
+standardVersion: "0.1.0"
+project: "CHANGE-ME"
+
+# Level overrides. Omit a rule to take the framework default. Note that a `forbidden` rule cannot be
+# downgraded: reclassifying a prohibition because it is inconvenient is what Standard 29 forbids.
+#
+# rules:
+#   math.real-terms-for-long-horizons:
+#     level: required
+
+# Rules whose subject does not exist in this project. Each is a claim about THIS PROJECT and stops
+# being true the moment the project gains the capability — which is what `revisitWhen` is for.
+#
+# The commonest honest entry in this domain:
+#
+# applicability:
+#   risk.sequence-risk-addressed:
+#     status: not-applicable
+#     reason: "No analysis here models withdrawals or contributions, so return ordering has no effect on any outcome."
+#     reviewedAt: "2026-01-01"
+#     revisitWhen: "Any analysis models a withdrawal, a contribution, or any periodic cash flow."
+
+# Approved, time-bounded waivers of rules that DO apply. An expired exception is a compliance
+# failure, not a resolution — that is deliberate, so a waiver cannot be left to lapse quietly.
+#
+# A waiver against any of the five non-exemptible rules is REJECTED rather than honoured, and the
+# verdict becomes BLOCKED_BY_INVARIANT. Those five are the four fabrication-and-guarantee
+# prohibitions and integrity.no-weakening.
+exceptions: []
+
+# Recorded human judgement, for the rules the catalog says a human evaluates.
+#
+# An attestation is EVIDENCE, not a waiver. It never overrides an automated finding, and it goes
+# stale on its own once `reviewedAgainst.paths` change — `standards status` reports which have
+# lapsed. This is the only way a rule like prohibited.fabricated-market-data can ever be established,
+# because no scan determines whether a figure was invented.
+#
+# attestations:
+#   prohibited.fabricated-market-data:
+#     status: approved
+#     reviewedBy: "name"
+#     reviewedAt: "2026-01-01"
+#     evidence: "Traced every market figure in analyses/ to its published source and confirmed the as-of dates."
+#     reviewedAgainst:
+#       paths:
+#         - analyses/retirement-projection.md
+#       digest: "run `standards check` and paste the digest it prints"

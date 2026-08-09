@@ -69,45 +69,102 @@ test("no catalogued rule backlinks to a standard nobody has written", async () =
 // than it appears to.
 
 /**
- * Count the fenced blocks in everything fidelity scans. Every claimed block is a fence, and not
- * every fence is claimed, so this is a genuine upper bound on the claims total — independent of how
- * many standards happen to exist.
+ * An INDEPENDENT count of claim-bearing blocks, deliberately implemented the opposite way round
+ * from `scripts/fidelity.mjs`.
  *
- * The first version of these two tests asserted `claims <= 8`, a figure true only while three
- * documents existed. It began failing the moment the series was written, which is the worst kind of
- * test: one that goes red for a reason unrelated to the property it defends, and so teaches people
- * to edit the number rather than look. Bounding against something derived from the repository fixes
- * that without weakening what is checked.
+ * fidelity is **line-first**: it walks every line, tests a three-line lookback window against the
+ * claim pattern, and then looks forward for a block. That shape is what produced the duplicate
+ * counting — the window keeps matching at each position it still covers the claim, and every one of
+ * those matches points at the same block.
+ *
+ * This is **block-first**: find each fence, then look backward at the paragraph immediately above
+ * it. One block, one decision, so double counting is structurally impossible here. Two
+ * implementations that cannot fail the same way agreeing on a number is what makes that number
+ * evidence rather than an echo.
+ *
+ * WHY NOT A HARD-CODED FIGURE. These tests first asserted `claims <= 8` — true only while three
+ * documents existed, and stale the moment the series was written. A test that goes red for a reason
+ * unrelated to the property it defends teaches people to edit the number rather than look, which is
+ * how a guard quietly stops guarding.
+ *
+ * Changing a guard's test is exactly what Standard 29 constrains, so the replacement had to be
+ * *stronger* rather than merely unpinned. The intermediate fix — bounding against every fence in the
+ * repository — was measured and found useless: with fidelity's dedup removed it reports 110 claims
+ * against 144 fences, so `claims <= fences` PASSES while the defect it is named for is live. The
+ * check would have gone on reporting green through the exact regression it existed to catch.
+ *
+ * An exact equality against an independently derived 55 fails on that mutation, and on the wrap
+ * defect in the other direction. Both are mutation-tested, and each directional test fires only on
+ * its own defect.
  */
-async function fenceCount() {
-  let fences = 0;
+const CLAIM_RE = /reproduced\s+(?:verbatim\s+)?from\s+the\s+source|verbatim\s+from\s+the\s+source|from\s+the\s+source[,:]?\s*$|^From the source[,:]|quoted\s+verbatim/i;
+
+async function claimBearingBlocks() {
+  let total = 0;
   for (const dir of ["standards", "artifacts/adr"]) {
-    for (const file of await readdir(path.join(ROOT, dir))) {
-      if (!file.endsWith(".md")) continue;
-      const text = await readFile(path.join(ROOT, dir, file), "utf8");
-      fences += (text.match(/^[ \t]*```/gm) ?? []).length / 2;
+    for (const file of (await readdir(path.join(ROOT, dir))).sort()) {
+      if (!/^\d\d-.*\.md$/.test(file) && !/^\d{4}-.*\.md$/.test(file)) continue;
+      const lines = (await readFile(path.join(ROOT, dir, file), "utf8")).replace(/\r/g, "").split("\n");
+
+      // Opening fences only — every second fence line closes the one before it.
+      const openers = [];
+      let inside = false;
+      lines.forEach((line, i) => {
+        if (!/^[ \t]*```/.test(line)) return;
+        if (!inside) openers.push(i);
+        inside = !inside;
+      });
+
+      for (const at of openers) {
+        let i = at - 1;
+        while (i >= 0 && lines[i].trim() === "") i--;
+        const paragraph = [];
+        while (i >= 0 && lines[i].trim() !== "") paragraph.unshift(lines[i--]);
+        if (paragraph.length && CLAIM_RE.test(paragraph.join(" "))) total++;
+      }
     }
   }
-  return fences;
+  return total;
 }
+
+test("the independent block-first count agrees with what fidelity reports", async () => {
+  // The load-bearing assertion. Equality in both directions at once: a missed claim makes fidelity's
+  // figure too low, a double-counted one makes it too high, and only a correct dedup over a correct
+  // claim match produces the same number as a counter that cannot double count.
+  const { stdout } = await guard("fidelity.mjs", ["--json"]);
+  const reported = JSON.parse(stdout).claims;
+  const derived = await claimBearingBlocks();
+  assert.equal(reported, derived, `fidelity reports ${reported} claims; block-first count finds ${derived}`);
+});
 
 test("a verbatim claim that wraps across lines is still checked", async () => {
   // The defect: prose here is hard-wrapped, and "Reproduced verbatim from\nthe source:" split the
   // claim across two lines. Testing one line at a time matched neither half, so the block after it
-  // went unchecked while the guard reported clean.
+  // went unchecked while the guard reported clean. A wrapped claim missed shows up as fidelity
+  // reporting FEWER claims than the block-first count finds.
   const { stdout } = await guard("fidelity.mjs", ["--json"]);
-  const report = JSON.parse(stdout);
-  assert.ok(report.claims >= report.documents, `only ${report.claims} claims across ${report.documents} documents`);
+  const reported = JSON.parse(stdout).claims;
+  const derived = await claimBearingBlocks();
+  assert.ok(reported >= derived, `fidelity missed ${derived - reported} claim-bearing block(s)`);
 });
 
 test("one block is counted once, however many positions the claim window matches at", async () => {
   // The defect: widening to a lookback window made the same block match at each position the window
   // still covered the claim, inflating the claims total into a number that looked like more coverage
-  // than existed.
+  // than existed. Duplicate counting shows up as fidelity reporting MORE claims than there are
+  // claim-bearing blocks.
   const { stdout } = await guard("fidelity.mjs", ["--json"]);
-  const claims = JSON.parse(stdout).claims;
-  const fences = await fenceCount();
-  assert.ok(claims <= fences, `${claims} claims exceeds ${fences} fenced blocks — duplicate counting`);
+  const reported = JSON.parse(stdout).claims;
+  const derived = await claimBearingBlocks();
+  assert.ok(reported <= derived, `fidelity reports ${reported} claims over ${derived} blocks — duplicate counting`);
+});
+
+test("the claim counter has a subject, so agreement is not two zeroes matching", async () => {
+  // Both counts agreeing at zero would satisfy every assertion above while checking nothing. This is
+  // the same defence the inventory extractor carries: a negative result is never trusted until the
+  // mechanism is shown to work on known-positive input.
+  const derived = await claimBearingBlocks();
+  assert.ok(derived > 25, `only ${derived} claim-bearing blocks found across 29 standards and 6 ADRs`);
 });
 
 // --- The inventory extractor ------------------------------------------------------------------------

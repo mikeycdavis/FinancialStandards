@@ -6,8 +6,20 @@
 
 This is a worked example demonstrating [Standard 11](../../standards/11-nominal-vs-real-returns.md).
 It is a **known-negative fixture**: every automated rule that could fire on it must not, and
-`test/examples.test.mjs` asserts that. It is deliberately narrow — it does not attempt to satisfy the
-whole framework, only the standard it demonstrates.
+`test/examples.test.mjs` asserts that. Its subject is narrow — one balance, one horizon — but it is
+written to satisfy every automated rule that finds a subject in it, not only the standard it
+demonstrates.
+
+## Objective
+
+The holder's stated objective is to have **$250,000 in today's purchasing power by 2056**, a
+**30-year horizon**, from a starting balance of $100,000 held as a single lump sum. The objective is
+expressed in real terms deliberately: a nominal target set thirty years out is a target for an
+unknown quantity of goods.
+
+Whether that objective is the right one, and whether it is ranked above or below the holder's other
+uses for the same money, *[requires personal financial context]* this document does not have. The
+analysis below establishes only what the assumed return path would produce against it.
 
 ## Assumptions
 
@@ -36,8 +48,10 @@ At **8.0% nominal**, ignoring fees, taxes, and inflation, $100,000 becomes:
   "expect": { "value": 1006265.69, "tolerance": 0.01 } }
 ```
 
-**$1,006,265.69 nominal, before fees, taxes, and inflation.** This figure is stated only to be
-discarded. Nobody receives it.
+**Just over $1 million nominal, before fees, taxes, and inflation.** The block above carries the
+figure to the cent so it can be recomputed exactly; the prose rounds it, because at a thirty-year
+horizon the assumptions cannot support a figure stated to the penny. This number is stated only to
+be discarded. Nobody receives it.
 
 ## What is actually left
 
@@ -59,6 +73,33 @@ The net **real** return is **3.02% real**, against the 8.0% nominal headline. Ov
 
 **$244,208 in today's purchasing power.** The nominal figure is roughly four times larger than the
 real one. Both are arithmetically correct; only the second answers "what will this buy me".
+
+## What is being projected
+
+The $100,000 is a **single lump sum**. There are no withdrawals, no contributions, and no rebalancing
+cash flows across the thirty years. That matters for one reason worth stating explicitly rather than
+leaving to inference: **sequence risk does not apply here**. With no cash flows, the order in which
+the annual returns arrive cannot change the ending value — the same returns in any order multiply to
+the same figure. Add a single withdrawal and that ceases to be true, and this projection would have
+to be redone with the path modelled rather than the average compounded.
+
+The balance is assumed to sit in a four-sleeve allocation — 55% global equity, 25% domestic equity,
+15% bonds, 5% cash — which is where the 8.0% gross assumption comes from. The concentration of that
+allocation is not left as a single largest-position figure, because a largest position says nothing
+about how the rest is distributed:
+
+```calc
+{ "fn": "portfolioConcentration",
+  "inputs": { "weights": [0.55, 0.25, 0.15, 0.05] },
+  "expect": { "value": { "maxWeight": 0.55, "herfindahl": 0.39, "effectiveHoldings": 2.5641 },
+              "tolerance": 0.0001 } }
+```
+
+The largest weight is 55%, the Herfindahl index 0.39, and the effective number of holdings 2.56 —
+that is, this four-sleeve allocation is about as concentrated as two-and-a-half equal positions. The
+exposure being concentrated is to equity as an asset class, not to any one issuer; four sleeves is a
+count of sleeves, not a measure of diversification. Whether that concentration is acceptable
+*[requires personal financial context]*.
 
 ## Scenarios
 
@@ -136,3 +177,9 @@ probabilities.
 - Whether this allocation is appropriate *[requires personal financial context]* — objectives,
   horizon, liquidity needs, and risk tolerance, none of which this document knows. A mathematically
   higher expected return is not automatically the right choice for a particular person.
+- **Risk tolerance and risk capacity are two different things and neither is established here.**
+  Tolerance is willingness: how much decline the holder would sit through without selling. Capacity
+  is the ability to bear loss without the plan failing — whether a 40% real decline over thirty
+  years, which the adverse scenario above describes, would still leave the 2056 objective reachable
+  from other resources. A holder can have a high willingness and no capacity, or the reverse, and
+  the two are routinely collapsed into one number. Both *[require personal financial context]*.

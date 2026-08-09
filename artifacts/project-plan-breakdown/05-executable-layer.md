@@ -88,6 +88,33 @@ that a violation is caught and that compliant work is not falsely accused.
   and confirm the suite goes red before restoring it.
 - **Dependencies:** the CLI item
 
+### Strengthen the fidelity claim-count test
+
+- **Status:** COMPLETE
+- **Purpose:** The two tests defending `fidelity.mjs` against its own failure modes asserted
+  `claims <= 8` — a figure true only while three documents existed. Writing the series made it stale,
+  and it began failing for a reason unrelated to the property it defends.
+- **Why this is recorded rather than just fixed.** Changing a guard's test is the act Standard 29
+  constrains, and the obvious repairs were both weakenings. Raising the ceiling to 55 re-pins it to a
+  document count that grows; deleting the test removes the check. The replacement had to be stronger
+  than what it replaced, and had to be shown to be.
+- **Deliverables:** an independent block-first claim counter in `test/guards.test.mjs`, and an exact
+  equality against it.
+- **Acceptance Criteria:** The counter is implemented the opposite way round from `fidelity.mjs` —
+  fidelity is line-first with a lookback window, the counter is block-first looking backward from each
+  fence — so the two cannot fail the same way. Their agreement is evidence rather than an echo. A
+  fourth test asserts the counter has a subject, so two zeroes agreeing cannot satisfy the others.
+- **The intermediate fix was measured and rejected.** Bounding against every fence in the repository
+  gives `claims <= 144`. With fidelity's dedup removed it reports **110** claims — so that assertion
+  PASSES while the defect it is named for is live. It would have gone on reporting green through the
+  exact regression it existed to catch. The equality against an independently derived **55** fails on
+  that mutation.
+- **Verification:** `node --test "test/guards.test.mjs"` — 22 tests. Mutation-tested both ways:
+  removing the dedup turns the equality and the duplicate-counting test red while the wrap test stays
+  green; reverting to line-only claim matching turns the equality and the wrap test red while the
+  duplicate-counting test stays green. Each directional test fires only on its own defect.
+- **Dependencies:** Milestone 3
+
 ### Mutation-test the guards
 
 - **Status:** NOT_STARTED
