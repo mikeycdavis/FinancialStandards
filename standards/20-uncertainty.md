@@ -1,0 +1,202 @@
+# Standard 20 — Uncertainty
+
+Producing a range is not the same act as being honest about what is unknown. A scenario set describes
+the outcomes a model can produce; uncertainty is the larger question of how much confidence the model
+itself deserves, and a document can satisfy the first completely while misrepresenting the second. The
+danger is specific and it runs in one direction: every device that expresses uncertainty — a range, a
+confidence band, a set of four labelled cases — also projects competence, and a reader shown a
+well-constructed range concludes that the analyst knows the shape of what they do not know.
+
+Source: the `uncertainty` item of the Required standards list in
+[`financial-standards-spec.md`](../artifacts/prompts/financial-standards-spec.md), reproduced
+verbatim from the source:
+
+```text
+uncertainty
+```
+
+The specification's `## Uncertainty` section, which supplies the substance behind this bullet, is
+implemented by [Standard 19](19-scenario-analysis.md), where it is quoted in full. This standard
+takes the epistemic half of that section: what may be claimed once a scenario set exists, and what
+must still be said about everything outside it.
+
+## Scope
+
+Applies to forecasting, scenario modeling, planning, and personalized recommendation, and to any
+analysis stating a value that is not yet known — the same modes in
+[Standard 1](01-modes-of-financial-communication.md) that [Standard 19](19-scenario-analysis.md)
+binds.
+
+It applies with particular force to documents that have *already* done the work: a document with four
+scenarios, a stated method, and disclosed assumptions has earned a degree of the reader's trust, and
+is therefore the document best placed to overstate what it knows. A crude forecast is discounted
+appropriately. A careful one is not.
+
+It does not apply to factual financial information reporting a published figure, where the question
+is provenance rather than uncertainty — [Standard 26](26-evidence-and-provenance.md) governs that —
+nor to financial education describing a mechanism rather than an outcome.
+
+## Requirements
+
+### R1 — A projected value MUST NOT be stated in the grammar of fact
+
+A document MUST express projected values in language that marks them as projections, and MUST NOT use
+the indicative future — "your portfolio will be worth", "this reaches", "you retire with" — for any
+figure that depends on an assumption.
+
+This is a requirement about grammar because the violation is committed in grammar. "Will be worth
+$663,000" and "would be worth $663,000 if returns averaged 5%" describe the same computation and make
+entirely different claims, and the first is easier to write, shorter, and more satisfying to read. No
+disclaimer elsewhere in the document repairs it, because the reader carries away the sentence, not
+the disclaimer. The prohibition `describe investment returns as guaranteed` is the extreme form of
+this failure; the ordinary form is the one that does the damage, because it never uses the word
+"guaranteed" and so never trips anyone's attention.
+
+### R2 — Stated precision MUST NOT exceed what the method supports
+
+A figure MUST be rounded to a precision consistent with the uncertainty in its inputs. Where an
+input is uncertain in its first significant figure, the output MUST NOT be stated to its last.
+
+Precision is a claim, made silently and believed automatically. Ten thousand dollars compounded at an
+assumed 5% for ten years is:
+
+```calc
+{ "fn": "futureValue",
+  "inputs": { "principal": 10000, "annualRate": 0.05, "years": 10, "compoundsPerYear": 1 },
+  "expect": { "value": 16288.95, "tolerance": 0.01 } }
+```
+
+The function actually returns 16288.94626777442, and a document could print every digit of it. Doing
+so would be arithmetically correct and epistemically false: the 5% was chosen, not measured, and if
+it is wrong by a quarter of a percentage point the answer moves by hundreds of dollars — which is to
+say the cents were never meaningful and the tens of dollars were not either. "About $16,300" is the
+honest rendering. This is the prohibition `use excessive precision in long-term projections`, and it
+is worth stating that the violation is not carelessness: unrounded output is what a spreadsheet
+produces by default, so the honest form is the one requiring deliberate effort.
+
+### R3 — The source of the uncertainty MUST be named
+
+A document MUST distinguish, for the uncertainty it discloses, between uncertainty in its inputs —
+the return might be 3% or 8% — and uncertainty in its structure — the model may be the wrong shape
+for what will happen. Where it addresses only the first, it MUST say so.
+
+The distinction determines what the reader should do with the analysis, which is why it cannot be
+left implicit. Input uncertainty is bounded and the scenario set expresses it; a reader can respond
+by planning against the low end. Structural uncertainty is not expressed anywhere in the scenario set
+and cannot be, because every scenario is generated by the same model. A document that presents a
+range without naming which kind of uncertainty it covers has allowed the reader to believe the range
+covers both, and the outcomes that historically caused the most harm were structural: the correlation
+that held until it did not, the income that was never modelled as stopping.
+
+### R4 — The absence of an outcome from the analysis MUST NOT stand as evidence of its impossibility
+
+A document MUST state what it has not modelled, where an unmodelled factor could plausibly dominate
+the result — job loss, disability, a change in tax regime, an instrument behaving unlike its history.
+
+The reason is that a reader cannot see an absence. A scenario table is a complete-looking object, and
+a factor that appears in none of its rows is, to a reader, a factor that does not exist. This is the
+same argument [Standard 19](19-scenario-analysis.md) R4 makes about the scenario set's own bounds,
+extended to the model's bounds: the set is not exhaustive, and neither is the list of things the set
+was built to vary. Naming the exclusions is the only way an absence becomes visible.
+
+### R5 — Where the range is too wide to inform the decision, the document SHOULD say so
+
+Where the plausible range spans outcomes that would lead to opposite decisions, a document SHOULD
+state that the analysis does not determine the decision, rather than presenting a range and leaving
+the reader to conclude that it does.
+
+This is recommended rather than required because the threshold is a judgement and reasonable analysts
+place it differently. But a range presented without that statement carries an implicit claim that the
+range is informative, and there are questions — thirty-year real returns on a concentrated position,
+the tax treatment of an instrument in a jurisdiction that has not decided — where it is not.
+[Standard 29](29-standards-integrity.md) makes "the evidence does not support a conclusion" a
+complete and permissible output, precisely so that this requirement can be satisfied rather than
+routed around by producing something.
+
+## Additions this standard makes beyond the source
+
+The source states one word — `uncertainty` — in the Required standards list, and its `## Uncertainty`
+section is implemented by [Standard 19](19-scenario-analysis.md). Everything below is this document's
+interpretation and must be read as such rather than as source requirement:
+
+- **The division of labour between this standard and Standard 19.** The source does not separate
+  structure from epistemic claim. The split is authored here, on the grounds that a document can
+  produce a perfect scenario set and still misrepresent what it knows.
+- **R1's treatment of the indicative future as the operative violation.** The source prohibits
+  describing returns as guaranteed and presenting a single forecast as certain. The claim that
+  ordinary grammar accomplishes the same thing without the word "guaranteed" appearing is this
+  document's.
+- **R2's rule that precision must track input uncertainty**, and the observation that unrounded
+  output is the default a spreadsheet produces. The source prohibits excessive precision without
+  saying what makes precision excessive.
+- **R3's distinction between input uncertainty and structural uncertainty** in full. The source does
+  not draw it.
+- **R4's requirement to name what was not modelled.** An extension of the source's prohibition on
+  implying that scenarios exhaust outcomes, applied to the model rather than to the scenario set.
+- **R5 in full**, including its recommended level and its dependence on the five conclusions in
+  [Standard 29](29-standards-integrity.md).
+- **The specific figures** ($16,288.95 and 16288.94626777442) are computed by this repository's own
+  functions and recomputed by CI. They illustrate the requirement; they are not source material.
+
+## Relationship to other standards
+
+[Standard 19](19-scenario-analysis.md) is the other half of this standard and carries the source's
+`## Uncertainty` section verbatim. Read alone, either one is incomplete: Standard 19 without this one
+produces well-formed scenario sets that overclaim, and this one without Standard 19 produces
+appropriate humility about an analysis that was never done.
+
+[Standard 18](18-assumptions.md) supplies what R3's input uncertainty is uncertainty *about*. An
+undisclosed assumption cannot be a disclosed source of uncertainty, so this standard depends on that
+one being satisfied first.
+
+[Standard 15](15-volatility.md) and [Standard 16](16-downside-risk.md) are where R3's structural
+uncertainty most often bites: a volatility figure is a parameter estimated from a history, and its
+adequacy as a description of the future is exactly the structural question.
+[Standard 21](21-data-freshness.md) governs a third source of uncertainty this standard does not — the
+possibility that an input was correct once and is no longer.
+
+[Standard 27](27-external-data-and-personal-context.md) supplies the markers R4 uses for factors the
+document cannot know. [Standard 29](29-standards-integrity.md) supplies the conclusions R5 depends on.
+[Standard 25](25-prohibitions.md) carries `prohibited.guaranteed-returns`,
+`prohibited.single-forecast-as-certain`, and `prohibited.excessive-precision`.
+[Standard 28](28-computational-verification.md) defines the `calc` block used above.
+
+## Implementation
+
+**Automated, full assurance.** The single `calc` block above is recomputed by `npm run math` against
+`scripts/finance.mjs` on every CI run. It fixes the figure this document rounds, so that the
+argument for rounding is made against a verified number rather than an asserted one. That guarantee
+covers the arithmetic and nothing else.
+
+**Automated, partial assurance.** `scenarios.range-not-point-estimate` detects whether a document
+stating projected values expresses them as a range or expresses them as single figures, and
+`scenarios.uncertainty-source-named` detects whether a document disclosing uncertainty distinguishes
+input uncertainty from structural uncertainty (R3). Both are lexical, and a lexical check establishes
+only that the language is PRESENT, never that the claim behind it is ADEQUATE. A sentence reading
+"there is of course model risk" satisfies `scenarios.uncertainty-source-named` and tells the reader
+nothing about which part of the model is doubted.
+
+R2 is evaluated by the existing `math.projection-precision` rule together with the forbidden-level
+`prohibited.excessive-precision`; no new id is added here, because the question those rules ask is
+already this requirement's question and duplicating it would inflate `frameworkCoverage` without
+checking more.
+
+**Not automated.** R1 in substance — whether a document's grammar asserts a projection as a fact — is
+partially reachable by pattern matching on indicative-future constructions, and the catalog does not
+attempt it. The reason is the false-positive rate: "your contributions will total $60,000" is an
+arithmetic certainty stated in the indicative future and is entirely correct. A rule that cannot tell
+that sentence from "your portfolio will be worth $663,000" would fail correct documents, and a rule
+people are right to ignore teaches them to ignore rules. It is carried instead by
+`prohibited.guaranteed-returns` and `prohibited.single-forecast-as-certain` in their forbidden forms,
+which reach the severe cases only.
+
+R5 is deliberately kept out of the rule catalog. Whether the plausible range is wide enough that the
+analysis fails to determine the decision depends on what decision the reader faces, which is not in
+the document: it fails the second admission question in
+[ADR 0005](../artifacts/adr/0005-concept-disposition.md), since the evidence that would settle it
+cannot be gathered from the artifact, and consequently the third. R4's materiality trigger — whether
+an unmodelled factor could plausibly dominate — is kept out for the same reason. Both remain
+normative text a reviewer applies. A requirement carried by a `manual-review` rule reports
+`NOT_EVALUATED` until a person records a judgement; a requirement kept out of the catalog altogether
+is not reported at all, which is exactly why keeping it out has to be disclosed here. Their absence
+is a disclosed gap rather than a silent one.

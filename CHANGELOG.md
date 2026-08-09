@@ -39,11 +39,30 @@ capability that is not implemented.
   twenty-eight more documents harden around it.
 - `scripts/inventory.mjs` now refuses a rule that backlinks to a standard nobody has written.
 
+- All 29 standards. Standards 1, 25, and 29 set the vocabulary: the seven-mode taxonomy, the
+  twenty-three prohibitions reproduced verbatim, and the standards-integrity invariant with the
+  guard suite that protects it.
+- The rule catalog: 95 rules across 17 categories — 24 forbidden, 68 required, 3 recommended.
+  58 are lexical (`partial`), 33 are `manual-review` (`none`), and only 3 claim `full`.
+- `test/integrity.test.mjs`, the self-protection suite Standard 29 promises: the non-exemptible set
+  is pinned to exactly five ids, the four enumerations are pinned, every guard must stay wired into
+  CI, and no rule may claim an assurance its validation type cannot deliver. Mutation-tested four
+  ways — removing a `nonExemptible` flag, rewording a prohibition, commenting out a CI step, and
+  overclaiming assurance all fail the suite.
+
 ### Fixed
 
 - `scripts/inventory.mjs` ran its whole check on import, so importing `extract` for a test executed
   the command and called `process.exit`. A module whose import has side effects cannot be tested,
   and an untestable guard is one nobody can prove works.
+- `integrity.no-weakening` claimed `assurance: "partial"` on the reasoning that the guard suite
+  catches mechanical weakening. That coverage already belongs to `integrity.guards-present`, so
+  crediting both counted it twice and overstated what the rule establishes. Now `none`, with the
+  reasoning recorded in Standard 29 — the framework's own characteristic error, caught in itself.
+- A guards test asserted `claims <= 8`, true only while three documents existed. It began failing
+  when the series was written — a test that goes red for a reason unrelated to the property it
+  defends, which teaches people to edit the number rather than look. Now bounded against the fenced
+  blocks actually present.
 - `scripts/fidelity.mjs` tested one line at a time, so a verbatim claim broken across a line wrap
   matched nothing and the block after it went unchecked while the guard reported clean. Widening to a
   lookback window then counted one block once per matching position, inflating the claims total.

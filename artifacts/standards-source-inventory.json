@@ -179,70 +179,70 @@
     {
       "number": 1,
       "title": "Modes of Financial Communication",
-      "implementedBy": null,
+      "implementedBy": "standards/01-modes-of-financial-communication.md",
       "coversSource": "spec (preamble) — all 7 bullets",
       "file": "standards/01-modes-of-financial-communication.md"
     },
     {
       "number": 2,
       "title": "Objectives",
-      "implementedBy": null,
+      "implementedBy": "standards/02-objectives.md",
       "coversSource": "spec Required standards — objectives",
       "file": "standards/02-objectives.md"
     },
     {
       "number": 3,
       "title": "Time Horizon",
-      "implementedBy": null,
+      "implementedBy": "standards/03-time-horizon.md",
       "coversSource": "spec Required standards — time horizon",
       "file": "standards/03-time-horizon.md"
     },
     {
       "number": 4,
       "title": "Liquidity",
-      "implementedBy": null,
+      "implementedBy": "standards/04-liquidity.md",
       "coversSource": "spec Required standards — liquidity",
       "file": "standards/04-liquidity.md"
     },
     {
       "number": 5,
       "title": "Emergency Reserves",
-      "implementedBy": null,
+      "implementedBy": "standards/05-emergency-reserves.md",
       "coversSource": "spec Required standards — emergency reserves",
       "file": "standards/05-emergency-reserves.md"
     },
     {
       "number": 6,
       "title": "Debt",
-      "implementedBy": null,
+      "implementedBy": "standards/06-debt.md",
       "coversSource": "spec Required standards — debt",
       "file": "standards/06-debt.md"
     },
     {
       "number": 7,
       "title": "Interest Rates",
-      "implementedBy": null,
+      "implementedBy": "standards/07-interest-rates.md",
       "coversSource": "spec Required standards — interest rates",
       "file": "standards/07-interest-rates.md"
     },
     {
       "number": 8,
       "title": "Taxes",
-      "implementedBy": null,
+      "implementedBy": "standards/08-taxes.md",
       "coversSource": "spec Required standards — taxes",
       "file": "standards/08-taxes.md"
     },
     {
       "number": 9,
       "title": "Fees",
-      "implementedBy": null,
+      "implementedBy": "standards/09-fees.md",
       "coversSource": "spec Required standards — fees",
       "file": "standards/09-fees.md"
     },
     {
       "number": 10,
       "title": "Inflation",
-      "implementedBy": null,
+      "implementedBy": "standards/10-inflation.md",
       "coversSource": "spec Required standards — inflation",
       "file": "standards/10-inflation.md"
     },
@@ -256,126 +256,126 @@
     {
       "number": 12,
       "title": "Compounding",
-      "implementedBy": null,
+      "implementedBy": "standards/12-compounding.md",
       "coversSource": "spec Required standards — compounding",
       "file": "standards/12-compounding.md"
     },
     {
       "number": 13,
       "title": "Diversification",
-      "implementedBy": null,
+      "implementedBy": "standards/13-diversification.md",
       "coversSource": "spec Required standards — diversification",
       "file": "standards/13-diversification.md"
     },
     {
       "number": 14,
       "title": "Concentration",
-      "implementedBy": null,
+      "implementedBy": "standards/14-concentration.md",
       "coversSource": "spec Required standards — concentration",
       "file": "standards/14-concentration.md"
     },
     {
       "number": 15,
       "title": "Volatility",
-      "implementedBy": null,
+      "implementedBy": "standards/15-volatility.md",
       "coversSource": "spec Required standards — volatility",
       "file": "standards/15-volatility.md"
     },
     {
       "number": 16,
       "title": "Downside Risk",
-      "implementedBy": null,
+      "implementedBy": "standards/16-downside-risk.md",
       "coversSource": "spec Required standards — downside risk",
       "file": "standards/16-downside-risk.md"
     },
     {
       "number": 17,
       "title": "Sequence Risk",
-      "implementedBy": null,
+      "implementedBy": "standards/17-sequence-risk.md",
       "coversSource": "spec Required standards — sequence risk where applicable",
       "file": "standards/17-sequence-risk.md"
     },
     {
       "number": 18,
       "title": "Assumptions",
-      "implementedBy": null,
+      "implementedBy": "standards/18-assumptions.md",
       "coversSource": "spec Required standards — assumptions",
       "file": "standards/18-assumptions.md"
     },
     {
       "number": 19,
       "title": "Scenario Analysis",
-      "implementedBy": null,
+      "implementedBy": "standards/19-scenario-analysis.md",
       "coversSource": "spec Required standards — scenario analysis; and the whole Uncertainty section, including its 4 bullets and the non-exhaustiveness statement",
       "file": "standards/19-scenario-analysis.md"
     },
     {
       "number": 20,
       "title": "Uncertainty",
-      "implementedBy": null,
+      "implementedBy": "standards/20-uncertainty.md",
       "coversSource": "spec Required standards — uncertainty; and the Uncertainty section's statement that projections should use scenarios or ranges where uncertainty materially affects the answer",
       "file": "standards/20-uncertainty.md"
     },
     {
       "number": 21,
       "title": "Data Freshness",
-      "implementedBy": null,
+      "implementedBy": "standards/21-data-freshness.md",
       "coversSource": "spec Required standards — data freshness",
       "file": "standards/21-data-freshness.md"
     },
     {
       "number": 22,
       "title": "Risk Tolerance",
-      "implementedBy": null,
+      "implementedBy": "standards/22-risk-tolerance.md",
       "coversSource": "spec Required standards — risk tolerance",
       "file": "standards/22-risk-tolerance.md"
     },
     {
       "number": 23,
       "title": "Opportunity Cost",
-      "implementedBy": null,
+      "implementedBy": "standards/23-opportunity-cost.md",
       "coversSource": "spec Required standards — opportunity cost",
       "file": "standards/23-opportunity-cost.md"
     },
     {
       "number": 24,
       "title": "Behavioral Biases",
-      "implementedBy": null,
+      "implementedBy": "standards/24-behavioral-biases.md",
       "coversSource": "spec Required standards — behavioral biases",
       "file": "standards/24-behavioral-biases.md"
     },
     {
       "number": 25,
       "title": "Prohibitions",
-      "implementedBy": null,
+      "implementedBy": "standards/25-prohibitions.md",
       "coversSource": "spec Must-never rules — all 23 bullets, reproduced verbatim",
       "file": "standards/25-prohibitions.md"
     },
     {
       "number": 26,
       "title": "Evidence and Provenance",
-      "implementedBy": null,
+      "implementedBy": "standards/26-evidence-and-provenance.md",
       "coversSource": "spec Deliverables — evidence requirements; directive — the evidence concept",
       "file": "standards/26-evidence-and-provenance.md"
     },
     {
       "number": 27,
       "title": "External Data and Personal Context",
-      "implementedBy": null,
+      "implementedBy": "standards/27-external-data-and-personal-context.md",
       "coversSource": "spec Deliverables — clearly identify what requires current external data or personal financial context",
       "file": "standards/27-external-data-and-personal-context.md"
     },
     {
       "number": 28,
       "title": "Computational Verification",
-      "implementedBy": null,
+      "implementedBy": "standards/28-computational-verification.md",
       "coversSource": "spec Deliverables — automatically verify financial mathematics where feasible",
       "file": "standards/28-computational-verification.md"
     },
     {
       "number": 29,
       "title": "Standards Integrity",
-      "implementedBy": null,
+      "implementedBy": "standards/29-standards-integrity.md",
       "coversSource": "directive Standards integrity invariant, quoted verbatim; and the AI usage section's stop-work capability and blocked-by-invariant conclusion",
       "file": "standards/29-standards-integrity.md"
     }
