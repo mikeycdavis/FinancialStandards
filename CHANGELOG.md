@@ -31,11 +31,23 @@ capability that is not implemented.
 - **`BLOCKED_BY_INVARIANT`** verdict, outranking all others, for a failed non-exemptible rule or an
   attempted waiver against one.
 
+- `scripts/finance.mjs` — 21 pure, deterministic financial functions, and `scripts/calc.mjs`, which
+  recomputes every `calc` block in `standards/` and `examples/`. This is the mechanism behind the
+  specification's "automatically verify financial mathematics where feasible".
+- `standards/11-nominal-vs-real-returns.md`, the first standard, with `rules/math.json` and a
+  compliant and a violating example. Written as one vertical slice to prove the shape before
+  twenty-eight more documents harden around it.
+- `scripts/inventory.mjs` now refuses a rule that backlinks to a standard nobody has written.
+
 ### Fixed
 
 - `scripts/inventory.mjs` ran its whole check on import, so importing `extract` for a test executed
   the command and called `process.exit`. A module whose import has side effects cannot be tested,
   and an untestable guard is one nobody can prove works.
+- `scripts/fidelity.mjs` tested one line at a time, so a verbatim claim broken across a line wrap
+  matched nothing and the block after it went unchecked while the guard reported clean. Widening to a
+  lookback window then counted one block once per matching position, inflating the claims total.
+  Both are the guard's own failure mode turned on itself, and both now have regression tests.
 - `scripts/policy.mjs` resolved its alias table with a top-level `await loadCatalog()`, making mere
   import require a catalog that does not exist until Milestone 3. Now lazy and memoised; the catalog
   must still load before an alias resolves.

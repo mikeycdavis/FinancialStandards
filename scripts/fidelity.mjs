@@ -71,11 +71,16 @@ function blockAfter(lines, start) {
   while (i < lines.length && lines[i].trim() === "") i++;
   if (i >= lines.length) return null;
 
+  // Where the block ACTUALLY starts, not where the search began. Used both to deduplicate — the
+  // claim window matches at several consecutive positions, all pointing at one block — and as the
+  // file:line in a failure message, where the block's real position is what a reader needs.
+  const blockAt = i + 1;
+
   if (lines[i].trim().startsWith("```")) {
     const body = [];
     i++;
     while (i < lines.length && !lines[i].trim().startsWith("```")) body.push(lines[i++]);
-    return { kind: "fence", text: body.join("\n"), line: start + 1 };
+    return { kind: "fence", text: body.join("\n"), line: blockAt };
   }
   if (lines[i].trim().startsWith(">")) {
     const body = [];
@@ -83,12 +88,12 @@ function blockAfter(lines, start) {
       if (lines[i].trim() === "" && !(lines[i + 1] ?? "").trim().startsWith(">")) break;
       body.push(lines[i++]);
     }
-    return { kind: "quote", text: body.join("\n"), line: start + 1 };
+    return { kind: "quote", text: body.join("\n"), line: blockAt };
   }
   if (/^\s*[-*]\s+/.test(lines[i])) {
     const body = [];
     while (i < lines.length && (/^\s*[-*]\s+/.test(lines[i]) || /^\s{2,}\S/.test(lines[i]))) body.push(lines[i++]);
-    return { kind: "list", text: body.join("\n"), line: start + 1 };
+    return { kind: "list", text: body.join("\n"), line: blockAt };
   }
   return null;
 }
@@ -128,13 +133,31 @@ for (const scope of SCANNED) {
 const failures = [];
 let claims = 0;
 
+/**
+ * A claim may wrap across lines, because prose in these documents is hard-wrapped at ~100 columns.
+ *
+ * Testing one line at a time silently missed "Reproduced verbatim from\nthe source:" — the claim was
+ * split by the wrap, matched nothing, and the block after it went unchecked while the guard reported
+ * clean. That is this guard's own failure mode turned on itself: a check that quietly examines less
+ * than it appears to. Joining a small lookback window before testing is the fix; three lines is
+ * enough for any realistic wrap and short enough that it cannot reach back into a previous block.
+ */
+const LOOKBACK = 3;
+const claimEndsAt = (lines, i) =>
+  CLAIM_RE.test(lines.slice(Math.max(0, i - LOOKBACK + 1), i + 1).join(" "));
+
 for (const file of files) {
   const text = await readFile(path.join(ROOT, file), "utf8");
   const lines = text.split("\n");
+  // The window matches at every position it still covers the claim, so one block would otherwise be
+  // counted several times — inflating the claims total into a number that looks like more coverage
+  // than exists. Blocks are deduplicated by where they start.
+  const seen = new Set();
   for (let i = 0; i < lines.length; i++) {
-    if (!CLAIM_RE.test(lines[i])) continue;
+    if (!claimEndsAt(lines, i)) continue;
     const block = blockAfter(lines, i + 1);
-    if (!block) continue;
+    if (!block || seen.has(block.line)) continue;
+    seen.add(block.line);
     claims++;
     const norm = normalize(block.text);
     if (!norm) continue;

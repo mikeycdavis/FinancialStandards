@@ -54,6 +54,39 @@ test("every relative link in the repository resolves", async () => {
   assert.deepEqual(JSON.parse(stdout).broken, []);
 });
 
+test("no catalogued rule backlinks to a standard nobody has written", async () => {
+  // A rule pointing at an unwritten standard is enforced, its violation is reported, and the
+  // document explaining what it means does not exist. The reader is told they broke a rule and given
+  // nowhere to go.
+  const { stdout } = await guard("inventory.mjs", ["--json"]);
+  assert.deepEqual(JSON.parse(stdout).danglingRules, []);
+});
+
+// --- Fidelity's own failure modes -----------------------------------------------------------------
+//
+// Both of these were real defects in this guard, found while writing Standard 11. They are the
+// guard's own failure mode turned on itself: a check that quietly examines less — or reports more —
+// than it appears to.
+
+test("a verbatim claim that wraps across lines is still checked", async () => {
+  // The defect: prose here is hard-wrapped, and "Reproduced verbatim from\nthe source:" split the
+  // claim across two lines. Testing one line at a time matched neither half, so the block after it
+  // went unchecked while the guard reported clean.
+  const { stdout } = await guard("fidelity.mjs", ["--json"]);
+  const report = JSON.parse(stdout);
+  assert.ok(report.claims >= 6, `expected every claim to be found, saw ${report.claims}`);
+});
+
+test("one block is counted once, however many positions the claim window matches at", async () => {
+  // The defect: widening to a lookback window made the same block match at each position the window
+  // still covered the claim, inflating the claims total into a number that looked like more coverage
+  // than existed. Six claims across three documents is the true figure.
+  const { stdout } = await guard("fidelity.mjs", ["--json"]);
+  const report = JSON.parse(stdout);
+  const fences = report.claims;
+  assert.ok(fences <= 8, `claims total looks inflated by duplicate counting: ${fences}`);
+});
+
 // --- The inventory extractor ------------------------------------------------------------------------
 
 test("the extractor finds bullets before the first heading, where the mode taxonomy lives", () => {

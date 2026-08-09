@@ -13,10 +13,14 @@
  * sends a reader looking for a requirement that does not exist — and an agent following it concludes
  * the requirement was withdrawn, which is a silent weakening of the standard nobody authored.
  *
- * FORWARD REFERENCES. A plan may legitimately describe what it will create. So a link from
- * artifacts/project-plan-breakdown/ is permitted to point at a file that does not exist yet, but
- * ONLY where some item in that same directory names the target as a Deliverable. A plan may commit
- * to creating something; it may not point at something nothing has committed to.
+ * FORWARD REFERENCES. Two narrow exemptions, each requiring a written commitment to the target that
+ * predates the link. A plan may point at a file some item in artifacts/project-plan-breakdown/ names
+ * as a Deliverable. Anything may point at a standard the frozen inventory enumerates, because the
+ * series' shape and filenames were decided once and committed. Everything else is a dead link.
+ *
+ * The distinction is between "this will exist because we said so in a document under review" and
+ * "this will exist because I hope to write it". Only the first is honest, and only the first can be
+ * checked — a link to standards/30-something.md still fails, because the series has 29 entries.
  *
  * WHAT IS NOT CHECKED. External URLs — this command makes no network requests, so a run is
  * deterministic and offline. Anchors within a file are checked only for the file's existence, not
@@ -55,6 +59,31 @@ async function markdownFiles(dir, acc = []) {
 }
 
 /**
+ * Standards the inventory has committed to, by their declared path.
+ *
+ * A standard cross-referencing one that has not been written yet is honest in a way an arbitrary
+ * dead link is not: the series is enumerated and frozen in
+ * `artifacts/standards-source-inventory.json`, so the target is a commitment rather than a hope, and
+ * its path was decided once rather than guessed at the point of linking. Writing the series in
+ * batches with no cross-references, then adding them all at the end, would mean adding several
+ * hundred links in one pass with nothing checking them until then.
+ *
+ * The exemption is narrow by construction: only paths the inventory declares. A link to
+ * `standards/30-something.md` fails, because the series has 29 entries and nothing has committed to
+ * a thirtieth.
+ */
+async function declaredStandards() {
+  const declared = new Set();
+  const file = path.join(ROOT, "artifacts/standards-source-inventory.json");
+  if (!existsSync(file)) return declared;
+  const inventory = JSON.parse(await readFile(file, "utf8"));
+  for (const standard of inventory.standards ?? []) {
+    if (standard.file) declared.add(standard.file);
+  }
+  return declared;
+}
+
+/**
  * Targets that some plan item names as a Deliverable. Read from the plan's own text rather than
  * hardcoded, so the permission to forward-reference is granted by the plan committing to the file —
  * which is the thing that makes the reference honest.
@@ -77,6 +106,7 @@ async function plannedDeliverables() {
 
 const files = await markdownFiles("");
 const planned = await plannedDeliverables();
+const declared = await declaredStandards();
 const broken = [];
 const forward = [];
 let checked = 0;
@@ -98,8 +128,12 @@ for (const file of files) {
     if (existsSync(path.join(ROOT, resolved))) continue;
 
     const entry = { file, link: raw, resolved };
-    // Only the plan may forward-reference, and only to something it has committed to creating.
-    if (file.startsWith(PLAN_DIR) && planned.has(resolved)) forward.push(entry);
+    // Two narrow exemptions, each requiring a prior written commitment to the target:
+    //   * the plan may point at something an item names as a Deliverable;
+    //   * anything may point at a standard the frozen inventory enumerates.
+    // Everything else is a dead link.
+    if (file.startsWith(PLAN_DIR) && planned.has(resolved)) forward.push({ ...entry, why: "plan deliverable" });
+    else if (declared.has(resolved)) forward.push({ ...entry, why: "declared standard" });
     else broken.push(entry);
   }
 }
@@ -115,7 +149,7 @@ const out = [
   `Markdown files scanned:  ${files.length}`,
   `Relative links checked:  ${checked}`,
   `Unresolved:              ${broken.length}`,
-  `Planned (plan only):     ${forward.length}`,
+  `Committed, unwritten:    ${forward.length}`,
   "",
 ];
 for (const b of broken) {
@@ -131,8 +165,10 @@ if (broken.length > 0) {
   out.push("Every relative link resolves.");
   if (forward.length > 0) {
     out.push("");
-    out.push(`${forward.length} forward reference(s) in the plan, each to a declared Deliverable:`);
-    for (const f of forward) out.push(`  ~ ${f.file} → ${f.resolved}`);
+    out.push(`${forward.length} reference(s) to files not yet written, each already committed to:`);
+    const byWhy = new Map();
+    for (const f of forward) byWhy.set(f.why, (byWhy.get(f.why) ?? 0) + 1);
+    for (const [why, n] of byWhy) out.push(`  ~ ${n} × ${why}`);
   }
 }
 process.stdout.write(out.join("\n") + "\n");

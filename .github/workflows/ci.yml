@@ -36,12 +36,14 @@ jobs:
       - name: Policy shape
         run: npm run policy
 
+      - name: Financial mathematics
+        run: npm run math
+
       - name: Tests
         run: npm test
 
       # Steps enabled as their subjects land, so a red build is always something someone can act on:
       #
-      #   math      — Milestone 2, once scripts/calc.mjs and the first calc blocks exist
       #   diagrams  — Milestone 5, once docs/architecture.mmd exists
       #   audit     — Milestone 4, once the detectors and examples/ exist
       #   check     — Milestone 4, once the rule catalog exists

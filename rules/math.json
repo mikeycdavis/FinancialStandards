@@ -1,0 +1,46 @@
+{
+  "$comment": "Rules about financial arithmetic and how figures are expressed. Standards 10, 11, 12, and 28. Only the Standard 11 rules exist at this milestone; the rest land with their standards, because a rule backlinking to a standard nobody has written points at nothing — scripts/inventory.mjs now refuses that.",
+  "$admissionTest": "Every rule here passed all five questions (ADR 0005): can it be applicable, can evidence be gathered, can its state be evaluated, can its violation be explained, can remediation change the result? Standard 11's other requirements — whether an inflation assumption is reasonable, whether a cross-period comparison's basis is the right one — fail question three and stay in the standard's prose, disclosed in its Implementation section.",
+  "rules": [
+    {
+      "id": "math.nominal-real-labeled",
+      "title": "Every stated return is labelled nominal or real",
+      "standard": 11,
+      "category": "math",
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "introducedIn": "0.1.0",
+      "description": "Each return, growth rate, or projected monetary figure in the analysis states whether it is expressed in nominal terms or in real, inflation-adjusted terms.",
+      "rationale": "An unlabelled return is ambiguous by exactly the inflation rate, and the reader has no way to recover which was meant. Over a long horizon the two differ by most of the answer.",
+      "remediation": "Label each figure at the point it is stated. A single global note does not disambiguate a document that mixes both, which most realistic analyses do.",
+      "aliases": [],
+      "deprecatedIn": null,
+      "supersededBy": null,
+      "removedIn": null,
+      "$assuranceNote": "A lexical check. It establishes that a label is PRESENT near a figure — never that the label is CORRECT. A nominal figure labelled 'real' passes this check, and no scan available to this repository can tell the difference. Reporting a clean run as 'nominal and real are not confused here' would be exactly the false green this framework exists to prevent."
+    },
+    {
+      "id": "math.real-terms-for-long-horizons",
+      "title": "Long-horizon projections lead with real terms",
+      "standard": 11,
+      "category": "math",
+      "level": "recommended",
+      "severity": "warning",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "introducedIn": "0.1.0",
+      "description": "Where the projection horizon exceeds ten years, the analysis presents its primary figures in today's purchasing power, with nominal figures secondary.",
+      "rationale": "A nominal figure at a thirty-year horizon reads as a far better outcome than it is, and reads that way most strongly to the audience least equipped to notice.",
+      "remediation": "Convert the headline figures to today's money and state the inflation assumption used. Keep the nominal figures; make them secondary.",
+      "aliases": [],
+      "deprecatedIn": null,
+      "supersededBy": null,
+      "removedIn": null,
+      "$assuranceNote": "Recommended rather than required because legitimate exceptions exist: a fixed nominal liability such as a mortgage balance genuinely is a nominal quantity, and converting it obscures more than it clarifies. The checker cannot distinguish that case from an oversight, which is precisely why this warns rather than fails."
+    }
+  ]
+}

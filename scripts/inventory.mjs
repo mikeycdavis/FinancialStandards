@@ -199,9 +199,37 @@ async function main() {
 
   const countMismatch = inventory.expectedCount !== inventory.standards.length;
 
+  // Every catalogued rule backlinks to a standard. A rule pointing at a standard nobody has written
+  // is a dangling reference of the worst kind: the rule is enforced, its violation is reported, and
+  // the document explaining what it means and why does not exist. The reader is told they broke a
+  // rule and given nowhere to go.
+  const rulesDir = path.join(ROOT, "rules");
+  const written = new Set(
+    inventory.standards.filter((s) => s.implementedBy && existsSync(path.join(ROOT, s.implementedBy)))
+      .map((s) => s.number),
+  );
+  const danglingRules = [];
+  if (existsSync(rulesDir)) {
+    for (const file of (await readdir(rulesDir)).filter((f) => f.endsWith(".json"))) {
+      let parsed;
+      try {
+        parsed = JSON.parse(await readFile(path.join(rulesDir, file), "utf8"));
+      } catch (error) {
+        danglingRules.push({ rule: `${file} (unparseable)`, standard: null, reason: error.message });
+        continue;
+      }
+      for (const rule of parsed.rules ?? []) {
+        if (!written.has(rule.standard)) {
+          danglingRules.push({ rule: rule.id, standard: rule.standard });
+        }
+      }
+    }
+  }
+
   const problems =
     sectionProblems.length + gaps.length + duplicates.length + outOfRange.length +
-    brokenPaths.length + unclaimedFiles.length + numberingMismatches.length + (countMismatch ? 1 : 0);
+    brokenPaths.length + unclaimedFiles.length + numberingMismatches.length +
+    danglingRules.length + (countMismatch ? 1 : 0);
 
   if (JSON_OUT) {
     process.stdout.write(
@@ -212,7 +240,7 @@ async function main() {
           implementedCount: claimed.length,
           sectionProblems, gaps, duplicates, outOfRange,
           brokenPaths: brokenPaths.map((s) => s.implementedBy),
-          unclaimedFiles, numberingMismatches,
+          unclaimedFiles, numberingMismatches, danglingRules,
           ok: problems === 0,
         },
         null,
@@ -237,6 +265,7 @@ async function main() {
     line("Broken implementedBy paths:", list(brokenPaths.map((s) => s.implementedBy))),
     line("Unclaimed standard files:", list(unclaimedFiles)),
     line("Number/filename mismatches:", list(numberingMismatches.map((m) => `${m.number} ≠ ${m.implementedBy}`))),
+    line("Rules citing no standard:", list(danglingRules.map((d) => `${d.rule} → Standard ${d.standard}`))),
   ];
 
   if (countMismatch) {
