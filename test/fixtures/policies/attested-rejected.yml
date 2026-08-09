@@ -1,0 +1,9 @@
+# Known-negative in the outcome sense: a recorded rejection is a FAILURE, not silence.
+standardVersion: "0.1.0"
+project: "Fixture"
+attestations:
+  sample.human-judgement:
+    status: rejected
+    reviewedBy: "fixture-reviewer"
+    reviewedAt: "2026-08-09"
+    evidence: "Two figures could not be traced to any source."

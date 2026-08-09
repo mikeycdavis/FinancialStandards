@@ -1,0 +1,60 @@
+# Project policy for the FinancialStandards repository itself.
+#
+# This repository is its own first adopter, so this file is the pattern every adopting project will
+# copy — including its mistakes. Four rules govern what may appear here:
+#
+#   * Rule IDs are canonical only (ADR 0001). No camelCase; the schema rejects it.
+#   * `applicability` and `exceptions` are different mechanisms and never substitute for each other.
+#       not-applicable = the rule has no subject in this project.
+#       exception      = the rule applies and this project knowingly does not satisfy it.
+#   * An attestation is EVIDENCE, not a waiver. It never overrides an automated finding, and it goes
+#     stale on its own when what it reviewed changes.
+#   * Nothing here asserts compliance. What this project actually meets is the output of
+#     `standards check`, not a claim made in its own configuration.
+#
+# Shape: schemas/project-policy.schema.json. Reasoning: artifacts/adr/0005-concept-disposition.md.
+
+standardVersion: "0.1.0"
+project: "FinancialStandards"
+
+# No rule-level overrides yet, and none are expected.
+#
+# The catalog does not exist at this milestone — the standards series is written in Milestone 3, and
+# the tooling spine was deliberately built first so the guards exist before there is anything to
+# guard. An empty `rules` map means every catalogued rule takes its framework default, which is the
+# correct state for a project that has not yet had reason to differ from one.
+#
+# This is a real, schema-valid policy rather than a placeholder: the build order requires the schema
+# and the first policy to be authored together, because writing a policy is what reveals whether the
+# schema has collapsed two mechanisms into one. It had not.
+
+# Rules whose subject does not exist in this repository. Each is a claim about THIS PROJECT, not
+# about the rule, and stops being true the moment the project gains the capability — hence
+# `revisitWhen`.
+#
+# Empty at this milestone because there are no rules to declare anything about. When the catalog
+# lands, the honest entries go here. The first expected one is risk.sequence-risk-addressed, whose
+# subject — an analysis with withdrawals — genuinely may not exist in a given project.
+#
+# The key is omitted rather than written as an empty mapping because scripts/yaml.mjs rejects flow
+# collections outright rather than guessing at them. That strictness is deliberate and is the parser
+# working as intended: a policy is a document whose exact meaning matters, and a parser that accepts
+# two spellings of nothing will eventually accept two spellings of something. These comments are
+# what stop an omitted section from reading as an overlooked one.
+
+# No exceptions. Every rule that applies here is either met, failing, or honestly unevaluated, and a
+# failing rule is reported as a failure rather than waived.
+#
+# A waiver against any of the five non-exemptible rules is rejected rather than honoured, and yields
+# BLOCKED_BY_INVARIANT (ADR 0006). That is not a reason to avoid recording a genuine exception — it
+# is a reason that the four fabrication-and-guarantee prohibitions and integrity.no-weakening can
+# never be one.
+exceptions: []
+
+# Recorded human judgement for rules the catalog says a human evaluates.
+#
+# Empty, and this is the most important empty section in the file. Several prohibitions here can only
+# ever be established by a person: no scan determines whether market data, account data, or a tax
+# rule was fabricated. Until a human reviews and records that judgement, those rules are
+# NOT_EVALUATED — which is a distinct state from compliant, and must never be rounded up to one
+# because an automated run found nothing.

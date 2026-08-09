@@ -1,0 +1,8 @@
+standardVersion: "0.1.0"
+project: "Fixture"
+attestations:
+  sample.human-judgement:
+    status: approved
+    reviewedBy: "fixture-reviewer"
+    reviewedAt: "2026-08-09"
+    evidence: "Reviewed the source data against the custodian statements; no figure was invented."

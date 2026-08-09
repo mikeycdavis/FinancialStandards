@@ -1,0 +1,9 @@
+# Known-negative: a waiver against a non-exemptible rule. Must be REJECTED, not honoured and not
+# quietly ignored, and must yield BLOCKED_BY_INVARIANT (ADR 0006).
+standardVersion: "0.1.0"
+project: "Fixture"
+exceptions:
+  - rule: sample.forbidden-absolute
+    reason: "Attempting to waive an absolute prohibition."
+    approvedBy: "fixture-owner"
+    approvedAt: "2026-01-01"

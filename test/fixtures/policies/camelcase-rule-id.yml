@@ -1,0 +1,7 @@
+# Known-negative: a camelCase rule id. The schema must reject this by construction (ADR 0001),
+# not normalise it. Two spellings of one rule is the drift the canonical-identity rule abolishes.
+standardVersion: "0.1.0"
+project: "Fixture"
+rules:
+  sample.alwaysChecked:
+    level: required

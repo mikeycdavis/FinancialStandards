@@ -1,0 +1,9 @@
+# Known-negative: an exception that has lapsed. Expiry is a compliance failure, not a resolution.
+standardVersion: "0.1.0"
+project: "Fixture"
+exceptions:
+  - rule: sample.always-checked
+    reason: "Deliberately lapsed, to prove expiry is not silently forgiven."
+    approvedBy: "fixture-owner"
+    approvedAt: "2020-01-01"
+    expires: "2020-06-01"

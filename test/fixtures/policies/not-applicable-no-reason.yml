@@ -1,0 +1,6 @@
+# Known-negative: not-applicable with no reason. Indistinguishable from a forgotten rule.
+standardVersion: "0.1.0"
+project: "Fixture"
+applicability:
+  sample.always-checked:
+    status: not-applicable

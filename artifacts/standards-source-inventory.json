@@ -1,0 +1,206 @@
+{
+  "$comment": "The canonical enumeration of this framework's source material and its standards series. AUTHORED AND REVIEWED BY HAND, then frozen. scripts/inventory.mjs extracts from the sources and compares its result AGAINST this file; it must never regenerate it. A parser that becomes more or less forgiving can then only disagree with this file, and disagreeing fails the build. Regenerating this from a run would destroy the entire guarantee.",
+  "expectedCount": 29,
+
+  "sources": [
+    {
+      "path": "artifacts/prompts/financial-standards-spec.md",
+      "role": "domain — which standards exist, which prohibitions exist, what an analysis must disclose",
+      "sections": [
+        {
+          "heading": "(preamble)",
+          "note": "The mode taxonomy, introduced by the line 'Distinguish:'. It sits before the first heading, so a heading-driven scan would miss it entirely.",
+          "bullets": [
+            "financial education",
+            "factual financial information",
+            "analysis",
+            "forecasting",
+            "scenario modeling",
+            "planning",
+            "personalized recommendation"
+          ]
+        },
+        {
+          "heading": "Required standards",
+          "note": "Introduced by 'Cover:'. One standard per bullet, in source order, numbered 02 through 24.",
+          "bullets": [
+            "objectives",
+            "time horizon",
+            "liquidity",
+            "emergency reserves",
+            "debt",
+            "interest rates",
+            "taxes",
+            "fees",
+            "inflation",
+            "nominal vs real returns",
+            "compounding",
+            "diversification",
+            "concentration",
+            "volatility",
+            "downside risk",
+            "sequence risk where applicable",
+            "assumptions",
+            "scenario analysis",
+            "uncertainty",
+            "data freshness",
+            "risk tolerance",
+            "opportunity cost",
+            "behavioral biases"
+          ]
+        },
+        {
+          "heading": "Must-never rules",
+          "note": "Introduced by 'Never:'. All 23 are reproduced verbatim in Standard 25 and each becomes a forbidden-level rule in rules/prohibited.json. The exact text is recorded here so that softening one — 'never describe' becoming 'avoid describing' — fails the build rather than passing review.",
+          "bullets": [
+            "describe investment returns as guaranteed",
+            "fabricate market data",
+            "fabricate account data",
+            "fabricate tax rules",
+            "hide assumptions",
+            "ignore fees when material",
+            "ignore taxes when material",
+            "confuse nominal and real returns",
+            "compare values from different time periods without accounting for relevant differences",
+            "extrapolate recent returns indefinitely",
+            "recommend an investment solely because its price recently increased",
+            "assume historical returns will repeat",
+            "ignore concentration risk",
+            "present a single forecast as certain",
+            "use excessive precision in long-term projections",
+            "hide downside scenarios",
+            "optimize investment returns while ignoring required liquidity",
+            "recommend risk without considering time horizon",
+            "treat mathematically optimal as automatically personally appropriate",
+            "confuse correlation with guaranteed diversification",
+            "encourage borrowing for investment without explicit risk analysis",
+            "present tax estimates as exact when important information is missing",
+            "silently assume missing financial circumstances"
+          ]
+        },
+        {
+          "heading": "Uncertainty",
+          "note": "Introduced by 'Where appropriate include:'. The section's two prose statements are not bullets and are recorded under prose below: projections should use scenarios or ranges where uncertainty materially affects the answer, and these four must never be implied to exhaust possible outcomes.",
+          "bullets": ["conservative", "base", "optimistic", "adverse"]
+        }
+      ],
+      "prose": [
+        {
+          "heading": "Deliverables",
+          "note": "Four statements, no bullets. Each is a cross-cutting requirement rather than a topic, which is why they become standards 26 through 28 plus a plan obligation rather than one standard each.",
+          "statements": [
+            "Implement standards, prohibitions, applicability, evidence requirements, verification, tests, documentation, and examples.",
+            "Automatically verify financial mathematics where feasible.",
+            "Clearly identify what requires current external data or personal financial context.",
+            "Run all validation and report results."
+          ]
+        }
+      ]
+    },
+    {
+      "path": "artifacts/prompts/standalone-system-directive.md",
+      "role": "system — how the standards are represented, evaluated, evidenced, and protected",
+      "sections": [
+        {
+          "heading": "(preamble)",
+          "note": "The fifteen candidate concepts, introduced by 'At minimum, investigate whether the repository needs concepts equivalent to:'. The directive is explicit that these must not be implemented merely because they are listed, and that the reasoning must be documented — so every one of them is dispositioned in artifacts/adr/0005-concept-disposition.md. This section was MISSED when the inventory was first authored by hand and was caught by scripts/inventory.mjs disagreeing; the guard earning its place on its first run is the reason it is written before any standard rather than after.",
+          "bullets": [
+            "requirement",
+            "prohibition",
+            "recommendation",
+            "decision rule",
+            "applicability",
+            "evidence",
+            "verification",
+            "exceptions",
+            "severity",
+            "invariants",
+            "revisit conditions",
+            "not-applicable",
+            "not-evaluated",
+            "compliant",
+            "non-compliant"
+          ]
+        },
+        {
+          "heading": "AI usage",
+          "note": "Two bullet lists in one section: the ten capabilities an AI operator must have, then the five conclusions it must be able to reach. The extractor collects both under this heading, which is why the declared list below runs to fifteen.",
+          "bullets": [
+            "initialize the standards against a target project",
+            "determine applicable standards",
+            "explain why standards apply",
+            "gather or request evidence",
+            "evaluate compliance",
+            "identify violations",
+            "identify prohibitions",
+            "refuse or stop work that would violate an invariant",
+            "recommend remediation",
+            "update evaluations when relevant project state changes",
+            "compliant",
+            "non-compliant",
+            "not applicable",
+            "insufficient evidence / not evaluated",
+            "blocked by invariant"
+          ]
+        },
+        {
+          "heading": "Repository quality",
+          "note": "The production-software obligations this repository holds itself to.",
+          "bullets": [
+            "automated tests",
+            "deterministic behavior where appropriate",
+            "documentation",
+            "examples",
+            "schema validation",
+            "backward-compatible evolution where reasonable",
+            "clear failure behavior",
+            "safe defaults",
+            "auditable decisions"
+          ]
+        }
+      ],
+      "prose": [
+        {
+          "heading": "Standards integrity invariant",
+          "note": "Reproduced verbatim in Standard 29 and encoded as the non-exemptible rule integrity.no-weakening.",
+          "statements": [
+            "A human or AI must never bypass, weaken, remove, reclassify, reinterpret, falsify evidence for, or manipulate a standard, test, applicability determination, evidence requirement, or verification mechanism solely because it prevents the desired implementation or conclusion."
+          ]
+        }
+      ]
+    }
+  ],
+
+  "$standardsComment": "One standard per source unit. `coversSource` names the unit each standard answers for, so a reader can trace any requirement back to the text it came from, and so a source bullet with no standard is visible as a gap rather than as an absence.",
+  "standards": [
+    { "number": 1, "title": "Modes of Financial Communication", "implementedBy": null, "coversSource": "spec (preamble) — all 7 bullets" },
+    { "number": 2, "title": "Objectives", "implementedBy": null, "coversSource": "spec Required standards — objectives" },
+    { "number": 3, "title": "Time Horizon", "implementedBy": null, "coversSource": "spec Required standards — time horizon" },
+    { "number": 4, "title": "Liquidity", "implementedBy": null, "coversSource": "spec Required standards — liquidity" },
+    { "number": 5, "title": "Emergency Reserves", "implementedBy": null, "coversSource": "spec Required standards — emergency reserves" },
+    { "number": 6, "title": "Debt", "implementedBy": null, "coversSource": "spec Required standards — debt" },
+    { "number": 7, "title": "Interest Rates", "implementedBy": null, "coversSource": "spec Required standards — interest rates" },
+    { "number": 8, "title": "Taxes", "implementedBy": null, "coversSource": "spec Required standards — taxes" },
+    { "number": 9, "title": "Fees", "implementedBy": null, "coversSource": "spec Required standards — fees" },
+    { "number": 10, "title": "Inflation", "implementedBy": null, "coversSource": "spec Required standards — inflation" },
+    { "number": 11, "title": "Nominal vs Real Returns", "implementedBy": null, "coversSource": "spec Required standards — nominal vs real returns" },
+    { "number": 12, "title": "Compounding", "implementedBy": null, "coversSource": "spec Required standards — compounding" },
+    { "number": 13, "title": "Diversification", "implementedBy": null, "coversSource": "spec Required standards — diversification" },
+    { "number": 14, "title": "Concentration", "implementedBy": null, "coversSource": "spec Required standards — concentration" },
+    { "number": 15, "title": "Volatility", "implementedBy": null, "coversSource": "spec Required standards — volatility" },
+    { "number": 16, "title": "Downside Risk", "implementedBy": null, "coversSource": "spec Required standards — downside risk" },
+    { "number": 17, "title": "Sequence Risk", "implementedBy": null, "coversSource": "spec Required standards — sequence risk where applicable" },
+    { "number": 18, "title": "Assumptions", "implementedBy": null, "coversSource": "spec Required standards — assumptions" },
+    { "number": 19, "title": "Scenario Analysis", "implementedBy": null, "coversSource": "spec Required standards — scenario analysis; and the whole Uncertainty section, including its 4 bullets and the non-exhaustiveness statement" },
+    { "number": 20, "title": "Uncertainty", "implementedBy": null, "coversSource": "spec Required standards — uncertainty; and the Uncertainty section's statement that projections should use scenarios or ranges where uncertainty materially affects the answer" },
+    { "number": 21, "title": "Data Freshness", "implementedBy": null, "coversSource": "spec Required standards — data freshness" },
+    { "number": 22, "title": "Risk Tolerance", "implementedBy": null, "coversSource": "spec Required standards — risk tolerance" },
+    { "number": 23, "title": "Opportunity Cost", "implementedBy": null, "coversSource": "spec Required standards — opportunity cost" },
+    { "number": 24, "title": "Behavioral Biases", "implementedBy": null, "coversSource": "spec Required standards — behavioral biases" },
+    { "number": 25, "title": "Prohibitions", "implementedBy": null, "coversSource": "spec Must-never rules — all 23 bullets, reproduced verbatim" },
+    { "number": 26, "title": "Evidence and Provenance", "implementedBy": null, "coversSource": "spec Deliverables — evidence requirements; directive — the evidence concept" },
+    { "number": 27, "title": "External Data and Personal Context", "implementedBy": null, "coversSource": "spec Deliverables — clearly identify what requires current external data or personal financial context" },
+    { "number": 28, "title": "Computational Verification", "implementedBy": null, "coversSource": "spec Deliverables — automatically verify financial mathematics where feasible" },
+    { "number": 29, "title": "Standards Integrity", "implementedBy": null, "coversSource": "directive Standards integrity invariant, quoted verbatim; and the AI usage section's stop-work capability and blocked-by-invariant conclusion" }
+  ]
+}

@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# There is deliberately NO dependency-install step.
+#
+# The zero-dependency rule is enforced structurally rather than by policy: adding a package makes the
+# build fail here rather than passing unnoticed. A rule that only lives in documentation is a rule
+# until the first inconvenience.
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      # Guards run BEFORE the verdict, in this order, so a broken guard fails the build before a
+      # verdict can be rendered from it. A verdict computed on unverified inputs is worse than no
+      # verdict, because it carries the authority of having been checked.
+
+      - name: Source inventory
+        run: npm run inventory
+
+      - name: Source fidelity
+        run: npm run fidelity
+
+      - name: Cross-references
+        run: npm run links
+
+      - name: Policy shape
+        run: npm run policy
+
+      - name: Tests
+        run: npm test
+
+      # Steps enabled as their subjects land, so a red build is always something someone can act on:
+      #
+      #   math      — Milestone 2, once scripts/calc.mjs and the first calc blocks exist
+      #   diagrams  — Milestone 5, once docs/architecture.mmd exists
+      #   audit     — Milestone 4, once the detectors and examples/ exist
+      #   check     — Milestone 4, once the rule catalog exists
+      #
+      # The audit step, when it lands, is deliberately NOT run with --strict. A step that fails on
+      # advisory findings is a step someone eventually deletes, and a deleted step checks nothing.

@@ -12,6 +12,7 @@
     "check": "node scripts/standards.mjs check .",
     "inventory": "node scripts/inventory.mjs",
     "fidelity": "node scripts/fidelity.mjs",
+    "links": "node scripts/links.mjs",
     "policy": "node scripts/policy.mjs",
     "diagrams": "node scripts/diagrams.mjs",
     "math": "node scripts/calc.mjs standards examples"

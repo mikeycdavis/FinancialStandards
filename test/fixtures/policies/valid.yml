@@ -1,0 +1,6 @@
+standardVersion: "0.1.0"
+project: "Fixture"
+rules:
+  sample.always-checked:
+    level: required
+exceptions: []

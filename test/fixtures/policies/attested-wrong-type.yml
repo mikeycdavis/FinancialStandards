@@ -1,0 +1,10 @@
+# Known-negative: attesting a rule the catalog says is evaluated by machine, not by human review.
+# Attestation must not become a universal override.
+standardVersion: "0.1.0"
+project: "Fixture"
+attestations:
+  sample.always-checked:
+    status: approved
+    reviewedBy: "fixture-reviewer"
+    reviewedAt: "2026-08-09"
+    evidence: "Asserting a machine-checked rule by hand."

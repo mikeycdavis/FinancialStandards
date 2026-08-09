@@ -1,0 +1,15 @@
+# Known-negative: the same rule declared not-applicable AND carrying an exception. A rule cannot
+# both have no subject here and apply-but-be-unmet.
+standardVersion: "0.1.0"
+project: "Fixture"
+applicability:
+  sample.always-checked:
+    status: not-applicable
+    reason: "Claimed to have no subject here."
+    reviewedAt: "2026-08-09"
+    revisitWhen: "Never — this fixture exists to be contradictory."
+exceptions:
+  - rule: sample.always-checked
+    reason: "And also waived, which contradicts the line above."
+    approvedBy: "fixture-owner"
+    approvedAt: "2026-01-01"
