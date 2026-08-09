@@ -1,0 +1,56 @@
+flowchart TB
+    subgraph sources["Sources — committed verbatim"]
+        spec["financial-standards-spec.md<br/>23 topics · 23 prohibitions"]
+        directive["standalone-system-directive.md<br/>concepts · AI workflows · invariant"]
+    end
+
+    subgraph contract["The contract — what is required"]
+        standards["standards/01-29<br/>normative documents"]
+        catalog["rules/*.json<br/>95 rules, 17 categories"]
+        inventory["standards-source-inventory.json<br/>frozen enumeration"]
+    end
+
+    subgraph guards["Guards — run before any verdict"]
+        inv["inventory<br/>series has not shifted"]
+        fid["fidelity<br/>quotations still match"]
+        links["links<br/>no dead cross-reference"]
+        math["calc<br/>every figure recomputes"]
+    end
+
+    subgraph engine["Engine — evidence to verdict"]
+        document["document.mjs<br/>strips comments, fences, fixture prose"]
+        detectors["detectors.mjs<br/>58 document checks"]
+        finance["finance.mjs<br/>21 pure functions"]
+        compliance["compliance.mjs<br/>evaluate → 5 verdicts"]
+    end
+
+    subgraph surface["Command line"]
+        audit["audit<br/>evidence, no policy"]
+        check["check<br/>the verdict"]
+        explain["explain"]
+        status["status"]
+        init["init<br/>dry run by default"]
+    end
+
+    analysis[/"analysis document<br/>markdown"/]
+    policy[/"project-policy.yml<br/>applicability · exceptions · attestations"/]
+
+    spec --> standards
+    directive --> standards
+    standards --> catalog
+    inventory -. "compared against, never regenerated" .-> spec
+    fid -. "quotation must appear in source" .-> spec
+    math -. "recomputes calc blocks" .-> standards
+
+    analysis --> document
+    document --> detectors
+    catalog -. "assertBindings: unknown id is refused" .-> detectors
+    finance --> math
+    finance --> detectors
+
+    detectors -- "findings + evaluated set" --> audit
+    detectors -- findings --> compliance
+    policy -- "applicability · exceptions · attestations" --> compliance
+    compliance -- "COMPLIANT · NON_COMPLIANT · NOT_EVALUATED<br/>COMPLIANT_WITH_EXCEPTIONS · BLOCKED_BY_INVARIANT" --> check
+
+    guards ==> check

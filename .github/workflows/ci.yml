@@ -39,6 +39,9 @@ jobs:
       - name: Financial mathematics
         run: npm run math
 
+      - name: Diagram freshness
+        run: npm run diagrams
+
       - name: Tests
         run: npm test
 
@@ -50,11 +53,7 @@ jobs:
       - name: Check this repository against its own policy
         run: npm run check
 
-      # One step remains disabled until its subject exists:
-      #
-      #   diagrams  — Milestone 5, once docs/architecture.mmd exists
-      #
-      # SCOPE OF audit AND check. Both target examples/compliant — the analysis documents this
+      # Every step is now enabled. SCOPE OF audit AND check. Both target examples/compliant — the analysis documents this
       # repository publishes as its own work — rather than every markdown file it contains. Two
       # categories are excluded and neither goes unchecked:
       #

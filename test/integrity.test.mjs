@@ -138,6 +138,7 @@ const GUARDS = [
   { script: "scripts/links.mjs", npm: "links" },
   { script: "scripts/policy.mjs", npm: "policy" },
   { script: "scripts/calc.mjs", npm: "math" },
+  { script: "scripts/diagrams.mjs", npm: "diagrams" },
 ];
 
 test("every mechanical guard still exists as a script", () => {

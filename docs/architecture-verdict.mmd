@@ -1,0 +1,48 @@
+sequenceDiagram
+    autonumber
+    actor Agent
+    participant CLI as standards check
+    participant Doc as document.mjs
+    participant Det as detectors.mjs
+    participant Cat as catalog.mjs
+    participant Pol as policy.mjs
+    participant Eng as compliance.mjs
+
+    Agent->>CLI: check analyses/retirement.md
+    CLI->>Cat: loadCatalog(rules/)
+    Cat-->>CLI: 95 rules
+    CLI->>Cat: assertBindings(detector ids)
+    Note over Cat: an id the catalog does not define<br/>throws here, before any document is read
+
+    CLI->>Pol: checkPolicy(project-policy.yml)
+    alt policy malformed
+        Pol-->>CLI: schema errors
+        CLI-->>Agent: exit 2 — could not be evaluated
+        Note over CLI,Agent: never exit 1: a broken configuration<br/>is not non-compliance
+    end
+    Pol-->>CLI: validated policy
+
+    CLI->>Doc: parseDocument(text)
+    Note over Doc: strips HTML comments, fenced blocks,<br/>and everything after END OF ANALYSIS
+    Doc-->>CLI: prose, sections, calc blocks
+
+    CLI->>Det: runDetectors(doc)
+    Det-->>CLI: findings, evaluated[], notApplicable[]
+    Note over Det,CLI: a rule absent from evaluated[] was NOT checked;<br/>notApplicable is never folded into evaluated
+
+    CLI->>Eng: evaluate(catalog, policy, findings, evaluated)
+    Note over Eng: per rule — not-applicable → attestation →<br/>manual-review → findings → pass or fail by level
+
+    alt a non-exemptible rule failed, or a waiver was attempted against one
+        Eng-->>CLI: BLOCKED_BY_INVARIANT + invariantBreaches[]
+        CLI-->>Agent: STOP — do not route around, do not adjust the rule
+    else a required rule failed
+        Eng-->>CLI: NON_COMPLIANT
+        CLI-->>Agent: exit 1 + remediation per rule
+    else nothing evaluated it
+        Eng-->>CLI: skipped / not-evaluated
+        CLI-->>Agent: NOT_EVALUATED — never rounded up to a pass
+    else
+        Eng-->>CLI: COMPLIANT + frameworkCoverage
+        CLI-->>Agent: exit 0, coverage reported beside the verdict
+    end

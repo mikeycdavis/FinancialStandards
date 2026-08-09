@@ -14,27 +14,24 @@
 #
 # Shape: schemas/project-policy.schema.json. Reasoning: artifacts/adr/0005-concept-disposition.md.
 
-standardVersion: "0.1.0"
+standardVersion: "1.0.0"
 project: "FinancialStandards"
 
-# No rule-level overrides yet, and none are expected.
-#
-# The catalog does not exist at this milestone — the standards series is written in Milestone 3, and
-# the tooling spine was deliberately built first so the guards exist before there is anything to
-# guard. An empty `rules` map means every catalogued rule takes its framework default, which is the
-# correct state for a project that has not yet had reason to differ from one.
-#
-# This is a real, schema-valid policy rather than a placeholder: the build order requires the schema
-# and the first policy to be authored together, because writing a policy is what reveals whether the
-# schema has collapsed two mechanisms into one. It had not.
+# No rule-level overrides. Every one of the 95 catalogued rules takes its framework default here,
+# which is the correct state for a project that has not had reason to differ from one — and the
+# honest state for the repository that authored them.
 
 # Rules whose subject does not exist in this repository. Each is a claim about THIS PROJECT, not
 # about the rule, and stops being true the moment the project gains the capability — hence
 # `revisitWhen`.
 #
-# Empty at this milestone because there are no rules to declare anything about. When the catalog
-# lands, the honest entries go here. The first expected one is risk.sequence-risk-addressed, whose
-# subject — an analysis with withdrawals — genuinely may not exist in a given project.
+# Empty, and that is a claim worth examining rather than a default. The obvious candidate is
+# risk.sequence-risk-addressed, whose subject — an analysis modelling withdrawals — is absent from
+# two of the three analyses published here. It is deliberately NOT declared not-applicable: the
+# detector already reports NOT_EVALUATED for those documents, which is the accurate state, and a
+# blanket project-level declaration would also cover debt-vs-invest-analysis.md, which does model
+# cash flows. A not-applicable claim that is true of most documents and false of one is exactly the
+# kind of convenient approximation this mechanism exists to prevent.
 #
 # The key is omitted rather than written as an empty mapping because scripts/yaml.mjs rejects flow
 # collections outright rather than guessing at them. That strictness is deliberate and is the parser

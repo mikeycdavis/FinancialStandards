@@ -11,7 +11,7 @@
 # Nothing in this file asserts compliance. What this project actually meets is the output of
 # `standards check`, which is computed from evidence — not a claim made in its own configuration.
 
-standardVersion: "0.1.0"
+standardVersion: "1.0.0"
 project: "CHANGE-ME"
 
 # Level overrides. Omit a rule to take the framework default. Note that a `forbidden` rule cannot be

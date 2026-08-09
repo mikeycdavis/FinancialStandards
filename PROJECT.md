@@ -14,8 +14,9 @@ project that claims to follow these standards.
 
 This repository is standalone. It has no runtime, build-time, or reference dependency on any other
 standards repository. Proven machinery was copied in and is maintained here; the design decisions it
-embodies are re-recorded as this repository's own ADRs rather than cited elsewhere (ADR 0001,
-landing in Milestone 1). A reader needs nothing outside this repository to understand or run it.
+embodies are re-recorded as this repository's own ADRs rather than cited elsewhere
+([ADR 0001](artifacts/adr/0001-standalone-by-vendoring.md)). A reader needs nothing outside this
+repository to understand or run it, and `test/integrity.test.mjs` enforces that.
 
 ## Stack
 
@@ -70,9 +71,9 @@ Project-specific constraints, not a restatement of the standards:
 - **Assurance is stated honestly.** Every rule declares what its checker can establish and, in
   `$assuranceNote`, what it cannot. A lexical scan proves nothing was *obviously* wrong and must
   never be reported as proof that nothing is wrong.
-- **The integrity invariant is itself guarded and tested.** Standard 29 will list the guards and
-  their self-protection tests, together with the residual that cannot be protected from inside the
-  repository. Not yet written — Milestone 3.
+- **The integrity invariant is itself guarded and tested.**
+  [Standard 29](standards/29-standards-integrity.md) lists the guards and their self-protection
+  tests, together with the residual that cannot be protected from inside the repository.
 - **Zero third-party dependencies**, including in tests and CI.
 - **Every guard exists because of a specific defect**, and is mutation-tested where it guards a known
   bug — reintroduce the defect, confirm the test fails, restore.
@@ -101,13 +102,22 @@ Project-specific constraints, not a restatement of the standards:
 
 ## Current state
 
-- **Current status:** `IN_PROGRESS` — Milestone 0 of 5.
-- **Current release target:** `1.0.0`, cut only when every milestone gate in
-  [`artifacts/project-plan-breakdown/00-overview.md`](artifacts/project-plan-breakdown/00-overview.md)
-  has passed. No release is cut on a partially-built series.
-- **Known risks:** The rule catalog will cover fewer requirements than the standards state in prose.
-  That gap is disclosed per standard in its `## Implementation` section and in aggregate as
-  `frameworkCoverage`; nothing counts the prose-only remainder and nothing notices it going stale.
+- **Current status:** `COMPLETE` — 1.0.0 released. All six milestone gates passed.
+- **Last evaluated:** 2026-08-09. The full chain ran green: inventory, fidelity, links, policy, math,
+  diagrams, test (245), audit (0 findings), check (`COMPLIANT`).
+- **What exists:** 29 standards, 95 rules across 17 categories, 5 commands, 58 detectors, 21 finance
+  functions, 3 compliant examples, 9 violation fixtures, 245 tests, zero dependencies.
+- **Known risks, unchanged and disclosed rather than closed:**
+  - The rule catalog covers fewer requirements than the standards state in prose. Disclosed per
+    standard in its `## Implementation` section and in aggregate as `frameworkCoverage` (53 of 95
+    rules evaluated, 10 of 29 standards fully machine-represented). Nothing counts the prose-only
+    remainder and nothing notices it going stale.
+  - 33 rules can only be established by a person and report `NOT_EVALUATED` until one attests —
+    including all three fabrication prohibitions, the most consequential and least checkable rules in
+    the domain.
+  - Deleting the guards and their tests together cannot be prevented from inside this repository.
+    Git history and review are the backstops.
 - **Known blockers:** none.
-- **Next recommended work:** Milestone 1 — the tooling spine, which must land before any standard is
-  written so that the inventory and fidelity guards exist before there is anything to guard.
+- **Next recommended work:** adopt the framework in a real project and let its analyses drive the
+  rules. The catalog was written from the standards rather than from practice, and the first honest
+  test of a rule is a document its author did not write.

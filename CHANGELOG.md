@@ -1,5 +1,65 @@
 # Changelog
 
+All notable changes to this framework. A new `required` or `forbidden` rule is MAJOR, because it can
+turn a compliant project non-compliant. A new `recommended` rule is MINOR. A published rule id stays
+resolvable forever through `aliases` — ids are never reused or respelled.
+
+## 1.0.0 — 2026-08-09
+
+The first frozen release. Twenty-nine standards, ninety-five rules, five commands, 245 tests, zero
+dependencies.
+
+### The frozen surface
+
+Adopters may depend on these. Changing any of them is a MAJOR release.
+
+- **Verdicts** — `COMPLIANT`, `COMPLIANT_WITH_EXCEPTIONS`, `NON_COMPLIANT`, `NOT_EVALUATED`,
+  `BLOCKED_BY_INVARIANT`, with `BLOCKED_BY_INVARIANT` outranking all others and reachable without a
+  policy.
+- **Exit codes** — 0 fine, 1 a compliance condition failed, 2 could not be evaluated. A malformed
+  policy is always 2.
+- **Commands** — `audit`, `check`, `explain`, `status`, `init`, with their flags. `audit` never
+  gates and never renders a verdict; `check` requires a policy.
+- **Rule identity** — `category.kebab-case-name`, no hyphen in the category segment. Every id
+  currently published stays resolvable.
+- **Rule fields** — `id`, `title`, `standard`, `category`, `level`, `severity`, `validationType`,
+  `assurance`, `nonExemptible`, `introducedIn`, `description`, `rationale`, `remediation`,
+  `aliases`, `deprecatedIn`, `supersededBy`, `removedIn`, `$assuranceNote`.
+- **Enumerations** — `level`: required/recommended/optional/forbidden. `severity`: error/warning/info.
+  `assurance`: full/partial/none. `validationType`: structural/document/configuration/code-analysis/
+  computational/manual-review.
+- **The five non-exemptible rules** — `prohibited.guaranteed-returns`,
+  `prohibited.fabricated-market-data`, `prohibited.fabricated-account-data`,
+  `prohibited.fabricated-tax-rules`, `integrity.no-weakening`.
+- **The four policy mechanisms** — `rules`, `applicability`, `exceptions`, `attestations`, and the
+  schema at `schemas/project-policy.schema.json`. Merging any two would change the meaning of every
+  policy already written.
+- **The `calc` block** — fenced `calc` with `{fn, inputs, expect:{value, tolerance}}`; `fn` names an
+  export of `scripts/finance.mjs`; unknown `fn` is exit 2; `tolerance` is required.
+- **The two context markers** — `[requires current external data]`,
+  `[requires personal financial context]`.
+- **The result envelope** — `schemaVersion`, `standardVersion`, `project`, `status`, `score`,
+  `summary`, `assurance`, `denominator`, `invariantBreaches`, `frameworkCoverage`, `auditedAt`,
+  `results`.
+
+### Dogfooded
+
+The repository is its own first adopter. `npm run check` evaluates its three published analyses
+against its own `project-policy.yml` and returns `COMPLIANT`; `test/integrity.test.mjs` asserts that,
+so the dogfooding cannot lapse quietly.
+
+### Known gap
+
+Restated from `INSTRUCTIONS.md` §7 rather than buried there:
+
+- Only Markdown analyses can be evaluated. Anything else is `NOT_EVALUATED`, never a pass.
+- 58 of 95 rules are lexical: they establish presence, never correctness.
+- 33 rules — including all three fabrication prohibitions — can only be established by a person, and
+  report `NOT_EVALUATED` until one attests.
+- `frameworkCoverage` is 53 of 95 rules evaluated, and 10 of 29 standards fully machine-represented.
+- Deleting the guards and their tests together cannot be prevented from inside the repository.
+- No `.svg` is rendered; the `.mmd` is canonical and the embedded fences are checked against it.
+
 Versioning follows the contract in this repository's own standards: a new `required` or `forbidden`
 rule is a MAJOR change, a new `recommended` rule is MINOR, and a rule id is never reused or silently
 respelled — deprecated ids stay resolvable through `aliases` forever.
