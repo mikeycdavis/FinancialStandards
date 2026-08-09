@@ -1,0 +1,14 @@
+# The policy a first-time adopter would actually have on day one.
+#
+# Deliberately naive: standardVersion, a project name, and nothing else. No applicability
+# declarations, no exceptions, no attestations. This is what `standards init` scaffolds, and running
+# the framework against it is the point — an adoption test that began with a hand-tuned policy would
+# be measuring how well the policy was tuned, not how the framework behaves on arrival.
+#
+# Every declaration this policy SHOULD have carried is a finding, recorded in findings.md and
+# classified. It is not added here.
+
+standardVersion: "1.0.0"
+project: "Numerai crypto stake analysis (adoption test 01)"
+
+exceptions: []

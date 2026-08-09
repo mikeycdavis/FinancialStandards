@@ -1,0 +1,186 @@
+{
+  "schemaVersion": "1.0",
+  "command": "audit",
+  "documents": [
+    {
+      "file": "artifacts/adoption/01-numerai-crypto-stake/source.md",
+      "mode": null,
+      "calcBlocks": 0,
+      "evaluated": 25,
+      "notApplicable": 33,
+      "findings": [
+        {
+          "rule": "modes.declared-mode",
+          "level": "required",
+          "severity": "error",
+          "message": "The document does not declare which of the seven modes it operates in.",
+          "evidence": [
+            "artifacts/adoption/01-numerai-crypto-stake/source.md"
+          ]
+        },
+        {
+          "rule": "objectives.declared",
+          "level": "required",
+          "severity": "error",
+          "message": "No objectives section was found.",
+          "evidence": [
+            "artifacts/adoption/01-numerai-crypto-stake/source.md"
+          ]
+        },
+        {
+          "rule": "liquidity.requirements-stated",
+          "level": "required",
+          "severity": "error",
+          "message": "The document does not state its liquidity requirements.",
+          "evidence": [
+            "artifacts/adoption/01-numerai-crypto-stake/source.md"
+          ]
+        },
+        {
+          "rule": "math.rate-compounding-stated",
+          "level": "required",
+          "severity": "error",
+          "message": "A rate is stated with no period or compounding frequency.",
+          "evidence": [
+            "artifacts/adoption/01-numerai-crypto-stake/source.md"
+          ]
+        },
+        {
+          "rule": "math.compounding-inputs-stated",
+          "level": "required",
+          "severity": "error",
+          "message": "A compounded projection does not state both its rate and its horizon.",
+          "evidence": [
+            "artifacts/adoption/01-numerai-crypto-stake/source.md"
+          ]
+        },
+        {
+          "rule": "tax.materiality-considered",
+          "level": "required",
+          "severity": "error",
+          "message": "The document does not address tax at all.",
+          "evidence": [
+            "artifacts/adoption/01-numerai-crypto-stake/source.md"
+          ]
+        },
+        {
+          "rule": "fee.materiality-considered",
+          "level": "required",
+          "severity": "error",
+          "message": "The document does not address fees at all.",
+          "evidence": [
+            "artifacts/adoption/01-numerai-crypto-stake/source.md"
+          ]
+        },
+        {
+          "rule": "inflation.assumption-stated",
+          "level": "required",
+          "severity": "error",
+          "message": "The document does not state an inflation assumption.",
+          "evidence": [
+            "artifacts/adoption/01-numerai-crypto-stake/source.md"
+          ]
+        },
+        {
+          "rule": "risk.volatility-figure-qualified",
+          "level": "required",
+          "severity": "error",
+          "message": "A volatility figure is stated without its period or measurement basis.",
+          "evidence": [
+            "artifacts/adoption/01-numerai-crypto-stake/source.md"
+          ]
+        },
+        {
+          "rule": "risk.path-measure-stated",
+          "level": "required",
+          "severity": "error",
+          "message": "Risk is discussed with no path measure — no drawdown or worst-case figure.",
+          "evidence": [
+            "artifacts/adoption/01-numerai-crypto-stake/source.md"
+          ]
+        },
+        {
+          "rule": "risk.sequence-inapplicability-stated",
+          "level": "required",
+          "severity": "error",
+          "message": "A projection with no cash flows does not say so, leaving sequence risk unaddressed rather than inapplicable.",
+          "evidence": [
+            "artifacts/adoption/01-numerai-crypto-stake/source.md"
+          ]
+        },
+        {
+          "rule": "disclosure.assumptions-stated",
+          "level": "required",
+          "severity": "error",
+          "message": "No assumptions section was found.",
+          "evidence": [
+            "artifacts/adoption/01-numerai-crypto-stake/source.md"
+          ]
+        },
+        {
+          "rule": "scenarios.set-complete",
+          "level": "required",
+          "severity": "error",
+          "message": "The scenario set is missing: conservative, base, optimistic, adverse.",
+          "evidence": [
+            "artifacts/adoption/01-numerai-crypto-stake/source.md"
+          ]
+        },
+        {
+          "rule": "scenarios.range-not-point-estimate",
+          "level": "required",
+          "severity": "error",
+          "message": "A projection is presented as a single figure with no range.",
+          "evidence": [
+            "artifacts/adoption/01-numerai-crypto-stake/source.md"
+          ]
+        },
+        {
+          "rule": "data.source-named",
+          "level": "required",
+          "severity": "error",
+          "message": "Market or historical figures are used with no source named.",
+          "evidence": [
+            "artifacts/adoption/01-numerai-crypto-stake/source.md"
+          ]
+        },
+        {
+          "rule": "disclosure.risk-tolerance-stated",
+          "level": "required",
+          "severity": "error",
+          "message": "The document does not state a risk tolerance.",
+          "evidence": [
+            "artifacts/adoption/01-numerai-crypto-stake/source.md"
+          ]
+        },
+        {
+          "rule": "bias.recency-extrapolation-checked",
+          "level": "required",
+          "severity": "error",
+          "message": "Recent performance is cited in a projection without qualifying its predictive value.",
+          "evidence": [
+            "artifacts/adoption/01-numerai-crypto-stake/source.md"
+          ]
+        },
+        {
+          "rule": "prohibited.hide-downside-scenarios",
+          "level": "forbidden",
+          "severity": "error",
+          "message": "A projection presents favourable outcomes with no adverse case.",
+          "evidence": [
+            "artifacts/adoption/01-numerai-crypto-stake/source.md"
+          ]
+        },
+        {
+          "rule": "math.projections-carry-calc-blocks",
+          "level": "recommended",
+          "severity": "warning",
+          "message": "A projection carries no calc block, so none of its arithmetic can be recomputed.",
+          "evidence": [
+            "artifacts/adoption/01-numerai-crypto-stake/source.md"
+          ]
+        }
+      ]
+    }
+  ]
+}
