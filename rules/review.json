@@ -1,0 +1,27 @@
+{
+  "$comment": "Rules whose only output is a passage handed to a human. They exist because candidate replay 01 measured a real limit: automation is competent at DISCOVERY — 'this passage contains language that could constitute a claim of kind X' — and demonstrably incompetent at JUDGMENT — 'this passage makes claim X'. The v1.0 detector for prohibited.guaranteed-returns conflated the two and issued an unwaivable stop-work order against correct published work. Separating them lets each half claim exactly what it can establish.",
+  "$assurance": "A review rule is `recommended` and `warning` by construction. It cannot be `required`, because failing a document for containing a passage that MIGHT need adjudication would make the framework unusable, and it cannot be `forbidden`, because the thing it found may be entirely correct. Its assurance is `partial`: it establishes that a passage was found, never what the passage means.",
+  "$relationship": "A review rule NEVER establishes the prohibition it routes to. The prohibition stays `forbidden`, `nonExemptible`, `manual-review`, `assurance: none`, and reports NOT_EVALUATED until a person records an attestation with evidence. A clean review scan is not evidence for the prohibition either — it establishes only that nothing was surfaced by this vocabulary.",
+  "rules": [
+    {
+      "id": "review.guarantee-language-present",
+      "title": "surface guarantee language for human adjudication",
+      "standard": 25,
+      "category": "review",
+      "level": "recommended",
+      "severity": "warning",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "introducedIn": "1.1.0",
+      "description": "The document contains one or more passages describing something as guaranteed, assured, certain, risk-free, or promised, outside a negating context. Whether any of them describes an INVESTMENT return — which Standard 25 forbids — is not decided here.",
+      "rationale": "The prohibition on guaranteed investment returns cannot be evaluated automatically, but the passages a reviewer must read to evaluate it can be found automatically. Reporting them as a warning gives the reviewer a work-list without the framework asserting a conclusion it cannot support. Without this rule, moving the prohibition to manual review would have removed the only mechanism that told anyone where to look.",
+      "remediation": "Read each surfaced passage and decide what its guarantee describes. Where it is an investment return, the passage violates Standard 25 and must be rewritten as an assumption or a scenario with its downside case. Where it is a contractual certainty about something else — interest saved by repaying debt, a protected deposit, a gilt held to maturity — name the guarantor and the conditions in the sentence itself, which both satisfies the reader and removes the ambiguity that caused the passage to be surfaced. Then record the judgement as an attestation against prohibited.guaranteed-returns.",
+      "aliases": [],
+      "deprecatedIn": null,
+      "supersededBy": null,
+      "removedIn": null,
+      "$assuranceNote": "Establishes ONLY that guarantee vocabulary was found outside a negating context, with the position of each occurrence. It does not establish that a prohibited claim was made, and a clean result does not establish that none was: a guarantee implied without the vocabulary ('you will have £1m at 65') is not surfaced. It can never satisfy prohibited.guaranteed-returns — that rule is manual-review and reports NOT_EVALUATED regardless of what this one found."
+    }
+  ]
+}

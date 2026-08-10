@@ -1,0 +1,18 @@
+
+=== a01
+  v1.0.0    NON_COMPLIANT          {"passed":6,"failed":18,"warnings":1,"skipped":70}  evaluated 25/95  score 19
+  candidate NON_COMPLIANT          {"passed":6,"failed":18,"warnings":1,"skipped":71}  evaluated 25/96  score 19
+  CHANGED  prohibited.guaranteed-returns: passed/evaluated -> skipped/not-evaluated
+           now: No implemented check evaluates prohibited.guaranteed-returns.
+  NEW      review.guarantee-language-present: passed/evaluated
+           No violation of review.guarantee-language-present was observed.
+  2 rule-level change(s).
+
+=== a02
+  v1.0.0    BLOCKED_BY_INVARIANT   {"passed":31,"failed":15,"warnings":1,"skipped":48}  evaluated 47/95  score 65
+  candidate NON_COMPLIANT          {"passed":31,"failed":14,"warnings":2,"skipped":49}  evaluated 47/96  score 65
+  CHANGED  prohibited.guaranteed-returns: failed/evaluated -> skipped/not-evaluated
+           now: No implemented check evaluates prohibited.guaranteed-returns.
+  NEW      review.guarantee-language-present: warning/evaluated
+           3 passage(s) use guarantee language. Read each one and decide what it describes: a guarantee about an investment return is prohibited by Standard 25, 
+  2 rule-level change(s).

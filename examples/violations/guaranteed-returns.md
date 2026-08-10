@@ -1,5 +1,5 @@
-<!-- violates: prohibited.guaranteed-returns -->
-<!-- violates (manual-review): prohibited.fabricated-market-data, bias.falsifier-stated -->
+<!-- violates: review.guarantee-language-present -->
+<!-- violates (manual-review): prohibited.guaranteed-returns, prohibited.fabricated-market-data, bias.falsifier-stated -->
 
 # The Balanced Growth Plan — A Guaranteed 7% a Year
 
@@ -47,12 +47,21 @@ verification establishes that a number was computed correctly and says nothing a
 claim wrapped around it is honest.
 
 1. **"guaranteed", "assured", "risk-free", "certain return", "promised growth", "will earn"**
-   (`prohibited.guaranteed-returns`). [Standard 25](../../standards/25-prohibitions.md) forbids
-   describing an investment return as guaranteed. Six separate phrasings appear above and each one
-   trips the detector independently. Note that `saysUnnegated` in `scripts/document.mjs` deliberately
-   does *not* fire on the compliant form — "returns are **not** guaranteed" is required by
-   [Standard 20](../../standards/20-uncertainty.md), and a checker that flagged the required phrasing
-   is one people switch off.
+   ([Standard 25](../../standards/25-prohibitions.md) forbids describing an investment return as
+   guaranteed). Nine passages above use that vocabulary, and `review.guarantee-language-present`
+   surfaces every one of them with its position. It does **not** conclude that the prohibition was
+   breached: `prohibited.guaranteed-returns` is `manual-review` and reports `NOT_EVALUATED` until a
+   person reads the passages and records the judgement.
+
+   That split is the uncomfortable part of this fixture and it is deliberate. A human reads "The
+   Balanced Growth Plan pays a guaranteed 7% a year" and knows instantly what is being guaranteed.
+   The machine cannot: **this document never uses an investment noun anywhere in its text**, while a
+   correct published mortgage-versus-invest comparison uses twenty-one. Candidate replay 01 measured
+   exactly that, which is why the automated half of this rule was retired to discovery.
+
+   Note that the negation window deliberately does *not* fire on the compliant form — "returns are
+   **not** guaranteed" is required by [Standard 20](../../standards/20-uncertainty.md), and a checker
+   that flagged the required phrasing is one people switch off.
 
 2. **The certainty is used to remove the adverse case.** "There is no adverse case to consider" is
    the operative harm: the guarantee language is not merely inaccurate decoration, it is the
@@ -68,8 +77,7 @@ claim wrapped around it is honest.
 
    Distinguishing a genuine contractual guarantee — a deposit within a protection limit, a gilt held
    to maturity — from a marketing claim is the same kind of judgement: it requires reading the
-   instrument, not the sentence. `prohibited.guaranteed-returns` fires on both, which is the correct
-   trade for a lexical check to make, and the reason its assurance is `partial`.
+   instrument, not the sentence. `prohibited.guaranteed-returns` now sits with them for that reason.
 
 4. **The surrounding compliance is cosmetic.** The document names an inflation index, states fee and
    tax bases, cites a source, and declares a freshness threshold. It passes those checks. It is still

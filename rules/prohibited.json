@@ -1,7 +1,7 @@
 {
   "$comment": "The twenty-three must-never rules. Standard 25. Each rule's `title` is the source text VERBATIM — scripts/inventory.mjs holds the same strings and fails the build if one is reworded, so softening a prohibition here cannot pass review. Everything else in each entry is authored.",
   "$exemptibility": "Exactly four are nonExemptible: guaranteed-returns and the three fabrication rules. No project context makes those acceptable — inventing a price, a balance, or a tax rule corrupts the evidence every downstream conclusion rests on, and a guarantee claim asserts the absence of a risk the reader cannot check for. The other nineteen are materiality and context judgements a policy may legitimately scope. Making all twenty-three unwaivable was considered and rejected in Standard 25 R4: a stop signal that fires constantly is one people learn to route around.",
-  "$assurance": "Four rules have lexical detectors and claim `partial`. Nineteen are `manual-review` with `assurance: none` — including all three fabrication rules, because no scan establishes that a figure was NOT invented without already knowing the true value. That is uncomfortable and it is stated rather than softened: the most consequential prohibitions in this domain are the least checkable.",
+  "$assurance": "Three rules have lexical detectors and claim `partial`. Twenty are `manual-review` with `assurance: none` — including all three fabrication rules, because no scan establishes that a figure was NOT invented without already knowing the true value. That is uncomfortable and it is stated rather than softened: the most consequential prohibitions in this domain are the least checkable. `guaranteed-returns` joined them on measured evidence rather than on principle: candidate replay 01 established that no lexical scan can decide whether a guarantee claim's subject is an investment return. Its DISCOVERY half survives as `review.guarantee-language-present`, which surfaces the passages and adjudicates nothing.",
   "rules": [
     {
       "id": "prohibited.guaranteed-returns",
@@ -10,8 +10,8 @@
       "category": "prohibited",
       "level": "forbidden",
       "severity": "error",
-      "validationType": "document",
-      "assurance": "partial",
+      "validationType": "manual-review",
+      "assurance": "none",
       "nonExemptible": true,
       "introducedIn": "0.1.0",
       "description": "The analysis describes an investment return as guaranteed, assured, certain, risk-free, or promised.",
@@ -21,7 +21,7 @@
       "deprecatedIn": null,
       "supersededBy": null,
       "removedIn": null,
-      "$assuranceNote": "A lexical scan with a negation window, so 'returns are not guaranteed' does not trip it — that phrasing is required, not merely permitted, and a checker flagging it would be switched off. It establishes that no guarantee language was OBVIOUSLY present. A guarantee implied without the vocabulary ('you will have £1m at 65') passes."
+      "$assuranceNote": "NOT AUTOMATED. Deciding this requires establishing that the guaranteed thing is an INVESTMENT RETURN, and candidate replay 01 measured that a lexical scan cannot: the framework's own clearest violation names no investment anywhere in the document, while a correct published comparison names twenty-one. Vocabulary is at best uncorrelated with the violation. So this reports NOT_EVALUATED until a person reads the passages and records the judgement with evidence. `review.guarantee-language-present` finds the passages and can never establish this rule — discovery is not adjudication, and a run that reported this as passing because a scan found nothing would be the framework committing the error it exists to catch."
     },
     {
       "id": "prohibited.fabricated-market-data",

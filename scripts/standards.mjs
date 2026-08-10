@@ -243,7 +243,13 @@ function renderVerdict(report, documentCount) {
   }
   if (warned.length) {
     out("  Warnings:");
-    for (const r of warned) out(`    ${r.ruleId} — ${r.message}`);
+    for (const r of warned) {
+      out(`    ${r.ruleId} — ${r.message}`);
+      // Evidence, not just the count. A rule whose whole purpose is to hand a reviewer a work-list
+      // has not done its job if the verdict says "3 passages" and never says which three. The
+      // reviewer would have to re-run `audit` to find out, and most will not.
+      for (const e of r.evidence ?? []) out(`      · ${e}`);
+    }
     out("");
   }
 
