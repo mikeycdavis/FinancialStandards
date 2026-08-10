@@ -1,0 +1,4 @@
+# The same naive day-one policy as every adoption: standardVersion, a project name, nothing else.
+standardVersion: "1.0.0"
+project: "Outcome B counterexample search"
+exceptions: []

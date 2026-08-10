@@ -1,0 +1,1347 @@
+{
+  "schemaVersion": "1.0",
+  "standardVersion": "1.0.0",
+  "project": "Numerai crypto stake analysis (adoption test 01)",
+  "status": "NON_COMPLIANT",
+  "score": 19,
+  "summary": {
+    "passed": 6,
+    "failed": 18,
+    "warnings": 1,
+    "skipped": 70
+  },
+  "assurance": {
+    "automated": 25,
+    "manualReview": 0,
+    "notEvaluated": 70
+  },
+  "denominator": {
+    "total": 95,
+    "applicable": 95,
+    "scored": 21,
+    "basis": "required-level rules that were evaluated"
+  },
+  "invariantBreaches": [],
+  "frameworkCoverage": {
+    "cataloguedRules": 95,
+    "evaluatedRules": 25,
+    "standards": 29,
+    "standardsWithRules": 29,
+    "fullyMachineRepresentedStandards": 0,
+    "note": "Framework maturity, not compliance. A standard counts as fully machine-represented only when every rule it contributes is evaluated and carries assurance above none."
+  },
+  "auditedAt": "2026-08-09",
+  "results": [
+    {
+      "ruleId": "bias.recency-extrapolation-checked",
+      "status": "failed",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "partial",
+      "disposition": "evaluated",
+      "message": "Recent performance is cited in a projection without qualifying its predictive value.",
+      "evidence": [
+        "artifacts/adoption/01-numerai-crypto-stake/source.md"
+      ],
+      "files": [
+        "artifacts/adoption/01-numerai-crypto-stake/source.md"
+      ],
+      "remediation": "State the sample period beside the rate, say why it is representative of the horizon being projected, and vary the rate across scenarios rather than carrying one figure forward."
+    },
+    {
+      "ruleId": "bias.past-performance-qualified",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates bias.past-performance-qualified.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Put the qualification at the point of use, and make the analysis behave as though it were true by varying the forward rate rather than adopting the table's mean."
+    },
+    {
+      "ruleId": "bias.falsifier-stated",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates bias.falsifier-stated.",
+      "evidence": [],
+      "files": [],
+      "remediation": "State the specific observation — a rate, a threshold, an event — that would make the conclusion wrong, and where and when it would be checked."
+    },
+    {
+      "ruleId": "tax.materiality-considered",
+      "status": "failed",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "partial",
+      "disposition": "evaluated",
+      "message": "The document does not address tax at all.",
+      "evidence": [
+        "artifacts/adoption/01-numerai-crypto-stake/source.md"
+      ],
+      "files": [
+        "artifacts/adoption/01-numerai-crypto-stake/source.md"
+      ],
+      "remediation": "Model the tax that applies and present figures net of it, or declare the rule not-applicable with a reason and a revisit condition. Do not simply omit the subject."
+    },
+    {
+      "ruleId": "tax.rate-basis-stated",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates tax.rate-basis-stated.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Label each rate at the point it is used, and name the jurisdiction and tax year it comes from with a source."
+    },
+    {
+      "ruleId": "tax.estimate-precision",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates tax.estimate-precision.",
+      "evidence": [],
+      "files": [],
+      "remediation": "State the figure as an estimate or a range, name the inputs that would change it, and mark them [requires personal financial context]."
+    },
+    {
+      "ruleId": "fee.materiality-considered",
+      "status": "failed",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "partial",
+      "disposition": "evaluated",
+      "message": "The document does not address fees at all.",
+      "evidence": [
+        "artifacts/adoption/01-numerai-crypto-stake/source.md"
+      ],
+      "files": [
+        "artifacts/adoption/01-numerai-crypto-stake/source.md"
+      ],
+      "remediation": "State the fee schedule, apply it multiplicatively rather than by subtracting the ratio, and present the projection net. Where fees are genuinely absent, declare the rule not-applicable with a reason."
+    },
+    {
+      "ruleId": "fee.cumulative-effect-shown",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates fee.cumulative-effect-shown.",
+      "evidence": [],
+      "files": [],
+      "remediation": "State the terminal value with and without the fee over the document's own horizon, or the cumulative amount paid, and carry the arithmetic in a calc block."
+    },
+    {
+      "ruleId": "inflation.assumption-stated",
+      "status": "failed",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "partial",
+      "disposition": "evaluated",
+      "message": "The document does not state an inflation assumption.",
+      "evidence": [
+        "artifacts/adoption/01-numerai-crypto-stake/source.md"
+      ],
+      "files": [
+        "artifacts/adoption/01-numerai-crypto-stake/source.md"
+      ],
+      "remediation": "State the assumed rate where the projection is presented, and show the real-terms figure alongside the nominal one."
+    },
+    {
+      "ruleId": "inflation.assumption-marked",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates inflation.assumption-marked.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Move the rate into the assumptions section with its basis, and vary it across scenarios wherever the conclusion is sensitive to it."
+    },
+    {
+      "ruleId": "inflation.index-identified",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates inflation.index-identified.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Name the index, the period, and the publisher beside the figure, and say why that index is the right one for the spending being inflated."
+    },
+    {
+      "ruleId": "data.as-of-date-stated",
+      "status": "passed",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "partial",
+      "disposition": "evaluated",
+      "message": "No violation of data.as-of-date-stated was observed.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Attach the as-of date at the point each external figure is used, not once at the top of the document where it does not reach the figure."
+    },
+    {
+      "ruleId": "data.source-named",
+      "status": "failed",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "partial",
+      "disposition": "evaluated",
+      "message": "Market or historical figures are used with no source named.",
+      "evidence": [
+        "artifacts/adoption/01-numerai-crypto-stake/source.md"
+      ],
+      "files": [
+        "artifacts/adoption/01-numerai-crypto-stake/source.md"
+      ],
+      "remediation": "Name the publisher and the specific series or instrument beside the figure, with a reference or link where one exists."
+    },
+    {
+      "ruleId": "data.staleness-threshold-declared",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates data.staleness-threshold-declared.",
+      "evidence": [],
+      "files": [],
+      "remediation": "State the freshness window for each class of input the conclusion depends on, and the condition that would require the analysis to be redone."
+    },
+    {
+      "ruleId": "data.sources-cited",
+      "status": "passed",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "partial",
+      "disposition": "evaluated",
+      "message": "No violation of data.sources-cited was observed.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Attach an origin to every figure: a source with a date, an assumption with a basis, or a marker naming the missing input and the conclusion that depends on it."
+    },
+    {
+      "ruleId": "data.attestation-digests-current",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "structural",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates data.attestation-digests-current.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Re-review the changed content and record a new attestation with a fresh digest. Never update the digest without redoing the review — that is precisely the weakening Standard 29 forbids."
+    },
+    {
+      "ruleId": "data.external-data-marked",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates data.external-data-marked.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Mark the claim where it appears, name the specific figure that is missing, and state the conclusion as conditional on it. A document-level disclaimer does not reach the claim and does not satisfy this."
+    },
+    {
+      "ruleId": "data.personal-context-marked",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates data.personal-context-marked.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Mark the claim where it appears, name the circumstance that is missing, and present the conclusion as conditional on it rather than choosing a value for it."
+    },
+    {
+      "ruleId": "disclosure.assumptions-stated",
+      "status": "failed",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "partial",
+      "disposition": "evaluated",
+      "message": "No assumptions section was found.",
+      "evidence": [
+        "artifacts/adoption/01-numerai-crypto-stake/source.md"
+      ],
+      "files": [
+        "artifacts/adoption/01-numerai-crypto-stake/source.md"
+      ],
+      "remediation": "Collect every unobserved input into one section with its value, and keep that section beside the projection rather than in an appendix."
+    },
+    {
+      "ruleId": "disclosure.assumption-basis-stated",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates disclosure.assumption-basis-stated.",
+      "evidence": [],
+      "files": [],
+      "remediation": "State for each assumption its source, the period it was derived from, and why that period is representative of the horizon being projected."
+    },
+    {
+      "ruleId": "disclosure.assumption-sensitivity-identified",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates disclosure.assumption-sensitivity-identified.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Vary each assumption across its plausible range, record which ones move the conclusion, and mark those as material with the size of the effect."
+    },
+    {
+      "ruleId": "disclosure.risk-tolerance-stated",
+      "status": "failed",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "partial",
+      "disposition": "evaluated",
+      "message": "The document does not state a risk tolerance.",
+      "evidence": [
+        "artifacts/adoption/01-numerai-crypto-stake/source.md"
+      ],
+      "files": [
+        "artifacts/adoption/01-numerai-crypto-stake/source.md"
+      ],
+      "remediation": "State the tolerance, how it was established, and express it as a loss the person would actually experience rather than as a label."
+    },
+    {
+      "ruleId": "disclosure.risk-capacity-distinguished",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates disclosure.risk-capacity-distinguished.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Derive capacity from the balance sheet and the horizon, take tolerance from what was asked, and where they conflict act on the lower of the two and say that you did."
+    },
+    {
+      "ruleId": "disclosure.alternative-considered",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates disclosure.alternative-considered.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Name the alternative the money would otherwise have gone to, and say why the recommended course is preferred over that specific comparator rather than over an unnamed field."
+    },
+    {
+      "ruleId": "disclosure.opportunity-cost-quantified",
+      "status": "skipped",
+      "severity": "warning",
+      "level": "recommended",
+      "validationType": "document",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates disclosure.opportunity-cost-quantified.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Compute both courses over the same horizon, net of fees, taxes, and inflation, and state the difference — with the arithmetic in a calc block so it can be recomputed."
+    },
+    {
+      "ruleId": "objectives.declared",
+      "status": "failed",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "partial",
+      "disposition": "evaluated",
+      "message": "No objectives section was found.",
+      "evidence": [
+        "artifacts/adoption/01-numerai-crypto-stake/source.md"
+      ],
+      "files": [
+        "artifacts/adoption/01-numerai-crypto-stake/source.md"
+      ],
+      "remediation": "State the objective before the analysis, in terms the reader recognises as their own situation rather than as a category. Where it is genuinely unknown, mark it [requires personal financial context] and present the work as analysis rather than as a plan."
+    },
+    {
+      "ruleId": "objectives.quantified",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates objectives.quantified.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Add the sum required and the date it is required by, and state the consequence of missing it alongside. Where one element is unknown, mark it rather than dropping it."
+    },
+    {
+      "ruleId": "objectives.competing-ranked",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates objectives.competing-ranked.",
+      "evidence": [],
+      "files": [],
+      "remediation": "List the objectives in precedence order, state explicitly which is sacrificed first, and show that the allocation reflects that order rather than an average of them."
+    },
+    {
+      "ruleId": "horizon.stated",
+      "status": "passed",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "partial",
+      "disposition": "evaluated",
+      "message": "No violation of horizon.stated was observed.",
+      "evidence": [],
+      "files": [],
+      "remediation": "State the horizon beside the risk characterisation. Where several horizons apply, state each and analyse them separately rather than blending them into an average."
+    },
+    {
+      "ruleId": "horizon.matches-objective",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates horizon.matches-objective.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Set the projection horizon to the objective's date. Where they must differ, state why and show what the difference does to the conclusion."
+    },
+    {
+      "ruleId": "horizon.risk-constrained-by-horizon",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates horizon.risk-constrained-by-horizon.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Show the constraint operating: state the maximum risk the horizon permits, then derive the allocation from that bound, rather than annotating an allocation that was already settled."
+    },
+    {
+      "ruleId": "liquidity.requirements-stated",
+      "status": "failed",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "partial",
+      "disposition": "evaluated",
+      "message": "The document does not state its liquidity requirements.",
+      "evidence": [
+        "artifacts/adoption/01-numerai-crypto-stake/source.md"
+      ],
+      "files": [
+        "artifacts/adoption/01-numerai-crypto-stake/source.md"
+      ],
+      "remediation": "State the amounts required and their timing at the head of the allocation section, and show that the allocation meets them before any expected return is compared."
+    },
+    {
+      "ruleId": "liquidity.lockup-terms-disclosed",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates liquidity.lockup-terms-disclosed.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Name the notice period, the redemption frequency, any gating or suspension provision, and any exit charge, beside the recommendation rather than in an appendix."
+    },
+    {
+      "ruleId": "liquidity.constraint-not-tradeoff",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates liquidity.constraint-not-tradeoff.",
+      "evidence": [],
+      "files": [],
+      "remediation": "State the liquidity requirement as a constraint, show the feasible set it leaves, and select within that set. Never present a return advantage as grounds for reducing the requirement."
+    },
+    {
+      "ruleId": "reserves.months-basis",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates reserves.months-basis.",
+      "evidence": [],
+      "files": [],
+      "remediation": "State the monthly essential expense figure and the number of months covered, and derive the amount from the two rather than the other way round."
+    },
+    {
+      "ruleId": "reserves.access-terms-stated",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates reserves.access-terms-stated.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Name each instrument holding the reserve and state its settlement or notice period and any penalty, measured against the time the emergencies it is for would actually allow."
+    },
+    {
+      "ruleId": "reserves.adequacy-justified",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates reserves.adequacy-justified.",
+      "evidence": [],
+      "files": [],
+      "remediation": "State the factors that set the number for this holder and show which way each moves it. Where a factor is unknown, mark it rather than defaulting to a conventional figure."
+    },
+    {
+      "ruleId": "debt.total-cost-stated",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates debt.total-cost-stated.",
+      "evidence": [],
+      "files": [],
+      "remediation": "State total interest over the term beside the payment, and carry the arithmetic in a calc block so the figure can be recomputed rather than trusted."
+    },
+    {
+      "ruleId": "debt.leverage-adverse-case",
+      "status": "passed",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "partial",
+      "disposition": "evaluated",
+      "message": "No violation of debt.leverage-adverse-case was observed.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Model the leveraged adverse case with the cost of borrowing and the forced-close threshold, and present it before the expected spread rather than after it."
+    },
+    {
+      "ruleId": "debt.repay-vs-invest-comparable",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates debt.repay-vs-invest-comparable.",
+      "evidence": [],
+      "files": [],
+      "remediation": "State both sides net of tax over the same horizon, mark the repayment return as certain and the investment return as a distribution, and say what the comparison assumes about risk."
+    },
+    {
+      "ruleId": "integrity.no-weakening",
+      "status": "skipped",
+      "severity": "error",
+      "level": "forbidden",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates integrity.no-weakening.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Restore what was changed. If the standard is genuinely wrong, change it for that reason and record the reason — a change that would still be correct if the blocked outcome were not wanted is legitimate, and the record is what lets a reviewer tell the difference."
+    },
+    {
+      "ruleId": "integrity.guards-present",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "structural",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates integrity.guards-present.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Restore the missing step or script. If a guard is genuinely obsolete, remove it and its entry in Standard 29 in the same change, with the reason recorded."
+    },
+    {
+      "ruleId": "integrity.no-silent-reclassification",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "structural",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates integrity.no-silent-reclassification.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Keep the old id resolvable as an alias, and record deprecatedIn, supersededBy, and removedIn rather than deleting the entry."
+    },
+    {
+      "ruleId": "math.nominal-real-labeled",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates math.nominal-real-labeled.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Label each figure at the point it is stated. A single global note does not disambiguate a document that mixes both, which most realistic analyses do."
+    },
+    {
+      "ruleId": "math.real-terms-for-long-horizons",
+      "status": "skipped",
+      "severity": "warning",
+      "level": "recommended",
+      "validationType": "document",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates math.real-terms-for-long-horizons.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Convert the headline figures to today's money and state the inflation assumption used. Keep the nominal figures; make them secondary."
+    },
+    {
+      "ruleId": "math.rate-compounding-stated",
+      "status": "failed",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "partial",
+      "disposition": "evaluated",
+      "message": "A rate is stated with no period or compounding frequency.",
+      "evidence": [
+        "artifacts/adoption/01-numerai-crypto-stake/source.md"
+      ],
+      "files": [
+        "artifacts/adoption/01-numerai-crypto-stake/source.md"
+      ],
+      "remediation": "State the period and the compounding frequency beside each rate, and convert to an effective annual basis before comparing any two rates."
+    },
+    {
+      "ruleId": "math.borrowing-cost-total",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates math.borrowing-cost-total.",
+      "evidence": [],
+      "files": [],
+      "remediation": "State total interest over the term beside the payment, computed in a calc block from the same rate and term the payment used."
+    },
+    {
+      "ruleId": "math.compounding-inputs-stated",
+      "status": "failed",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "partial",
+      "disposition": "evaluated",
+      "message": "A compounded projection does not state both its rate and its horizon.",
+      "evidence": [
+        "artifacts/adoption/01-numerai-crypto-stake/source.md"
+      ],
+      "files": [
+        "artifacts/adoption/01-numerai-crypto-stake/source.md"
+      ],
+      "remediation": "State all three beside the projected value, and carry the calculation in a calc block so the figure can be recomputed rather than trusted."
+    },
+    {
+      "ruleId": "math.geometric-mean-for-series",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates math.geometric-mean-for-series.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Label the average, and use the geometric mean wherever the figure is compounded. Where both are shown, state the gap and attribute it to volatility rather than to rounding."
+    },
+    {
+      "ruleId": "math.average-return-labeled",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates math.average-return-labeled.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Name the average where it is stated. Where the compound return is what the reader needs, give that figure and say which it is."
+    },
+    {
+      "ruleId": "math.projection-precision",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates math.projection-precision.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Round the projection to a precision consistent with the spread its own scenario set produces, and present that range beside it."
+    },
+    {
+      "ruleId": "math.calc-blocks-recompute",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "computational",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates math.calc-blocks-recompute.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Fix the figure, the inputs, or the function — whichever is actually wrong. Never widen the tolerance to make a block pass: that is the weakening Standard 29 forbids, and it converts the strongest guarantee here into a formality."
+    },
+    {
+      "ruleId": "math.projections-carry-calc-blocks",
+      "status": "warning",
+      "severity": "warning",
+      "level": "recommended",
+      "validationType": "document",
+      "assurance": "partial",
+      "disposition": "evaluated",
+      "message": "A projection carries no calc block, so none of its arithmetic can be recomputed.",
+      "evidence": [
+        "artifacts/adoption/01-numerai-crypto-stake/source.md"
+      ],
+      "files": [
+        "artifacts/adoption/01-numerai-crypto-stake/source.md"
+      ],
+      "remediation": "Attach a calc block naming the finance.mjs function, its literal inputs, the expected figure, and an explicit tolerance."
+    },
+    {
+      "ruleId": "modes.declared-mode",
+      "status": "failed",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "partial",
+      "disposition": "evaluated",
+      "message": "The document does not declare which of the seven modes it operates in.",
+      "evidence": [
+        "artifacts/adoption/01-numerai-crypto-stake/source.md"
+      ],
+      "files": [
+        "artifacts/adoption/01-numerai-crypto-stake/source.md"
+      ],
+      "remediation": "State the mode near the top of the document. Where the document spans modes, declare the primary one and mark the sections operating in another."
+    },
+    {
+      "ruleId": "modes.recommendation-requires-context",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates modes.recommendation-requires-context.",
+      "evidence": [],
+      "files": [],
+      "remediation": "State the circumstances the recommendation rests on. Where they are unknown, mark them [requires personal financial context] and present the work as analysis rather than as a recommendation."
+    },
+    {
+      "ruleId": "modes.education-not-advice",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates modes.education-not-advice.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Either keep the document to the mechanism, or declare the recommendation mode and meet its obligations."
+    },
+    {
+      "ruleId": "prohibited.guaranteed-returns",
+      "status": "passed",
+      "severity": "error",
+      "level": "forbidden",
+      "validationType": "document",
+      "assurance": "partial",
+      "disposition": "evaluated",
+      "message": "No violation of prohibited.guaranteed-returns was observed.",
+      "evidence": [],
+      "files": [],
+      "remediation": "State the return as an assumption or a scenario, with its downside case. If an instrument genuinely carries a contractual guarantee, name the guarantor and the conditions, because the guarantee is only as good as they are."
+    },
+    {
+      "ruleId": "prohibited.fabricated-market-data",
+      "status": "skipped",
+      "severity": "error",
+      "level": "forbidden",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates prohibited.fabricated-market-data.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Cite the source and as-of date for every market figure, or mark it as an assumption rather than a fact. Where the figure is needed but unavailable, mark it [requires current external data] and state what the conclusion depends on."
+    },
+    {
+      "ruleId": "prohibited.fabricated-account-data",
+      "status": "skipped",
+      "severity": "error",
+      "level": "forbidden",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates prohibited.fabricated-account-data.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Take account figures from statements, and state the as-of date. Where a figure is unknown, mark it [requires personal financial context] and treat the analysis as conditional on it rather than filling it in."
+    },
+    {
+      "ruleId": "prohibited.fabricated-tax-rules",
+      "status": "skipped",
+      "severity": "error",
+      "level": "forbidden",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates prohibited.fabricated-tax-rules.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Cite the jurisdiction, the tax year, and the source for every rate or threshold. Where the applicable rules are unknown, mark it [requires personal financial context] — jurisdiction and circumstances determine which rules apply at all."
+    },
+    {
+      "ruleId": "prohibited.hidden-assumptions",
+      "status": "skipped",
+      "severity": "error",
+      "level": "forbidden",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates prohibited.hidden-assumptions.",
+      "evidence": [],
+      "files": [],
+      "remediation": "List every input the conclusion is sensitive to in an assumptions section, with its value and its basis."
+    },
+    {
+      "ruleId": "prohibited.ignored-fees",
+      "status": "skipped",
+      "severity": "error",
+      "level": "forbidden",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates prohibited.ignored-fees.",
+      "evidence": [],
+      "files": [],
+      "remediation": "State the fees and present figures net of them. Where fees are genuinely immaterial or absent, say so rather than omitting the subject."
+    },
+    {
+      "ruleId": "prohibited.ignored-taxes",
+      "status": "skipped",
+      "severity": "error",
+      "level": "forbidden",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates prohibited.ignored-taxes.",
+      "evidence": [],
+      "files": [],
+      "remediation": "State the tax treatment assumed and present figures net of it, or state explicitly that figures are pre-tax and why that is the right basis here."
+    },
+    {
+      "ruleId": "prohibited.nominal-real-confusion",
+      "status": "skipped",
+      "severity": "error",
+      "level": "forbidden",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates prohibited.nominal-real-confusion.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Label every figure, and convert using the Fisher relation rather than subtraction. See Standard 11."
+    },
+    {
+      "ruleId": "prohibited.cross-period-comparison",
+      "status": "skipped",
+      "severity": "error",
+      "level": "forbidden",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates prohibited.cross-period-comparison.",
+      "evidence": [],
+      "files": [],
+      "remediation": "State the price index and reference year used, or state explicitly that the figures are nominal and unadjusted."
+    },
+    {
+      "ruleId": "prohibited.indefinite-extrapolation",
+      "status": "skipped",
+      "severity": "error",
+      "level": "forbidden",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates prohibited.indefinite-extrapolation.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Use a long-run assumption, state it as an assumption, and vary it across scenarios."
+    },
+    {
+      "ruleId": "prohibited.price-momentum-recommendation",
+      "status": "skipped",
+      "severity": "error",
+      "level": "forbidden",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates prohibited.price-momentum-recommendation.",
+      "evidence": [],
+      "files": [],
+      "remediation": "State the reasons independent of recent price movement, or do not recommend."
+    },
+    {
+      "ruleId": "prohibited.historical-returns-repeat",
+      "status": "skipped",
+      "severity": "error",
+      "level": "forbidden",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates prohibited.historical-returns-repeat.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Present the historical figure as an assumption, state the period it covers, and vary it across scenarios."
+    },
+    {
+      "ruleId": "prohibited.ignored-concentration",
+      "status": "skipped",
+      "severity": "error",
+      "level": "forbidden",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates prohibited.ignored-concentration.",
+      "evidence": [],
+      "files": [],
+      "remediation": "State the largest positions and any concentration by sector, geography, or issuer. Where employment and holdings share an exposure, say so."
+    },
+    {
+      "ruleId": "prohibited.single-forecast-as-certain",
+      "status": "passed",
+      "severity": "error",
+      "level": "forbidden",
+      "validationType": "document",
+      "assurance": "partial",
+      "disposition": "evaluated",
+      "message": "No violation of prohibited.single-forecast-as-certain was observed.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Present a range or a scenario set including an adverse case, and state that the set is not exhaustive."
+    },
+    {
+      "ruleId": "prohibited.excessive-precision",
+      "status": "skipped",
+      "severity": "error",
+      "level": "forbidden",
+      "validationType": "document",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates prohibited.excessive-precision.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Round long-horizon figures to a precision consistent with the uncertainty, and present ranges rather than points."
+    },
+    {
+      "ruleId": "prohibited.hide-downside-scenarios",
+      "status": "failed",
+      "severity": "error",
+      "level": "forbidden",
+      "validationType": "document",
+      "assurance": "partial",
+      "disposition": "evaluated",
+      "message": "A projection presents favourable outcomes with no adverse case.",
+      "evidence": [
+        "artifacts/adoption/01-numerai-crypto-stake/source.md"
+      ],
+      "files": [
+        "artifacts/adoption/01-numerai-crypto-stake/source.md"
+      ],
+      "remediation": "Include an adverse scenario with the same detail as the base case, and state what happens to the objective under it."
+    },
+    {
+      "ruleId": "prohibited.returns-over-liquidity",
+      "status": "skipped",
+      "severity": "error",
+      "level": "forbidden",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates prohibited.returns-over-liquidity.",
+      "evidence": [],
+      "files": [],
+      "remediation": "State the liquidity requirement and its timing, and show that the allocation meets it before comparing returns."
+    },
+    {
+      "ruleId": "prohibited.risk-without-horizon",
+      "status": "skipped",
+      "severity": "error",
+      "level": "forbidden",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates prohibited.risk-without-horizon.",
+      "evidence": [],
+      "files": [],
+      "remediation": "State the horizon and justify the risk level against it. Where there are several horizons, address each."
+    },
+    {
+      "ruleId": "prohibited.optimal-equals-appropriate",
+      "status": "skipped",
+      "severity": "error",
+      "level": "forbidden",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates prohibited.optimal-equals-appropriate.",
+      "evidence": [],
+      "files": [],
+      "remediation": "State what is being optimised and why that is the right objective here, and address the circumstances that make the optimum unsuitable if they exist."
+    },
+    {
+      "ruleId": "prohibited.correlation-as-diversification",
+      "status": "skipped",
+      "severity": "error",
+      "level": "forbidden",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates prohibited.correlation-as-diversification.",
+      "evidence": [],
+      "files": [],
+      "remediation": "State the period the correlation was measured over, and address what happens to it under stress rather than assuming it persists."
+    },
+    {
+      "ruleId": "prohibited.leverage-without-risk-analysis",
+      "status": "skipped",
+      "severity": "error",
+      "level": "forbidden",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates prohibited.leverage-without-risk-analysis.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Show the leveraged adverse scenario, including the point at which the position must be closed, alongside the cost of the borrowing."
+    },
+    {
+      "ruleId": "prohibited.tax-estimates-as-exact",
+      "status": "skipped",
+      "severity": "error",
+      "level": "forbidden",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates prohibited.tax-estimates-as-exact.",
+      "evidence": [],
+      "files": [],
+      "remediation": "State the figure as an estimate, name what would change it, and mark the missing inputs [requires personal financial context]."
+    },
+    {
+      "ruleId": "prohibited.silent-circumstance-assumption",
+      "status": "skipped",
+      "severity": "error",
+      "level": "forbidden",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates prohibited.silent-circumstance-assumption.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Mark every unknown [requires personal financial context] and state the conclusion as conditional on it, rather than choosing a value."
+    },
+    {
+      "ruleId": "risk.diversification-claim-qualified",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates risk.diversification-claim-qualified.",
+      "evidence": [],
+      "files": [],
+      "remediation": "State what the portfolio is diversified against — issuer, sector, geography, currency, factor — and give the period any correlation figure was measured over, with what happens to it under stress."
+    },
+    {
+      "ruleId": "risk.diversification-adequate",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates risk.diversification-adequate.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Examine the holdings, their issuers, sectors, currencies, and shared factor exposures, and record a judgement with evidence. Where the claim is not supported, narrow it to what the holdings actually deliver rather than restating it."
+    },
+    {
+      "ruleId": "risk.concentration-measure-stated",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates risk.concentration-measure-stated.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Compute a concentration measure from the allocation actually shown and state it beside the table, in a calc block so it can be recomputed."
+    },
+    {
+      "ruleId": "risk.concentration-distribution-measure",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates risk.concentration-distribution-measure.",
+      "evidence": [],
+      "files": [],
+      "remediation": "State a distribution measure beside the largest-holding figure — the concentration index, the top-five share, or the effective number of positions."
+    },
+    {
+      "ruleId": "risk.concentration-whole-position",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates risk.concentration-whole-position.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Enumerate the exposures outside the portfolio under review — employer, property, other accounts, income source — and assess concentration against the total, marking whatever is unknown rather than assuming it away."
+    },
+    {
+      "ruleId": "risk.volatility-figure-qualified",
+      "status": "failed",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "partial",
+      "disposition": "evaluated",
+      "message": "A volatility figure is stated without its period or measurement basis.",
+      "evidence": [
+        "artifacts/adoption/01-numerai-crypto-stake/source.md"
+      ],
+      "files": [
+        "artifacts/adoption/01-numerai-crypto-stake/source.md"
+      ],
+      "remediation": "State the periodicity, the sample window, and the estimator beside the figure, and say whether the window contains a stress episode."
+    },
+    {
+      "ruleId": "risk.volatility-not-whole-risk",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates risk.volatility-not-whole-risk.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Name the risks the dispersion figure does not capture and address each, or state explicitly that the figure describes one dimension of risk and say which one."
+    },
+    {
+      "ruleId": "risk.path-measure-stated",
+      "status": "failed",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "partial",
+      "disposition": "evaluated",
+      "message": "Risk is discussed with no path measure — no drawdown or worst-case figure.",
+      "evidence": [
+        "artifacts/adoption/01-numerai-crypto-stake/source.md"
+      ],
+      "files": [
+        "artifacts/adoption/01-numerai-crypto-stake/source.md"
+      ],
+      "remediation": "State the maximum drawdown and the worst single period over the modelled path, computed in a calc block, beside the terminal figure."
+    },
+    {
+      "ruleId": "risk.adverse-case-is-a-loss",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates risk.adverse-case-is-a-loss.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Set the adverse scenario to a genuine decline — an absolute loss, and over a long horizon a loss of purchasing power — and carry it through to what happens to the objective."
+    },
+    {
+      "ruleId": "risk.sequence-risk-addressed",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates risk.sequence-risk-addressed.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Model at least two orderings of the same returns, including one that front-loads the poor years, and state what each does to the objective."
+    },
+    {
+      "ruleId": "risk.sequence-inapplicability-stated",
+      "status": "failed",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "partial",
+      "disposition": "evaluated",
+      "message": "A projection with no cash flows does not say so, leaving sequence risk unaddressed rather than inapplicable.",
+      "evidence": [
+        "artifacts/adoption/01-numerai-crypto-stake/source.md"
+      ],
+      "files": [
+        "artifacts/adoption/01-numerai-crypto-stake/source.md"
+      ],
+      "remediation": "State that the projection has no cash flows and that return order therefore does not affect the outcome, or declare the rule not-applicable in policy with a reason and a revisit condition."
+    },
+    {
+      "ruleId": "risk.adverse-ordering-front-loaded",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates risk.adverse-ordering-front-loaded.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Reorder the modelled series so the poor returns fall in the first years of withdrawals, and show the resulting path beside the favourable ordering."
+    },
+    {
+      "ruleId": "scenarios.set-complete",
+      "status": "failed",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "partial",
+      "disposition": "evaluated",
+      "message": "The scenario set is missing: conservative, base, optimistic, adverse.",
+      "evidence": [
+        "artifacts/adoption/01-numerai-crypto-stake/source.md"
+      ],
+      "files": [
+        "artifacts/adoption/01-numerai-crypto-stake/source.md"
+      ],
+      "remediation": "Present all four scenarios with the same detail as the base case, or name the omitted one and explain why it does not apply here."
+    },
+    {
+      "ruleId": "scenarios.non-exhaustive-stated",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates scenarios.non-exhaustive-stated.",
+      "evidence": [],
+      "files": [],
+      "remediation": "State plainly, where the set is presented rather than in a footer, that the scenarios are illustrative and that outcomes worse than the adverse case can occur."
+    },
+    {
+      "ruleId": "scenarios.range-not-point-estimate",
+      "status": "failed",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "partial",
+      "disposition": "evaluated",
+      "message": "A projection is presented as a single figure with no range.",
+      "evidence": [
+        "artifacts/adoption/01-numerai-crypto-stake/source.md"
+      ],
+      "files": [
+        "artifacts/adoption/01-numerai-crypto-stake/source.md"
+      ],
+      "remediation": "Replace the single figure with the range the scenario set actually produces, and round both ends to a precision the assumptions support."
+    },
+    {
+      "ruleId": "scenarios.uncertainty-source-named",
+      "status": "skipped",
+      "severity": "error",
+      "level": "required",
+      "validationType": "document",
+      "assurance": "none",
+      "disposition": "not-evaluated",
+      "message": "No implemented check evaluates scenarios.uncertainty-source-named.",
+      "evidence": [],
+      "files": [],
+      "remediation": "Name the uncertain inputs and their plausible ranges separately from the structural assumptions the model makes, and say which of the two dominates the result."
+    }
+  ]
+}
