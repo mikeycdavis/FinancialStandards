@@ -1,0 +1,8 @@
+# The naive day-one policy, identical in spirit to Adoption 01's: standardVersion, a project name,
+# and nothing else. No applicability declarations, no exceptions, no attestations.
+#
+# Holding this constant across adoptions is what makes them comparable. Tuning it for a UK,
+# non-personalised, general-audience article would measure the tuning.
+standardVersion: "1.0.0"
+project: "Monevator mortgage-vs-invest (adoption test 02)"
+exceptions: []

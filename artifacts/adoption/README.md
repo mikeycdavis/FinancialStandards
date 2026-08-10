@@ -38,7 +38,48 @@ are that second question.
 
 | # | Subject | Verdict | Findings | False positives | Headline |
 |---|---|---|---|---|---|
-| [01](01-numerai-crypto-stake/) | Numerai crypto stake diagnostic — 218 lines, real capital recommendation, written before this repository existed | `NON_COMPLIANT` | 19 | 10 (+4 applicability) | 42% of findings caused by one word of YAML storage metadata |
+| [01](01-numerai-crypto-stake/) | Numerai crypto stake diagnostic — 218 lines, retrospective, institutional, real capital recommendation. `historical-local` | `NON_COMPLIANT` | 19 | 10 (+4 applicability) | 42% of findings caused by one word of YAML storage metadata |
+| [02](02-mortgage-vs-invest/) | Monevator "Pay off the mortgage or invest?" — 4,205 words, prospective, personal finance, published 2011 / updated Sept 2024. `historical-public` | **`BLOCKED_BY_INVARIANT`** | 16 | 7 (+1 applicability) | A false stop-work order on a financially correct sentence |
+
+## Independence classes
+
+| Class | Means | Strength |
+|---|---|---|
+| `historical-local` | Already existed on the machine, authored for its own purpose before this framework | Strong |
+| `historical-public` | Publicly published before this framework, retrievable by anyone | Strong — and **reproducible by a third party** |
+| `independently-generated-blind` | Produced on request with no exposure to this framework | Moderate |
+
+## What the two-adopter corpus establishes
+
+**Reproduced — these have earned architectural attention:**
+
+1. **Detectors match predicates without establishing subjects, and do not recognise ordinary English.**
+   Ten instances across both adopters. "The WORST slot" and "a deep bear market where you're down 50%"
+   both went unrecognised as worst-case statements; a file path with a line number and a byline date
+   both went unrecognised as what they are. **The dominant defect class.**
+2. **Forbidden-level rules produce false accusations.** Both adopters, different mechanisms. In
+   Adoption 02 it escalated to `BLOCKED_BY_INVARIANT` — a false instruction to stop and refuse work,
+   against a correct sentence, under a rule no policy can waive.
+
+**Did not reproduce — narrowed or falsified:**
+
+3. **Parser boundaries.** Adoption 02 has no frontmatter and produced no non-semantic findings. The
+   Adoption 01 defect is **specific to storage metadata**, not a general inability to identify
+   semantic content. The candidate narrows accordingly.
+4. **Contextual applicability.** Four applicability errors in 01, one in 02; rules with no subject fell
+   from 33 to 11. Adoption 01's pressure was **mostly domain mismatch**, not missing architecture.
+5. **`scenarios.set-complete`.** Fired correctly on a genuinely prospective analysis with a genuine
+   gap. **The rule is fine**; Adoption 01's instance was an applicability failure. This test was
+   pre-registered before Adoption 02 ran.
+
+**New in 02:** the framework's marker syntax (`[requires personal financial context]`) cannot be
+satisfied by any document written before the framework existed. Structural for all historical
+adoptions.
+
+**Across two adoptions and 35 findings, not one standard has been found wrong.** Every misfire traces
+to a detector, a missing applicability gate, or a parsing boundary. The normative layer has survived
+contact with an institutional quant memo and a published personal-finance article; its executable
+approximation has not.
 
 ## What adoption 01 established
 

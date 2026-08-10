@@ -1,0 +1,159 @@
+{
+  "schemaVersion": "1.0",
+  "command": "audit",
+  "documents": [
+    {
+      "file": "artifacts/adoption/02-mortgage-vs-invest/retrieved.md",
+      "mode": null,
+      "calcBlocks": 0,
+      "evaluated": 47,
+      "notApplicable": 11,
+      "findings": [
+        {
+          "rule": "modes.declared-mode",
+          "level": "required",
+          "severity": "error",
+          "message": "The document does not declare which of the seven modes it operates in.",
+          "evidence": [
+            "artifacts/adoption/02-mortgage-vs-invest/retrieved.md"
+          ]
+        },
+        {
+          "rule": "objectives.declared",
+          "level": "required",
+          "severity": "error",
+          "message": "No objectives section was found.",
+          "evidence": [
+            "artifacts/adoption/02-mortgage-vs-invest/retrieved.md"
+          ]
+        },
+        {
+          "rule": "liquidity.requirements-stated",
+          "level": "required",
+          "severity": "error",
+          "message": "The document does not state its liquidity requirements.",
+          "evidence": [
+            "artifacts/adoption/02-mortgage-vs-invest/retrieved.md"
+          ]
+        },
+        {
+          "rule": "reserves.months-basis",
+          "level": "required",
+          "severity": "error",
+          "message": "A reserve is discussed without stating how many months of expenses it covers.",
+          "evidence": [
+            "artifacts/adoption/02-mortgage-vs-invest/retrieved.md"
+          ]
+        },
+        {
+          "rule": "math.geometric-mean-for-series",
+          "level": "required",
+          "severity": "error",
+          "message": "An average return is stated without saying which average it is.",
+          "evidence": [
+            "artifacts/adoption/02-mortgage-vs-invest/retrieved.md"
+          ]
+        },
+        {
+          "rule": "inflation.index-identified",
+          "level": "required",
+          "severity": "error",
+          "message": "An inflation rate is used with no index named and no marker acknowledging the gap.",
+          "evidence": [
+            "artifacts/adoption/02-mortgage-vs-invest/retrieved.md"
+          ]
+        },
+        {
+          "rule": "risk.concentration-measure-stated",
+          "level": "required",
+          "severity": "error",
+          "message": "A portfolio is described without any statement of concentration.",
+          "evidence": [
+            "artifacts/adoption/02-mortgage-vs-invest/retrieved.md"
+          ]
+        },
+        {
+          "rule": "risk.path-measure-stated",
+          "level": "required",
+          "severity": "error",
+          "message": "Risk is discussed with no path measure — no drawdown or worst-case figure.",
+          "evidence": [
+            "artifacts/adoption/02-mortgage-vs-invest/retrieved.md"
+          ]
+        },
+        {
+          "rule": "disclosure.assumptions-stated",
+          "level": "required",
+          "severity": "error",
+          "message": "No assumptions section was found.",
+          "evidence": [
+            "artifacts/adoption/02-mortgage-vs-invest/retrieved.md"
+          ]
+        },
+        {
+          "rule": "scenarios.set-complete",
+          "level": "required",
+          "severity": "error",
+          "message": "The scenario set is missing: conservative, base, adverse.",
+          "evidence": [
+            "artifacts/adoption/02-mortgage-vs-invest/retrieved.md"
+          ]
+        },
+        {
+          "rule": "scenarios.non-exhaustive-stated",
+          "level": "required",
+          "severity": "error",
+          "message": "A scenario set is presented without stating that it does not exhaust the possible outcomes.",
+          "evidence": [
+            "artifacts/adoption/02-mortgage-vs-invest/retrieved.md"
+          ]
+        },
+        {
+          "rule": "data.as-of-date-stated",
+          "level": "required",
+          "severity": "error",
+          "message": "Figures are stated with no as-of date.",
+          "evidence": [
+            "artifacts/adoption/02-mortgage-vs-invest/retrieved.md"
+          ]
+        },
+        {
+          "rule": "data.personal-context-marked",
+          "level": "required",
+          "severity": "error",
+          "message": "The document depends on personal circumstances without marking them [requires personal financial context].",
+          "evidence": [
+            "artifacts/adoption/02-mortgage-vs-invest/retrieved.md"
+          ]
+        },
+        {
+          "rule": "disclosure.risk-capacity-distinguished",
+          "level": "required",
+          "severity": "error",
+          "message": "Risk tolerance is stated without distinguishing willingness from capacity to bear loss.",
+          "evidence": [
+            "artifacts/adoption/02-mortgage-vs-invest/retrieved.md"
+          ]
+        },
+        {
+          "rule": "prohibited.guaranteed-returns",
+          "level": "forbidden",
+          "severity": "error",
+          "message": "The document describes a return as guaranteed, assured, or certain.",
+          "evidence": [
+            "rtgage include: * **It's a guaranteed return**. You'll earn whatever interest you save,"
+          ]
+        },
+        {
+          "rule": "math.projections-carry-calc-blocks",
+          "level": "recommended",
+          "severity": "warning",
+          "message": "A projection carries no calc block, so none of its arithmetic can be recomputed.",
+          "evidence": [
+            "artifacts/adoption/02-mortgage-vs-invest/retrieved.md"
+          ]
+        }
+      ]
+    }
+  ]
+}
