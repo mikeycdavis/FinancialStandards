@@ -1,0 +1,7 @@
+v1.0.0    NON_COMPLIANT {"passed":11,"failed":14,"warnings":2,"skipped":68} evaluated 27/95 score 38
+candidate NON_COMPLIANT {"passed":11,"failed":14,"warnings":2,"skipped":69} evaluated 27/96 score 38
+  CHANGED prohibited.guaranteed-returns passed/evaluated -> skipped/not-evaluated
+            No implemented check evaluates prohibited.guaranteed-returns.
+  NEW review.guarantee-language-present passed/evaluated
+            No violation of review.guarantee-language-present was observed.
+2 rule-level change(s).
