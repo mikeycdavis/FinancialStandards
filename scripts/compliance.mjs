@@ -41,8 +41,15 @@ const RESULT = { passed: "passed", failed: "failed", warning: "warning", skipped
  *                  A rule absent from this set was not checked, and reporting it as passing
  *                  because nothing failed is the false green this whole framework exists to stop.
  * @param today     ISO date, for exception expiry
+ * @param unevaluable optional Map of rule id → why the evaluator ran and could not decide. Purely a
+ *                  reporting input: these ids are already absent from `evaluated` and land on
+ *                  not-evaluated either way. It exists so the report does not say "no implemented
+ *                  check evaluates this" about a check that ran — an inaccuracy that would push a
+ *                  reader toward building the checker that already exists instead of reading the
+ *                  passage it could not resolve.
  */
-export function evaluate({ catalog, policy, findings, evaluated, today, digests }) {
+export function evaluate({ catalog, policy, findings, evaluated, today, digests, unevaluable }) {
+  const couldNotDecide = unevaluable ?? new Map();
   const declaredRules = policy?.rules ?? {};
   const applicability = policy?.applicability ?? {};
   const exceptions = Array.isArray(policy?.exceptions) ? policy.exceptions : [];
@@ -111,9 +118,8 @@ export function evaluate({ catalog, policy, findings, evaluated, today, digests 
     // data, or a tax rule was NOT invented, and a run that reported those as passing because it
     // found nothing would be this system committing the exact error it exists to catch.
     if (rule.validationType === "manual-review" || !examined.has(rule.id)) {
-      results.push(
-        base(rule, level, RESULT.skipped, "not-evaluated", `No implemented check evaluates ${rule.id}.`),
-      );
+      const message = couldNotDecide.get(rule.id) ?? `No implemented check evaluates ${rule.id}.`;
+      results.push(base(rule, level, RESULT.skipped, "not-evaluated", message));
       continue;
     }
 

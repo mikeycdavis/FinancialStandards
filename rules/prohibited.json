@@ -21,7 +21,7 @@
       "deprecatedIn": null,
       "supersededBy": null,
       "removedIn": null,
-      "$assuranceNote": "A lexical scan with a negation window, so 'returns are not guaranteed' does not trip it — that phrasing is required, not merely permitted, and a checker flagging it would be switched off. It establishes that no guarantee language was OBVIOUSLY present. A guarantee implied without the vocabulary ('you will have £1m at 65') passes."
+      "$assuranceNote": "A lexical scan with two gates. A negation window drops claims the document denies, because 'returns are not guaranteed' is required phrasing and a checker flagging it would be switched off. Sentence-scoped subject resolution then reports a violation ONLY where the sentence establishes that the guaranteed thing is an investment return; the prohibition is about investment returns, not about the word 'guaranteed'. Where the subject cannot be established the rule reports NOT_EVALUATED and names the passage for human review — it does not decide the statement is safe. So a clean result establishes only that no guarantee about a RECOGNISABLY investment subject was present. Two things pass it: a guarantee whose subject the sentence leaves implicit (reported for review, never cleared), and a guarantee implied without the vocabulary at all ('you will have £1m at 65'), which is not reported."
     },
     {
       "id": "prohibited.fabricated-market-data",

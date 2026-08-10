@@ -106,13 +106,101 @@ export const count = (doc, re) => (doc.prose.match(new RegExp(re.source, re.flag
  * a clause and narrow enough not to reach the previous sentence.
  */
 export function saysUnnegated(doc, re) {
-  const NEGATORS = /\b(not|never|no|cannot|can't|without|isn't|aren't|non-?guaranteed|rather than|no such)\b[^.]{0,60}$/i;
   const global = new RegExp(re.source, re.flags.includes("g") ? re.flags : re.flags + "g");
   for (const m of doc.prose.matchAll(global)) {
-    const before = doc.prose.slice(Math.max(0, m.index - 60), m.index);
-    if (!NEGATORS.test(before)) return { hit: true, evidence: excerpt(doc.prose, m.index) };
+    if (!negatedAt(doc.prose, m.index)) return { hit: true, evidence: excerpt(doc.prose, m.index) };
   }
   return { hit: false };
+}
+
+/** Is the match at `index` inside a negating context? The 60-character window described above. */
+export function negatedAt(text, index) {
+  const NEGATORS = /\b(not|never|no|cannot|can't|without|isn't|aren't|non-?guaranteed|rather than|no such)\b[^.]{0,60}$/i;
+  return NEGATORS.test(text.slice(Math.max(0, index - 60), index));
+}
+
+/**
+ * Every guarantee-shaped claim in the document, with the subject the sentence establishes for it.
+ *
+ * WHY THIS EXISTS. The prohibition is *"describe investment returns as guaranteed"*. A scanner that
+ * matches the predicate alone implements a different and much broader rule — *"say the word
+ * guaranteed"* — and Adoption 02 showed what that costs: `BLOCKED_BY_INVARIANT`, the framework's
+ * stop-work order, against the financially correct sentence "It's a guaranteed return. You'll earn
+ * whatever interest you save, unlike the variable and unknown returns from the stock market." The
+ * subject there is mortgage repayment, which is not an investment return. No backward window can fix
+ * that: the qualifying clause sits *after* the phrase.
+ *
+ * WHAT IS AND IS NOT CLASSIFIED. Only one thing is recognised: whether the sentence establishes an
+ * INVESTMENT subject. There is deliberately no list of non-investment subjects — no "mortgage"
+ * exclusion, no "savings account" exclusion. Adding one would fit the sentence Adoption 02 happened
+ * to contain and teach nothing, and the next adopter would arrive with a different noun. Because the
+ * only recognised class is the prohibited one, anything unrecognised is `unresolved`, and the
+ * detector's default flips from accuse to *cannot establish*. That default is the change; the word
+ * list is incidental to it.
+ *
+ * THE CONTRAST RULE. A contrast marker — "unlike", "rather than", "versus", "against" — separates
+ * two compared things, and the guaranteed one is whichever sits on the phrase's side of it. So the
+ * subject is read from the span between the nearest marker before the phrase and the nearest after.
+ * "It's a guaranteed return, unlike the stock market" keeps nothing of the stock market;
+ * "you're pitting investing against the certain return you get from repaying your mortgage" keeps
+ * nothing of the investing. A fronted adjunct puts its alternative on the near side — "Unlike cash,
+ * your fund is guaranteed" — so a comma between the marker and the phrase closes the cut, leaving
+ * "your fund is guaranteed" and catching it.
+ *
+ * Both-sided contrast was NOT in the original design; the one-sided version was, and Adoption 02
+ * contained a sentence it could not read. That makes this part of the rule fitted to a corpus it was
+ * measured against, and the replay record says so. What it is not is a non-investment word list: the
+ * generalisation is about contrast structure, and no noun was privileged to make one sentence pass.
+ *
+ * Returns [{ phrase, subject: "investment-return" | "unresolved", negated, sentence, evidence }].
+ */
+export function guaranteeClaims(doc) {
+  const GUARANTEE = /\b(guarantee[ds]?|assured|risk[- ]free|certain return|promised? (return|growth)|will (earn|return|grow to))\b/gi;
+  const INVESTMENT = /\b(invest(s|ed|ing|ment|ments|or|ors)?|portfolios?|stocks?|shares?|equit(y|ies)|funds?|etfs?|bonds?|securit(y|ies)|markets?|crypto\w*|yields?|holdings?|asset allocation)\b/i;
+  const CONTRAST = /\b(unlike|rather than|as opposed to|compared (?:to|with)|versus|vs\.?|instead of|against|not the)\b/gi;
+
+  const claims = [];
+  for (const m of doc.prose.matchAll(GUARANTEE)) {
+    const { start, end } = sentenceAround(doc.prose, m.index);
+    const sentence = doc.prose.slice(start, end).replace(/\s+/g, " ").trim();
+
+    // Keep only the phrase's side of the nearest contrast marker in each direction.
+    let from = start;
+    let last = null;
+    for (const c of doc.prose.slice(start, m.index).matchAll(CONTRAST)) last = c;
+    if (last) {
+      from = start + last.index + last[0].length;
+      const comma = doc.prose.indexOf(",", from);
+      if (comma !== -1 && comma < m.index) from = comma + 1;
+    }
+    const ahead = CONTRAST.exec(doc.prose.slice(m.index, end));
+    CONTRAST.lastIndex = 0;
+    const subjectText = doc.prose.slice(from, ahead ? m.index + ahead.index : end);
+
+    claims.push({
+      phrase: m[0],
+      subject: INVESTMENT.test(subjectText) ? "investment-return" : "unresolved",
+      negated: negatedAt(doc.prose, m.index),
+      sentence,
+      evidence: excerpt(doc.prose, m.index),
+    });
+  }
+  return claims;
+}
+
+/** The bounds of the sentence containing `index`. Line breaks bound too: headings are not prose. */
+function sentenceAround(text, index) {
+  let start = 0;
+  for (const p of [".", "!", "?", "\n", ":"]) {
+    const i = text.lastIndexOf(p, index - 1);
+    if (i + 1 > start) start = i + 1;
+  }
+  let end = text.length;
+  for (const p of [".", "!", "?", "\n"]) {
+    const i = text.indexOf(p, index);
+    if (i !== -1 && i < end) end = i;
+  }
+  return { start, end };
 }
 
 /** A short quotation around a position, for a finding's evidence. */

@@ -80,9 +80,10 @@ async function auditPaths(targets) {
  */
 function auditDocument(catalog, text, file) {
   const doc = parseDocument(text, file);
-  const { findings, evaluated, notApplicable } = runDetectors(doc);
+  const { findings, evaluated, notApplicable, unevaluable } = runDetectors(doc);
   assertBindings(catalog, findings.map((f) => f.rule));
-  return { doc, findings, evaluated, notApplicable };
+  assertBindings(catalog, unevaluable.map((u) => u.rule));
+  return { doc, findings, evaluated, notApplicable, unevaluable };
 }
 
 // --- audit -------------------------------------------------------------------------------------------
@@ -96,13 +97,14 @@ async function commandAudit(catalog, targets, json) {
 
   const reports = [];
   for (const file of files) {
-    const { doc, findings, evaluated, notApplicable } = auditDocument(catalog, await readFile(path.join(ROOT, file), "utf8"), file);
+    const { doc, findings, evaluated, notApplicable, unevaluable } = auditDocument(catalog, await readFile(path.join(ROOT, file), "utf8"), file);
     reports.push({
       file,
       mode: declaredMode(doc),
       calcBlocks: doc.calcBlocks.length,
       evaluated: evaluated.length,
       notApplicable: notApplicable.length,
+      unevaluable,
       findings: findings.map((f) => {
         const rule = resolve(catalog, f.rule);
         return { rule: f.rule, level: rule.level, severity: rule.severity, message: f.message, evidence: f.evidence };
@@ -117,14 +119,19 @@ async function commandAudit(catalog, targets, json) {
       out(`\n${report.file}`);
       out(`  mode: ${report.mode ?? "(none declared)"} · ${report.evaluated} rule(s) evaluated, ` +
           `${report.notApplicable} without a subject here · ${report.calcBlocks} calc block(s)`);
-      if (report.findings.length === 0) {
-        out("  no findings");
-        continue;
-      }
+      if (report.findings.length === 0) out("  no findings");
       for (const f of report.findings) {
         out(`  ${f.severity.toUpperCase().padEnd(7)} ${f.rule}`);
         out(`          ${f.message}`);
         for (const e of f.evidence.slice(0, 1)) out(`          — ${e}`);
+      }
+      // Reported after the findings and never among them: this is work handed to a human, not an
+      // accusation. It is printed even on an otherwise clean document, because a document with no
+      // findings and an unresolved prohibition claim has not been cleared of it.
+      for (const u of report.unevaluable) {
+        out(`  REVIEW  ${u.rule}`);
+        out(`          ${u.message}`);
+        for (const e of u.evidence.slice(0, 1)) out(`          — ${e}`);
       }
     }
     const total = reports.reduce((n, r) => n + r.findings.length, 0);
@@ -184,14 +191,18 @@ async function commandCheck(catalog, targets, json, policyPath) {
   const files = await auditPaths(targets.length ? targets : ["examples/compliant"]);
   const findings = [];
   const evaluated = new Set();
+  const unevaluable = new Map();
   for (const file of files) {
     const result = auditDocument(catalog, await readFile(path.join(ROOT, file), "utf8"), file);
     findings.push(...result.findings);
     for (const id of result.evaluated) evaluated.add(id);
+    for (const u of result.unevaluable) unevaluable.set(u.rule, `${u.message} (${file})`);
   }
-
+  // Corpus semantics, unchanged by this candidate and worth naming: a rule another document in the
+  // same run evaluated cleanly stays in `evaluated`, so its unresolved reading here is visible in
+  // `audit` but not in the verdict. Multi-document runs already dilute `applies` the same way.
   const digests = await attestationDigests(policy);
-  const verdict = evaluate({ catalog, policy, findings, evaluated: [...evaluated], today, digests });
+  const verdict = evaluate({ catalog, policy, findings, evaluated: [...evaluated], today, digests, unevaluable });
 
   const inventory = JSON.parse(await readFile(path.join(ROOT, "artifacts/standards-source-inventory.json"), "utf8"));
   const report = envelope({
@@ -310,15 +321,17 @@ async function commandExplain(catalog, subject, docPath, json) {
       err(`standards explain: no document at ${docPath}`);
       return EXIT_INVOCATION;
     }
-    const { findings, evaluated, notApplicable } = auditDocument(
+    const { findings, evaluated, notApplicable, unevaluable } = auditDocument(
       catalog, await readFile(path.join(ROOT, docPath), "utf8"), docPath,
     );
     const finding = findings.find((f) => f.rule === rule.id);
+    const undecided = unevaluable.find((u) => u.rule === rule.id);
     application = {
       document: docPath,
       applies: !notApplicable.includes(rule.id),
       evaluated: evaluated.includes(rule.id),
       finding: finding ? finding.message : null,
+      requiresReview: undecided ? undecided.message : null,
     };
   }
 
@@ -352,6 +365,9 @@ async function commandExplain(catalog, subject, docPath, json) {
       out("    Not evaluated is NOT a pass. Only a policy may declare a rule not-applicable.");
     } else if (application.finding) {
       out(`    FAILING — ${application.finding}`);
+    } else if (application.requiresReview) {
+      out(`    REQUIRES HUMAN REVIEW — ${application.requiresReview}`);
+      out("    The check ran and could not decide. That is not a pass and not a violation.");
     } else if (application.evaluated) {
       out("    No violation was observed. Read the assurance note above for what that does not mean.");
     } else {

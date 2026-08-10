@@ -1,0 +1,12 @@
+
+=== a01
+  v1.0.0    NON_COMPLIANT          {"passed":6,"failed":18,"warnings":1,"skipped":70}  evaluated 25  breaches   score 19
+  candidate NON_COMPLIANT          {"passed":6,"failed":18,"warnings":1,"skipped":70}  evaluated 25  breaches   score 19
+  0 rule-level change(s).
+
+=== a02
+  v1.0.0    BLOCKED_BY_INVARIANT   {"passed":31,"failed":15,"warnings":1,"skipped":48}  evaluated 47  breaches [object Object]  score 65
+  candidate NON_COMPLIANT          {"passed":31,"failed":14,"warnings":1,"skipped":49}  evaluated 46  breaches   score 65
+  CHANGED  prohibited.guaranteed-returns: failed/evaluated -> skipped/not-evaluated
+           now: 3 guarantee claim(s) were found whose subject this scan cannot establish. A guarantee about something other than an investment return may be correct; one about 
+  1 rule-level change(s).

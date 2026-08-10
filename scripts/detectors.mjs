@@ -25,11 +25,21 @@
 
 import {
   hasSection, sectionText, says, saysUnnegated, count, excerpt,
-  declaredMode, projects, horizonYears, hasCashFlows,
+  declaredMode, projects, horizonYears, hasCashFlows, guaranteeClaims,
 } from "./document.mjs";
 
 /** A finding, phrased as what was observed rather than as a verdict. */
 const miss = (message, evidence = []) => ({ message, evidence: [].concat(evidence) });
+
+/**
+ * The third outcome: the detector ran, found its subject present, and could not decide.
+ *
+ * This is NOT a pass and NOT a finding. The rule leaves `evaluated`, so the engine reports it as
+ * not-evaluated and the document is never credited with satisfying it. It is distinct from `applies`
+ * returning false, which claims something stronger — that the rule has no subject in this document
+ * at all. Here the subject is present and the automation is admitting it cannot read it.
+ */
+const unevaluable = (message, evidence = []) => ({ unevaluable: true, message, evidence: [].concat(evidence) });
 
 /** Section-presence detector: the commonest shape by far. */
 const needsSection = (rule, re, what, remedy) => ({
@@ -473,13 +483,35 @@ export const DETECTORS = [
   {
     rule: "prohibited.guaranteed-returns",
     detect: (doc) => {
-      // The negation window is what makes this usable. "Returns are not guaranteed" is REQUIRED by
-      // Standard 20; a checker that flagged the compliant phrasing would be switched off, and a
-      // switched-off checker checks nothing.
-      const hit = saysUnnegated(doc, /\b(guarantee[ds]?|assured|risk[- ]free|certain return|promised? (return|growth)|will (earn|return|grow to))\b/i);
-      return hit.hit
-        ? miss("The document describes a return as guaranteed, assured, or certain.", [hit.evidence])
-        : null;
+      // Two gates, and the order is the point. The negation window ("returns are NOT guaranteed" is
+      // required by Standard 20) removes claims the document denies. Subject resolution then removes
+      // claims whose subject the sentence does not establish as an investment return — because the
+      // prohibition is about investment returns, not about the word "guaranteed".
+      //
+      // This rule is forbidden, non-exemptible, and maps to BLOCKED_BY_INVARIANT. Its false positives
+      // are therefore not noise: they are a stop-work order issued against correct work, unwaivable
+      // by any policy. A false negative, by contrast, is a claim this scan missed that Standard 25
+      // still forbids and human review can still catch. Those consequences are not symmetric, so the
+      // threshold is precision: where the subject cannot be established, the detector reports that it
+      // could not evaluate — never that the statement is safe.
+      const live = guaranteeClaims(doc).filter((c) => !c.negated);
+      const established = live.filter((c) => c.subject === "investment-return");
+      if (established.length > 0) {
+        return miss(
+          `${established.length} claim(s) describe an investment return as guaranteed, assured, or certain.`,
+          established.slice(0, 3).map((c) => c.evidence),
+        );
+      }
+      const unresolved = live.filter((c) => c.subject === "unresolved");
+      if (unresolved.length > 0) {
+        return unevaluable(
+          `${unresolved.length} guarantee claim(s) were found whose subject this scan cannot establish. ` +
+          "A guarantee about something other than an investment return may be correct; one about an " +
+          "investment return is prohibited. Deciding which requires reading the passage.",
+          unresolved.slice(0, 3).map((c) => c.evidence),
+        );
+      }
+      return null;
     },
   },
   {
@@ -531,25 +563,35 @@ export const DETECTED_RULES = DETECTORS.map((d) => d.rule);
 /**
  * Run every detector against a document.
  *
- * Returns { findings, evaluated, notApplicable }. `evaluated` is the crucial output: a rule absent
- * from it was NOT checked, and the compliance engine reports it as not-evaluated rather than passed.
- * A detector whose `applies` returns false lands in `notApplicable` and, deliberately, NOT in
- * `evaluated` — the tooling does not get to decide a rule has no subject.
+ * Returns { findings, evaluated, notApplicable, unevaluable }. `evaluated` is the crucial output: a
+ * rule absent from it was NOT checked, and the compliance engine reports it as not-evaluated rather
+ * than passed. A detector whose `applies` returns false lands in `notApplicable` and, deliberately,
+ * NOT in `evaluated` — the tooling does not get to decide a rule has no subject.
+ *
+ * `unevaluable` is the same exclusion reached from the other end: the rule's subject IS present and
+ * the detector could not read it. Both stay out of `evaluated`; they are reported separately because
+ * "this does not apply here" and "I could not tell" are different admissions, and collapsing them
+ * would let the second hide inside the first.
  */
 export function runDetectors(doc) {
   const findings = [];
   const evaluated = [];
   const notApplicable = [];
+  const unevaluable = [];
 
   for (const detector of DETECTORS) {
     if (detector.applies && !detector.applies(doc)) {
       notApplicable.push(detector.rule);
       continue;
     }
-    evaluated.push(detector.rule);
     const result = detector.detect(doc);
+    if (result?.unevaluable) {
+      unevaluable.push({ rule: detector.rule, message: result.message, evidence: result.evidence });
+      continue;
+    }
+    evaluated.push(detector.rule);
     if (result) findings.push({ rule: detector.rule, ...result });
   }
 
-  return { findings, evaluated, notApplicable };
+  return { findings, evaluated, notApplicable, unevaluable };
 }
