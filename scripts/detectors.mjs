@@ -24,7 +24,7 @@
  */
 
 import {
-  hasSection, sectionText, says, saysUnnegated, count, excerpt,
+  hasSection, sectionText, says, saysUnnegated, negatedAt, count, excerpt,
   declaredMode, projects, horizonYears, hasCashFlows,
 } from "./document.mjs";
 
@@ -471,15 +471,33 @@ export const DETECTORS = [
 
   // --- Standard 25: the lexically detectable prohibitions -------------------------------------------------------------------------
   {
-    rule: "prohibited.guaranteed-returns",
+    // DISCOVERY, not judgment. This reports where the guarantee language is; whether any of it
+    // describes an INVESTMENT return is `prohibited.guaranteed-returns`, which is manual-review and
+    // which nothing here can establish. The v1.0 detector bound this same scan to the prohibition
+    // directly, and candidate replay 01 measured the cost: a forbidden, non-exemptible, unwaivable
+    // stop-work order issued against a correct published sentence about mortgage repayment.
+    //
+    // The scan itself is UNCHANGED from v1.0, deliberately. What changed is what it claims. The
+    // negation window stays because "returns are not guaranteed" is required by Standard 20, and a
+    // checker that flagged the required phrasing is one people switch off.
+    rule: "review.guarantee-language-present",
     detect: (doc) => {
-      // The negation window is what makes this usable. "Returns are not guaranteed" is REQUIRED by
-      // Standard 20; a checker that flagged the compliant phrasing would be switched off, and a
-      // switched-off checker checks nothing.
-      const hit = saysUnnegated(doc, /\b(guarantee[ds]?|assured|risk[- ]free|certain return|promised? (return|growth)|will (earn|return|grow to))\b/i);
-      return hit.hit
-        ? miss("The document describes a return as guaranteed, assured, or certain.", [hit.evidence])
-        : null;
+      const GUARANTEE = /\b(guarantee[ds]?|assured|risk[- ]free|certain return|promised? (return|growth)|will (earn|return|grow to))\b/gi;
+      // Every occurrence, not the first. A reviewer given one passage out of nine has been given a
+      // sample; the work-list has to be complete or the human half of this design does not work.
+      const passages = [];
+      for (const m of doc.prose.matchAll(GUARANTEE)) {
+        if (!negatedAt(doc.prose, m.index)) passages.push(excerpt(doc.prose, m.index));
+      }
+      return passages.length === 0
+        ? null
+        : miss(
+            `${passages.length} passage(s) use guarantee language. Read each one and decide what it ` +
+            "describes: a guarantee about an investment return is prohibited by Standard 25, and one " +
+            "about anything else may be correct. This scan does not decide which, and does not " +
+            "establish prohibited.guaranteed-returns either way.",
+            passages,
+          );
     },
   },
   {

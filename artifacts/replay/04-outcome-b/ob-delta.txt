@@ -1,0 +1,8 @@
+v1.0.0    BLOCKED_BY_INVARIANT {"passed":6,"failed":17,"warnings":1,"skipped":71} evaluated 24/95 breaches 1
+candidate NON_COMPLIANT {"passed":6,"failed":16,"warnings":2,"skipped":72} evaluated 24/96 breaches 0
+  CHANGED prohibited.guaranteed-returns failed/evaluated -> skipped/not-evaluated
+            No implemented check evaluates prohibited.guaranteed-returns.
+  NEW review.guarantee-language-present warning/evaluated
+            1 passage(s) use guarantee language. Read each one and decide what it describes: a guarantee about an investment return is prohibited by Standard 25, and one ab
+            evidence: ["These tokens are analogs of guaranteed-yield bonds on the stock market"]
+2 rule-level change(s).

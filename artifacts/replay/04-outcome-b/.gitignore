@@ -1,0 +1,7 @@
+# The retrieved article body is a third party's copyrighted work and is deliberately NOT committed.
+#
+# Reproducibility is preserved by stronger means than a copy would give: retrieved.sha256 pins
+# exactly what was audited, audit.json and check.json record every finding with its evidence, and
+# findings.md quotes the passages each classification turns on. A reviewer retrieves the URL,
+# verifies the digest, and re-runs. A committed copy would prove only that SOME text was analysed.
+retrieved.md

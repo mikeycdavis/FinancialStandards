@@ -106,13 +106,17 @@ export const count = (doc, re) => (doc.prose.match(new RegExp(re.source, re.flag
  * a clause and narrow enough not to reach the previous sentence.
  */
 export function saysUnnegated(doc, re) {
-  const NEGATORS = /\b(not|never|no|cannot|can't|without|isn't|aren't|non-?guaranteed|rather than|no such)\b[^.]{0,60}$/i;
   const global = new RegExp(re.source, re.flags.includes("g") ? re.flags : re.flags + "g");
   for (const m of doc.prose.matchAll(global)) {
-    const before = doc.prose.slice(Math.max(0, m.index - 60), m.index);
-    if (!NEGATORS.test(before)) return { hit: true, evidence: excerpt(doc.prose, m.index) };
+    if (!negatedAt(doc.prose, m.index)) return { hit: true, evidence: excerpt(doc.prose, m.index) };
   }
   return { hit: false };
+}
+
+/** Is the match at `index` inside a negating context? The 60-character window described above. */
+export function negatedAt(text, index) {
+  const NEGATORS = /\b(not|never|no|cannot|can't|without|isn't|aren't|non-?guaranteed|rather than|no such)\b[^.]{0,60}$/i;
+  return NEGATORS.test(text.slice(Math.max(0, index - 60), index));
 }
 
 /** A short quotation around a position, for a finding's evidence. */

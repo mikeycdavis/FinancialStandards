@@ -69,7 +69,7 @@ test("audit does not gate — it exits 0 even on a document full of violations",
   // and an audit that failed the build would make evidence-gathering something to avoid running.
   const { code, stdout } = await cli("audit", "examples/violations/guaranteed-returns.md");
   assert.equal(code, 0);
-  assert.match(stdout, /prohibited\.guaranteed-returns/);
+  assert.match(stdout, /review\.guarantee-language-present/);
 });
 
 test("every compliant example audits with no findings", async () => {
@@ -159,18 +159,46 @@ test("attempting to waive a non-exemptible rule blocks on the invariant", async 
   });
 });
 
-test("a document that actually makes a guarantee claim blocks on the invariant", async () => {
+// SEMANTIC MIGRATION (candidate 02). This previously asserted that a document full of guarantee
+// language blocks on the invariant automatically. That claim is retired deliberately, not weakened:
+// candidate replay 01 measured that no lexical scan can establish whether a guarantee claim's subject
+// is an investment return, so an automated stop-work order on this rule was a conclusion the
+// automation could not support. What replaces it is stricter — the document must not block, and must
+// not be credited with satisfying the prohibition either.
+test("a document full of guarantee language neither blocks on the invariant nor passes the prohibition", async () => {
   const { code, stdout } = await cli("check", "examples/violations/guaranteed-returns.md", "--json");
   const report = JSON.parse(stdout);
-  assert.equal(report.status, "BLOCKED_BY_INVARIANT");
+  assert.equal(report.status, "NON_COMPLIANT", "no automated finding may reach the invariant here");
+  assert.deepEqual(report.invariantBreaches, []);
   assert.equal(code, 1);
+
+  const prohibition = report.results.find((r) => r.ruleId === "prohibited.guaranteed-returns");
+  assert.equal(prohibition.disposition, "not-evaluated");
+  assert.notEqual(prohibition.status, "passed", "unreviewed must never render as satisfied");
+
+  const companion = report.results.find((r) => r.ruleId === "review.guarantee-language-present");
+  assert.equal(companion.status, "warning", "the passages must still be surfaced");
 });
 
 test("the human rendering of a breach tells the operator to stop rather than to fix the rule", async () => {
-  const { stdout } = await cli("check", "examples/violations/guaranteed-returns.md");
-  assert.match(stdout, /STOP\. This is not an ordinary failure/);
-  assert.match(stdout, /not to adjust\s+the rule/);
-  assert.match(stdout, /Declining is a complete answer/);
+  // MIGRATED TRIGGER, unchanged assertion. The rendering under test is the invariant breach, which
+  // is now reached by attempting to waive a non-exemptible rule rather than by a lexical detector.
+  const yaml = [
+    'standardVersion: "0.1.0"',
+    'project: "WaiverAttempt"',
+    "exceptions:",
+    "  - rule: prohibited.guaranteed-returns",
+    '    reason: "We would like to describe the return as guaranteed."',
+    '    approvedBy: "someone"',
+    '    approvedAt: "2026-08-09"',
+    "",
+  ].join("\n");
+  await withPolicy(yaml, async (file) => {
+    const { stdout } = await cli("check", "examples/compliant", "--policy", file);
+    assert.match(stdout, /STOP\. This is not an ordinary failure/);
+    assert.match(stdout, /not to adjust\s+the rule/);
+    assert.match(stdout, /Declining is a complete answer/);
+  });
 });
 
 test("a clean run reports an empty breach list rather than omitting the field", async () => {
@@ -216,8 +244,17 @@ test("explain against a document distinguishes not-applicable from passing", asy
 });
 
 test("explain against a document reports a live finding", async () => {
-  const { stdout } = await cli("explain", "prohibited.guaranteed-returns", "--doc", "examples/violations/guaranteed-returns.md");
+  const { stdout } = await cli("explain", "review.guarantee-language-present", "--doc", "examples/violations/guaranteed-returns.md");
   assert.match(stdout, /FAILING/);
+});
+
+test("explain tells a reviewer that the prohibition is unresolved on the document that most obviously breaches it", async () => {
+  // The pairing candidate 02 rests on. The discovery rule has a finding; the prohibition it routes to
+  // reports that no automated check reached it. Both must be legible from `explain`.
+  const { stdout } = await cli("explain", "prohibited.guaranteed-returns", "--doc", "examples/violations/guaranteed-returns.md");
+  assert.doesNotMatch(stdout, /FAILING/);
+  assert.match(stdout, /NOT_EVALUATED/);
+  assert.match(stdout, /review\.guarantee-language-present/, "the reviewer must be told where the passages are");
 });
 
 test("explaining an unknown rule cannot be evaluated, and suggests the category", async () => {

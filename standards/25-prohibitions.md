@@ -160,14 +160,25 @@ prohibition can be established at all.
 
 ## Implementation
 
-**Automated, partial assurance — four rules.** `prohibited.guaranteed-returns` scans for guarantee
-language with a negation window, so "returns are **not** guaranteed" does not trip it. That phrasing
-is not merely permitted but required by [Standard 20](20-uncertainty.md), and a checker that flagged
-the compliant form is a checker that gets switched off. `prohibited.single-forecast-as-certain`,
+**Automated, partial assurance — three rules.** `prohibited.single-forecast-as-certain`,
 `prohibited.hide-downside-scenarios`, and `prohibited.excessive-precision` are corroborated by the
 scenario and math rules, which detect the structural symptoms rather than the prose.
 
-**Not automated — nineteen rules, including the three fabrication prohibitions.** No scan available
+**Discovery, separated from judgment — one rule.** `review.guarantee-language-present` scans for
+guarantee language with a negation window, so "returns are **not** guaranteed" does not trip it: that
+phrasing is not merely permitted but required by [Standard 20](20-uncertainty.md), and a checker that
+flagged the compliant form is a checker that gets switched off. It reports every surviving passage
+with its position, at `recommended` level and `warning` severity, and concludes nothing about whether
+any of them describes an investment return.
+
+That separation exists because the combined version was measured and failed. Bound directly to the
+prohibition, the same scan issued a `BLOCKED_BY_INVARIANT` stop-work order against a correct published
+sentence about mortgage repayment, and the repair — resolving the guarantee claim's subject — proved
+unavailable: the clearest violation this repository owns names no investment anywhere in its text,
+while the correct comparison names twenty-one. Automation is competent at finding the passages and is
+not competent at reading them. The rule now claims only the first.
+
+**Not automated — twenty rules, including the three fabrication prohibitions.** No scan available
 to this repository establishes that market data, account data, or a tax rule was *not* invented. Doing
 so would require the true value, which is the thing the document is supposed to supply. These are
 `manual-review` with `assurance: "none"` and `attestable: true`: they report `NOT_EVALUATED` until a

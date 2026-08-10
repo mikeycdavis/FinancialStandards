@@ -1,0 +1,159 @@
+{
+  "schemaVersion": "1.0",
+  "command": "audit",
+  "documents": [
+    {
+      "file": "replay/a03-source.md",
+      "mode": null,
+      "calcBlocks": 0,
+      "evaluated": 27,
+      "notApplicable": 31,
+      "findings": [
+        {
+          "rule": "modes.declared-mode",
+          "level": "required",
+          "severity": "error",
+          "message": "The document does not declare which of the seven modes it operates in.",
+          "evidence": [
+            "replay/a03-source.md"
+          ]
+        },
+        {
+          "rule": "objectives.declared",
+          "level": "required",
+          "severity": "error",
+          "message": "No objectives section was found.",
+          "evidence": [
+            "replay/a03-source.md"
+          ]
+        },
+        {
+          "rule": "liquidity.requirements-stated",
+          "level": "required",
+          "severity": "error",
+          "message": "The document does not state its liquidity requirements.",
+          "evidence": [
+            "replay/a03-source.md"
+          ]
+        },
+        {
+          "rule": "fee.materiality-considered",
+          "level": "required",
+          "severity": "error",
+          "message": "The document does not address fees at all.",
+          "evidence": [
+            "replay/a03-source.md"
+          ]
+        },
+        {
+          "rule": "inflation.assumption-stated",
+          "level": "required",
+          "severity": "error",
+          "message": "The document does not state an inflation assumption.",
+          "evidence": [
+            "replay/a03-source.md"
+          ]
+        },
+        {
+          "rule": "math.nominal-real-labeled",
+          "level": "required",
+          "severity": "error",
+          "message": "Returns or projected values are stated with no nominal or real label.",
+          "evidence": [
+            "replay/a03-source.md"
+          ]
+        },
+        {
+          "rule": "math.real-terms-for-long-horizons",
+          "level": "recommended",
+          "severity": "warning",
+          "message": "A 80-year projection is presented only in nominal terms.",
+          "evidence": [
+            "replay/a03-source.md"
+          ]
+        },
+        {
+          "rule": "risk.sequence-risk-addressed",
+          "level": "required",
+          "severity": "error",
+          "message": "A projection with cash flows does not address the order in which returns arrive.",
+          "evidence": [
+            "replay/a03-source.md"
+          ]
+        },
+        {
+          "rule": "disclosure.assumptions-stated",
+          "level": "required",
+          "severity": "error",
+          "message": "No assumptions section was found.",
+          "evidence": [
+            "replay/a03-source.md"
+          ]
+        },
+        {
+          "rule": "scenarios.set-complete",
+          "level": "required",
+          "severity": "error",
+          "message": "The scenario set is missing: conservative, base, optimistic, adverse.",
+          "evidence": [
+            "replay/a03-source.md"
+          ]
+        },
+        {
+          "rule": "scenarios.range-not-point-estimate",
+          "level": "required",
+          "severity": "error",
+          "message": "A projection is presented as a single figure with no range.",
+          "evidence": [
+            "replay/a03-source.md"
+          ]
+        },
+        {
+          "rule": "data.staleness-threshold-declared",
+          "level": "required",
+          "severity": "error",
+          "message": "Dated figures are given with no statement of when they should be refreshed.",
+          "evidence": [
+            "replay/a03-source.md"
+          ]
+        },
+        {
+          "rule": "data.personal-context-marked",
+          "level": "required",
+          "severity": "error",
+          "message": "The document depends on personal circumstances without marking them [requires personal financial context].",
+          "evidence": [
+            "replay/a03-source.md"
+          ]
+        },
+        {
+          "rule": "disclosure.risk-tolerance-stated",
+          "level": "required",
+          "severity": "error",
+          "message": "The document does not state a risk tolerance.",
+          "evidence": [
+            "replay/a03-source.md"
+          ]
+        },
+        {
+          "rule": "prohibited.hide-downside-scenarios",
+          "level": "forbidden",
+          "severity": "error",
+          "message": "A projection presents favourable outcomes with no adverse case.",
+          "evidence": [
+            "replay/a03-source.md"
+          ]
+        },
+        {
+          "rule": "math.projections-carry-calc-blocks",
+          "level": "recommended",
+          "severity": "warning",
+          "message": "A projection carries no calc block, so none of its arithmetic can be recomputed.",
+          "evidence": [
+            "replay/a03-source.md"
+          ]
+        }
+      ]
+    }
+  ]
+}
