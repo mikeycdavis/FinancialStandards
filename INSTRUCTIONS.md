@@ -11,7 +11,7 @@ A system for deciding whether a piece of financial analysis is justified by its 
 mathematics, assumptions, uncertainty, and context — and for saying so in a way that can be checked
 rather than trusted.
 
-You get 29 standards, 95 catalogued rules, five commands, and a set of guards that stop the standards
+You get 29 standards, 96 catalogued rules, five commands, and a set of guards that stop the standards
 being edited into compliance. What you do **not** get is a claim that passing means the analysis is
 right. Most checks establish that something is present. Read §7 before relying on a clean run.
 
@@ -148,14 +148,14 @@ Stated up front rather than discovered.
 | Limitation | Consequence |
 |---|---|
 | Only Markdown analyses can be evaluated | A spreadsheet, notebook, or slide deck is `NOT_EVALUATED`, not a pass |
-| 58 of 95 rules are lexical | They establish presence, never correctness. A nominal figure labelled "real" passes every automated check |
+| 58 of 96 rules are lexical | They establish presence, never correctness. A nominal figure labelled "real" passes every automated check |
 | 33 rules are `manual-review` with `assurance: none` | Including all three fabrication prohibitions. They stay `NOT_EVALUATED` until a person attests |
 | No scan detects fabricated data | Establishing a figure was not invented needs the true value — the thing the document was supposed to supply |
 | The guarantee scanner is a word list with a negation window | A guarantee implied without the vocabulary ("you will have £1m at 65") passes |
 | Detectors check presence of sections and phrases | A document can satisfy every check while being wrong throughout |
 | `integrity.no-weakening` cannot detect motivated weakening | Judging whether a change was made *solely* to unblock something requires reading intent |
 | Deleting the guards and their tests together is not preventable | Git history and review are the backstops; the repository cannot defend against this from inside |
-| `frameworkCoverage` is currently 53 of 95 rules evaluated | The rest report `NOT_EVALUATED` on any document |
+| `frameworkCoverage` is currently 53 of 96 rules evaluated | The rest report `NOT_EVALUATED` on any document |
 
 **What a clean `check` means:** every rule that applied, and that something actually evaluated,
 passed. It does not mean the analysis is correct, that its figures are real, or that its

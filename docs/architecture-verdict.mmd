@@ -10,7 +10,7 @@ sequenceDiagram
 
     Agent->>CLI: check analyses/retirement.md
     CLI->>Cat: loadCatalog(rules/)
-    Cat-->>CLI: 95 rules
+    Cat-->>CLI: 96 rules
     CLI->>Cat: assertBindings(detector ids)
     Note over Cat: an id the catalog does not define<br/>throws here, before any document is read
 

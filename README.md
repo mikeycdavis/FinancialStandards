@@ -42,13 +42,13 @@ recommendation.
 
 ## How honest it is about itself
 
-Of 95 catalogued rules:
+Of 96 catalogued rules:
 
 | | Count | Means |
 | --- | --- | --- |
 | `assurance: full` | 3 | Exact — recomputed arithmetic, or structural inspection |
 | `assurance: partial` | 59 | Lexical. Establishes presence, **never** correctness |
-| `assurance: none` | 33 | Only a person can establish it; reports `NOT_EVALUATED` until one does |
+| `assurance: none` | 34 | Only a person can establish it; reports `NOT_EVALUATED` until one does |
 
 The three fabrication prohibitions — invented market data, account data, or tax rules — are among the
 most consequential rules in the domain and the least checkable. No scan establishes that a figure was
@@ -108,7 +108,7 @@ npm run fidelity    # every verbatim quotation still matches its source
 npm run links       # no cross-reference points at nothing
 npm run policy      # this repository's own policy is well-formed
 npm run math        # every stated figure recomputes
-npm test            # 245 tests
+npm test            # 262 tests
 npm run diagrams    # the diagrams match their Mermaid source
 npm run audit       # evidence over the published analyses
 npm run check       # this repository's verdict on itself

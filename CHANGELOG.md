@@ -4,6 +4,64 @@ All notable changes to this framework. A new `required` or `forbidden` rule is M
 turn a compliant project non-compliant. A new `recommended` rule is MINOR. A published rule id stays
 resolvable forever through `aliases` — ids are never reused or respelled.
 
+## 1.1.0 — 2026-08-09
+
+One substantive change, and everything required to make it truthful. Ninety-six rules, 262 tests.
+
+The framework stops claiming a guarantee classifier that three independent adoptions measured it not
+to have. No standard changed. No rule was removed, renamed, or demoted.
+
+### Changed
+
+- **`prohibited.guaranteed-returns` is now `validationType: manual-review`, `assurance: none`.** It
+  keeps `level: forbidden`, `severity: error` and `nonExemptible: true` exactly. Absent an
+  attestation it reports `NOT_EVALUATED` — never `passed`. See
+  [ADR 0007](artifacts/adr/0007-guarantee-discovery-separated-from-judgment.md).
+- **The human `check` rendering now prints a warning's evidence**, not just its message. A rule whose
+  purpose is to hand a reviewer a work-list had been reporting the count and withholding the list.
+
+### Added
+
+- **`review.guarantee-language-present`** — `recommended`, `warning`, `document`, `partial`. Runs the
+  unchanged 1.0.0 scan and reports every surviving passage with its position. It concludes nothing,
+  and it can never establish the prohibition it routes to, in either direction.
+- **`test/release-isolation.test.mjs`** — ten tests diffing the live framework against frozen
+  `v1.0.0` snapshots under `artifacts/release/`. Exactly one rule added, exactly two identity fields
+  moved, no unrelated applicability or finding changed, no assurance raised anywhere, and every
+  non-exemptible rule still blocks a waiver. "The change looks isolated" is now a release property.
+- **`artifacts/adoption/` and `artifacts/replay/`** — the evidence corpus: three adoptions, two
+  candidate replays, a blind out-of-sample test, and a counterexample search, each with its
+  pre-registered protocol committed before the work it governs.
+
+### The trade-off this release makes
+
+**v1.1 intentionally gives up automatic stop-work enforcement for `prohibited.guaranteed-returns`.**
+Empirical evaluation showed the lexical detector could both falsely block compliant financial language
+and falsely certify documents containing no matching vocabulary. Automated detection is retained as
+evidence discovery; semantic compliance now requires review. A targeted counterexample confirmed that
+1.0.0 could correctly block a genuine violation, establishing this as a **measured trade-off rather
+than a cost-free correction**.
+
+Measured record for 1.0.0's automated adjudication of this rule: two false clearances (Adoptions 01
+and 03, on a non-exemptible pass nobody audits), one false stop (Adoption 02, on correct published
+work), two further false stops identified in prose but not audited, and one correct stop (promotional
+crypto material).
+
+### Deliberately not in this release
+
+`horizonYears()` reading "80 years old" as an eighty-year horizon; assumption disclosure detected by
+label rather than by content; the frontmatter parsing boundary; requiring an attestation to address
+the passages discovery surfaced. Each is a recorded hypothesis with one observation behind it. Only
+the guarantee decomposition has been through discovery, independent reproduction, a rejected
+candidate, a redesigned candidate, replay, an unseen adoption, and a counterexample search — and only
+evidence of that kind earns a standards change. See
+[artifacts/adoption/CORPUS.md](artifacts/adoption/CORPUS.md).
+
+### Assurance
+
+3 full · 59 partial · 34 none, across 96 rules. `none` rose by one: the framework admits one more
+thing it cannot establish. That is the release.
+
 ## 1.0.0 — 2026-08-09
 
 The first frozen release. Twenty-nine standards, ninety-five rules, five commands, 245 tests, zero

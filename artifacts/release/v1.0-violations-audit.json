@@ -1,0 +1,120 @@
+{
+  "documents": [
+    {
+      "file": "examples/violations/guaranteed-returns.md",
+      "evaluated": 34,
+      "notApplicable": 24,
+      "findings": [
+        "disclosure.assumptions-stated",
+        "disclosure.risk-tolerance-stated",
+        "fee.cumulative-effect-shown",
+        "liquidity.requirements-stated",
+        "objectives.declared",
+        "prohibited.guaranteed-returns",
+        "risk.sequence-inapplicability-stated",
+        "scenarios.non-exhaustive-stated",
+        "scenarios.set-complete",
+        "scenarios.uncertainty-source-named",
+        "tax.estimate-precision"
+      ]
+    },
+    {
+      "file": "examples/violations/ignored-fees.md",
+      "evaluated": 40,
+      "notApplicable": 18,
+      "findings": [
+        "fee.materiality-considered",
+        "tax.materiality-considered"
+      ]
+    },
+    {
+      "file": "examples/violations/integrity-weakening.md",
+      "evaluated": 10,
+      "notApplicable": 48,
+      "findings": [
+        "disclosure.assumptions-stated",
+        "disclosure.risk-tolerance-stated",
+        "fee.materiality-considered",
+        "horizon.stated",
+        "inflation.assumption-stated",
+        "liquidity.requirements-stated",
+        "objectives.declared",
+        "tax.materiality-considered"
+      ]
+    },
+    {
+      "file": "examples/violations/missing-scenarios.md",
+      "evaluated": 39,
+      "notApplicable": 19,
+      "findings": [
+        "prohibited.hide-downside-scenarios",
+        "prohibited.single-forecast-as-certain",
+        "scenarios.range-not-point-estimate",
+        "scenarios.set-complete"
+      ]
+    },
+    {
+      "file": "examples/violations/nominal-real-confusion.md",
+      "evaluated": 27,
+      "notApplicable": 31,
+      "findings": [
+        "data.as-of-date-stated",
+        "data.source-named",
+        "data.sources-cited",
+        "disclosure.assumptions-stated",
+        "disclosure.risk-tolerance-stated",
+        "fee.materiality-considered",
+        "inflation.assumption-stated",
+        "liquidity.requirements-stated",
+        "math.nominal-real-labeled",
+        "math.projection-precision",
+        "math.real-terms-for-long-horizons",
+        "objectives.declared",
+        "prohibited.excessive-precision",
+        "prohibited.hide-downside-scenarios",
+        "prohibited.single-forecast-as-certain",
+        "risk.concentration-measure-stated",
+        "risk.sequence-inapplicability-stated",
+        "scenarios.range-not-point-estimate",
+        "scenarios.set-complete",
+        "tax.materiality-considered"
+      ]
+    },
+    {
+      "file": "examples/violations/stale-data-no-refresh-threshold.md",
+      "evaluated": 45,
+      "notApplicable": 13,
+      "findings": [
+        "data.staleness-threshold-declared"
+      ]
+    },
+    {
+      "file": "examples/violations/stale-data.md",
+      "evaluated": 43,
+      "notApplicable": 15,
+      "findings": [
+        "data.as-of-date-stated",
+        "data.external-data-marked",
+        "data.source-named",
+        "data.sources-cited"
+      ]
+    },
+    {
+      "file": "examples/violations/unmarked-assumptions.md",
+      "evaluated": 42,
+      "notApplicable": 16,
+      "findings": [
+        "disclosure.assumptions-stated"
+      ]
+    },
+    {
+      "file": "examples/violations/wrong-math.md",
+      "evaluated": 42,
+      "notApplicable": 16,
+      "findings": [
+        "math.projection-precision",
+        "prohibited.excessive-precision"
+      ]
+    }
+  ]
+}

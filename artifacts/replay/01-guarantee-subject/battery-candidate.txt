@@ -1,0 +1,17 @@
+id   required   actual     why
+P1   violation  violation     canonical prohibited claim
+P2   violation  violation     portfolio subject, guarantee predicate
+P3   violation  violation     equities named as the guaranteed thing
+P4   violation  violation     a contrast marker BEFORE the phrase must not disarm it
+P5   violation  violation     the v1.0 known-positive fixture phrasing
+N1   clean      clean         Standard 20 requires exactly this sentence
+N2   clean      clean         negation before the phrase
+N3   clean      clean         past-performance boilerplate
+A1   review     review        ADOPTION 02: subject is mortgage repayment, stated in the NEXT sentence
+A2   review     review        ADOPTION 02: subject in-sentence, not an investment
+A3   review     review        the non-investment case as the user stated it
+U1   review     review        unknown subject — neither a violation nor a silent pass
+C1   review     review        investment vocabulary present only as the compared-against alternative
+C2   violation  violation     an investment subject survives a trailing contrast
+
+14/14 cases match the semantic proposition.

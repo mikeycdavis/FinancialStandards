@@ -12,7 +12,7 @@ make a subset of that machine-checkable. A command line evaluates a document aga
 policy and returns one of five verdicts. A suite of guards protects the standards themselves from
 being edited into compliance.
 
-The system is deliberately honest about its own reach. Of the 95 rules, **3 claim full assurance**,
+The system is deliberately honest about its own reach. Of the 96 rules, **3 claim full assurance**,
 58 are lexical checks that establish presence but never correctness, and 33 can only ever be
 established by a person. That distribution is published as `frameworkCoverage` beside every verdict —
 never folded into it, because a coverage improvement must not be able to read as a compliance
@@ -24,7 +24,7 @@ improvement.
 |---|---|
 | Runtime | Node.js ≥ 18, ESM (`"type": "module"`) |
 | Dependencies | **None.** Zero third-party packages, enforced structurally — CI has no install step, so adding one breaks the build |
-| Tests | `node:test` + `node:assert/strict` — 245 tests, no framework |
+| Tests | `node:test` + `node:assert/strict` — 262 tests, no framework |
 | Config parsing | Hand-written strict YAML subset (`scripts/yaml.mjs`) and JSON Schema evaluator (`scripts/jsonschema.mjs`) |
 | Schema | JSON Schema draft 2020-12 (`schemas/project-policy.schema.json`) |
 | Diagrams | Mermaid `.mmd` canonical; embedded fences and any `.svg` are derived |
@@ -151,7 +151,7 @@ every rule has a substantive one.
 ([ADR 0005](../artifacts/adr/0005-concept-disposition.md)): can it be applicable, can evidence be
 gathered, can its state be evaluated, can its violation be explained, can remediation change the
 result? Anything failing one stays in the standard's prose and is disclosed in its `## Implementation`
-section. This is why the catalog is 95 rules rather than several hundred.
+section. This is why the catalog is 96 rules rather than several hundred.
 
 ### The distribution, stated plainly
 
@@ -423,7 +423,7 @@ flowchart TB
 
     subgraph contract["The contract — what is required"]
         standards["standards/01-29<br/>normative documents"]
-        catalog["rules/*.json<br/>95 rules, 17 categories"]
+        catalog["rules/*.json<br/>96 rules, 18 categories"]
         inventory["standards-source-inventory.json<br/>frozen enumeration"]
     end
 
@@ -488,7 +488,7 @@ sequenceDiagram
 
     Agent->>CLI: check analyses/retirement.md
     CLI->>Cat: loadCatalog(rules/)
-    Cat-->>CLI: 95 rules
+    Cat-->>CLI: 96 rules
     CLI->>Cat: assertBindings(detector ids)
     Note over Cat: an id the catalog does not define<br/>throws here, before any document is read
 
@@ -571,12 +571,12 @@ artifacts/
 docs/                               this file, and the canonical .mmd sources
 examples/compliant/                 3 analyses that audit clean
 examples/violations/                9 known-positive fixtures
-rules/                              9 files, 95 rules
+rules/                             10 files, 96 rules
 schemas/                            project-policy.schema.json
 scripts/                            15 modules, zero dependencies
 standards/                          29 normative documents
 templates/                          what `standards init` scaffolds
-test/                               9 suites, 245 tests
+test/                              10 suites, 262 tests
 project-policy.yml                  this repository's own policy
 ```
 
@@ -586,7 +586,7 @@ Stated here rather than discovered:
 
 - **Only Markdown analyses can be evaluated.** A spreadsheet model, a notebook, or a slide deck is
   outside what this can assess. The honest report for one is `NOT_EVALUATED`, not a pass.
-- **58 of 95 rules are lexical.** They establish that something is present. A figure labelled "real"
+- **58 of 96 rules are lexical.** They establish that something is present. A figure labelled "real"
   that is actually nominal passes every automated check here.
 - **33 rules can only be established by a person**, including the three fabrication prohibitions.
   Until someone attests them they report `NOT_EVALUATED`.

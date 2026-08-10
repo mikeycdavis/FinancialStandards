@@ -1,0 +1,766 @@
+{
+  "version": "1.0.0",
+  "ruleCount": 95,
+  "rules": {
+    "bias.falsifier-stated": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "standard": 24
+    },
+    "bias.past-performance-qualified": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 24
+    },
+    "bias.recency-extrapolation-checked": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 24
+    },
+    "data.as-of-date-stated": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 21
+    },
+    "data.attestation-digests-current": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "structural",
+      "assurance": "full",
+      "nonExemptible": false,
+      "standard": 26
+    },
+    "data.external-data-marked": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 27
+    },
+    "data.personal-context-marked": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 27
+    },
+    "data.source-named": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 21
+    },
+    "data.sources-cited": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 26
+    },
+    "data.staleness-threshold-declared": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 21
+    },
+    "debt.leverage-adverse-case": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 6
+    },
+    "debt.repay-vs-invest-comparable": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "standard": 6
+    },
+    "debt.total-cost-stated": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 6
+    },
+    "disclosure.alternative-considered": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 23
+    },
+    "disclosure.assumption-basis-stated": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 18
+    },
+    "disclosure.assumption-sensitivity-identified": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "standard": 18
+    },
+    "disclosure.assumptions-stated": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 18
+    },
+    "disclosure.opportunity-cost-quantified": {
+      "level": "recommended",
+      "severity": "warning",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 23
+    },
+    "disclosure.risk-capacity-distinguished": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 22
+    },
+    "disclosure.risk-tolerance-stated": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 22
+    },
+    "fee.cumulative-effect-shown": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 9
+    },
+    "fee.materiality-considered": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 9
+    },
+    "horizon.matches-objective": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 3
+    },
+    "horizon.risk-constrained-by-horizon": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "standard": 3
+    },
+    "horizon.stated": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 3
+    },
+    "inflation.assumption-marked": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 10
+    },
+    "inflation.assumption-stated": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 10
+    },
+    "inflation.index-identified": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 10
+    },
+    "integrity.guards-present": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "structural",
+      "assurance": "full",
+      "nonExemptible": false,
+      "standard": 29
+    },
+    "integrity.no-silent-reclassification": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "structural",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 29
+    },
+    "integrity.no-weakening": {
+      "level": "forbidden",
+      "severity": "error",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "nonExemptible": true,
+      "standard": 29
+    },
+    "liquidity.constraint-not-tradeoff": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "standard": 4
+    },
+    "liquidity.lockup-terms-disclosed": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 4
+    },
+    "liquidity.requirements-stated": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 4
+    },
+    "math.average-return-labeled": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 15
+    },
+    "math.borrowing-cost-total": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 7
+    },
+    "math.calc-blocks-recompute": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "computational",
+      "assurance": "full",
+      "nonExemptible": false,
+      "standard": 28
+    },
+    "math.compounding-inputs-stated": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 12
+    },
+    "math.geometric-mean-for-series": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 12
+    },
+    "math.nominal-real-labeled": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 11
+    },
+    "math.projection-precision": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 12
+    },
+    "math.projections-carry-calc-blocks": {
+      "level": "recommended",
+      "severity": "warning",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 28
+    },
+    "math.rate-compounding-stated": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 7
+    },
+    "math.real-terms-for-long-horizons": {
+      "level": "recommended",
+      "severity": "warning",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 11
+    },
+    "modes.declared-mode": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 1
+    },
+    "modes.education-not-advice": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "standard": 1
+    },
+    "modes.recommendation-requires-context": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 1
+    },
+    "objectives.competing-ranked": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "standard": 2
+    },
+    "objectives.declared": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 2
+    },
+    "objectives.quantified": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 2
+    },
+    "prohibited.correlation-as-diversification": {
+      "level": "forbidden",
+      "severity": "error",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "standard": 25
+    },
+    "prohibited.cross-period-comparison": {
+      "level": "forbidden",
+      "severity": "error",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "standard": 25
+    },
+    "prohibited.excessive-precision": {
+      "level": "forbidden",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 25
+    },
+    "prohibited.fabricated-account-data": {
+      "level": "forbidden",
+      "severity": "error",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "nonExemptible": true,
+      "standard": 25
+    },
+    "prohibited.fabricated-market-data": {
+      "level": "forbidden",
+      "severity": "error",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "nonExemptible": true,
+      "standard": 25
+    },
+    "prohibited.fabricated-tax-rules": {
+      "level": "forbidden",
+      "severity": "error",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "nonExemptible": true,
+      "standard": 25
+    },
+    "prohibited.guaranteed-returns": {
+      "level": "forbidden",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": true,
+      "standard": 25
+    },
+    "prohibited.hidden-assumptions": {
+      "level": "forbidden",
+      "severity": "error",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "standard": 25
+    },
+    "prohibited.hide-downside-scenarios": {
+      "level": "forbidden",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 25
+    },
+    "prohibited.historical-returns-repeat": {
+      "level": "forbidden",
+      "severity": "error",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "standard": 25
+    },
+    "prohibited.ignored-concentration": {
+      "level": "forbidden",
+      "severity": "error",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "standard": 25
+    },
+    "prohibited.ignored-fees": {
+      "level": "forbidden",
+      "severity": "error",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "standard": 25
+    },
+    "prohibited.ignored-taxes": {
+      "level": "forbidden",
+      "severity": "error",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "standard": 25
+    },
+    "prohibited.indefinite-extrapolation": {
+      "level": "forbidden",
+      "severity": "error",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "standard": 25
+    },
+    "prohibited.leverage-without-risk-analysis": {
+      "level": "forbidden",
+      "severity": "error",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "standard": 25
+    },
+    "prohibited.nominal-real-confusion": {
+      "level": "forbidden",
+      "severity": "error",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "standard": 25
+    },
+    "prohibited.optimal-equals-appropriate": {
+      "level": "forbidden",
+      "severity": "error",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "standard": 25
+    },
+    "prohibited.price-momentum-recommendation": {
+      "level": "forbidden",
+      "severity": "error",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "standard": 25
+    },
+    "prohibited.returns-over-liquidity": {
+      "level": "forbidden",
+      "severity": "error",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "standard": 25
+    },
+    "prohibited.risk-without-horizon": {
+      "level": "forbidden",
+      "severity": "error",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "standard": 25
+    },
+    "prohibited.silent-circumstance-assumption": {
+      "level": "forbidden",
+      "severity": "error",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "standard": 25
+    },
+    "prohibited.single-forecast-as-certain": {
+      "level": "forbidden",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 25
+    },
+    "prohibited.tax-estimates-as-exact": {
+      "level": "forbidden",
+      "severity": "error",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "standard": 25
+    },
+    "reserves.access-terms-stated": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 5
+    },
+    "reserves.adequacy-justified": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "standard": 5
+    },
+    "reserves.months-basis": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 5
+    },
+    "risk.adverse-case-is-a-loss": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "standard": 16
+    },
+    "risk.adverse-ordering-front-loaded": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "standard": 17
+    },
+    "risk.concentration-distribution-measure": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 14
+    },
+    "risk.concentration-measure-stated": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 14
+    },
+    "risk.concentration-whole-position": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "standard": 14
+    },
+    "risk.diversification-adequate": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "standard": 13
+    },
+    "risk.diversification-claim-qualified": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 13
+    },
+    "risk.path-measure-stated": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 16
+    },
+    "risk.sequence-inapplicability-stated": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 17
+    },
+    "risk.sequence-risk-addressed": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 17
+    },
+    "risk.volatility-figure-qualified": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 15
+    },
+    "risk.volatility-not-whole-risk": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "manual-review",
+      "assurance": "none",
+      "nonExemptible": false,
+      "standard": 15
+    },
+    "scenarios.non-exhaustive-stated": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 19
+    },
+    "scenarios.range-not-point-estimate": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 20
+    },
+    "scenarios.set-complete": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 19
+    },
+    "scenarios.uncertainty-source-named": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 20
+    },
+    "tax.estimate-precision": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 8
+    },
+    "tax.materiality-considered": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 8
+    },
+    "tax.rate-basis-stated": {
+      "level": "required",
+      "severity": "error",
+      "validationType": "document",
+      "assurance": "partial",
+      "nonExemptible": false,
+      "standard": 8
+    }
+  }
+}
