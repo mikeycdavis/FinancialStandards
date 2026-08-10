@@ -1,0 +1,8 @@
+# The same naive day-one policy as Adoptions 01 and 02: standardVersion, a project name, nothing else.
+# No applicability declarations, no exceptions, no attestations.
+#
+# Holding this constant across all three adoptions is what makes them comparable. Tuning it for a
+# short Canadian advice column would measure the tuning.
+standardVersion: "1.0.0"
+project: "MoneySense RRIF estate withdrawals (adoption test 03)"
+exceptions: []
