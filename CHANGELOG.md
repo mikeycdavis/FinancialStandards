@@ -10,6 +10,19 @@ Development tooling only. **No standard, rule, catalog, policy, example or verdi
 `VERSION` is deliberately not bumped: nothing here alters what this framework requires of an analysis
 or what it concludes about one.
 
+### Added
+
+- **Containerised local CI and verified pull-request submission.** `.\scripts\ci.ps1` runs all nine
+  checks in an ephemeral Docker environment on a pinned Node 20, with no network and no host mounts
+  beyond a result directory. `.\scripts\submit-pr.ps1` pushes and opens a pull request only for a
+  commit that passed that pipeline, resolving `HEAD` before and after and refusing on any difference.
+  See [`docs/local-ci.md`](docs/local-ci.md).
+- **The pipeline is defined once**, in `scripts/ci.mjs`. `.github/workflows/ci.yml` keeps its nine
+  separate steps — `test/integrity.test.mjs` requires each guard to be individually visible, because
+  commenting one out is the least visible way to disable a check — and `test/local-ci.test.mjs` now
+  asserts the two descriptions match command-for-command and in order. The duplication stays; the
+  drift becomes a test failure.
+
 ### Fixed
 
 - **`npm test` could not run on the Node version this framework declares.** The script was

@@ -1,0 +1,44 @@
+# The ephemeral CI environment.
+#
+# Invoked through `node scripts/ci-docker.mjs` (or `.\scripts\ci.ps1`), never directly, because the
+# orchestrator supplies the unique project name that keeps concurrent runs and unrelated developer
+# containers from colliding. Running `docker compose -f compose.ci.yml up` by hand would use the
+# directory name as the project and reintroduce exactly that collision.
+#
+# There is one service. This repository has no database, no message broker, no cache and no
+# application server, so there is nothing to wait for and no health check to write — a `depends_on`
+# with a fabricated condition here would be ceremony that proves nothing. If a dependency is ever
+# added, it belongs in this file with a real `healthcheck` and `depends_on: condition:
+# service_healthy`, and never a sleep.
+
+services:
+  ci:
+    build:
+      context: .
+      dockerfile: Dockerfile.ci
+    # Stated explicitly rather than inherited from the image, so the one authoritative stage list is
+    # visibly what runs here.
+    command: ["node", "scripts/ci.mjs"]
+
+    # CI is untrusted code execution. It needs no network: this repository declares no dependencies,
+    # so there is nothing to install, and `scripts/links.mjs` is documented to make no network
+    # requests so that a run is deterministic and offline. Removing the network turns both of those
+    # from a claim into a property of the environment — a check that quietly reached the internet
+    # would fail here rather than pass slowly.
+    network_mode: none
+
+    # The only writable path shared with the host, and it holds results only. The source itself is
+    # baked into the image, so the pipeline cannot write into the developer's working tree.
+    volumes:
+      - ./artifacts/local-ci:/out
+    environment:
+      CI_RESULT_DIR: /out
+      # Announce the environment to anything that reasonably varies by it. Nothing in this pipeline
+      # currently reads these; they are set because a check that starts caring should not have to
+      # discover it is in CI by inference.
+      CI: "true"
+      FINANCIAL_STANDARDS_CI: "docker-local"
+
+    # No ports are published. A published port is how a CI container collides with a developer's
+    # running service, and nothing here serves anything.
+    init: true

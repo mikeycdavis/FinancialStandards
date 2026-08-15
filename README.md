@@ -108,11 +108,23 @@ npm run fidelity    # every verbatim quotation still matches its source
 npm run links       # no cross-reference points at nothing
 npm run policy      # this repository's own policy is well-formed
 npm run math        # every stated figure recomputes
-npm test            # 262 tests
+npm test            # 279 tests
 npm run diagrams    # the diagrams match their Mermaid source
 npm run audit       # evidence over the published analyses
 npm run check       # this repository's verdict on itself
 ```
+
+Or run all nine in a container, on a pinned runtime, with no network:
+
+```powershell
+.\scripts\ci.ps1          # the full pipeline; exit 0 only if every stage passes
+.\scripts\submit-pr.ps1   # verify, then push and open a PR for exactly the verified commit
+```
+
+A pull request is opened only for a commit that has passed that pipeline — `HEAD` is resolved before
+and after the run and compared, and submission refuses on any difference.
+[`docs/local-ci.md`](docs/local-ci.md) explains the isolation model and how local CI differs from the
+hosted GitHub Actions workflow.
 
 ## Where to look
 
@@ -120,6 +132,7 @@ npm run check       # this repository's verdict on itself
 | --- | --- |
 | To adopt this in a project | [`INSTRUCTIONS.md`](INSTRUCTIONS.md) |
 | How the system fits together | [`docs/architecture.md`](docs/architecture.md) |
+| How to run CI locally and submit a verified PR | [`docs/local-ci.md`](docs/local-ci.md) |
 | Why a design decision was made | [`artifacts/adr/`](artifacts/adr/) |
 | What must never be done | [`standards/25-prohibitions.md`](standards/25-prohibitions.md) |
 | What must never be done *to the standards* | [`standards/29-standards-integrity.md`](standards/29-standards-integrity.md) |

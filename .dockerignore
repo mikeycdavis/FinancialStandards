@@ -1,0 +1,24 @@
+# Keep the build context to the tree under test.
+#
+# .git is excluded for two reasons, and the second matters more: the image does not need history,
+# and nothing in the pipeline shells out to git, so a container that cannot reach the repository's
+# history cannot accidentally derive a result from anything other than the files it was given.
+.git
+.gitignore
+
+# Never present by design — this repository declares no dependencies — but excluded so that a stray
+# local `npm install` cannot leak a node_modules tree into the CI image and make a dependency look
+# available to a check that should have failed without it.
+node_modules
+package-lock.json
+
+# Results from previous runs. Copying them in would let a stale verdict sit in the image alongside
+# the run that is about to produce a new one.
+artifacts/local-ci
+
+# Editor and OS noise
+.DS_Store
+Thumbs.db
+*.swp
+.idea
+.vscode

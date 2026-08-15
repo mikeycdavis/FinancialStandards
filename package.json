@@ -15,7 +15,9 @@
     "links": "node scripts/links.mjs",
     "policy": "node scripts/policy.mjs",
     "diagrams": "node scripts/diagrams.mjs",
-    "math": "node scripts/calc.mjs standards examples/compliant"
+    "math": "node scripts/calc.mjs standards examples/compliant",
+    "local-ci": "node scripts/ci-docker.mjs",
+    "submit-pr": "node scripts/submit-pr.mjs"
   },
   "engines": {
     "node": ">=18"
