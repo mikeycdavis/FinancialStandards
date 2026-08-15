@@ -4,6 +4,24 @@ All notable changes to this framework. A new `required` or `forbidden` rule is M
 turn a compliant project non-compliant. A new `recommended` rule is MINOR. A published rule id stays
 resolvable forever through `aliases` — ids are never reused or respelled.
 
+## Unreleased
+
+Development tooling only. **No standard, rule, catalog, policy, example or verdict changed**, and
+`VERSION` is deliberately not bumped: nothing here alters what this framework requires of an analysis
+or what it concludes about one.
+
+### Fixed
+
+- **`npm test` could not run on the Node version this framework declares.** The script was
+  `node --test "test/*.test.mjs"`; the quotes prevent the shell from expanding the glob, leaving it
+  to Node's own `--test` glob support, which did not exist until after Node 20. `package.json`
+  declares `node >= 18` and `.github/workflows/ci.yml` pins Node 20, so on both the command failed
+  with `Could not find 'test/*.test.mjs'`. It passed only on newer runtimes, which is what the
+  development machine happened to have. **The single hosted CI run in this repository's history
+  failed for this reason.** Removing the quotes lets the shell expand the glob and works on every
+  supported runtime; the same 279 tests run, and no test changed. Found by the containerised
+  pipeline on its first execution.
+
 ## 1.1.0 — 2026-08-09
 
 One substantive change, and everything required to make it truthful. Ninety-six rules, 262 tests.

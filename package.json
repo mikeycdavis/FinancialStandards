@@ -7,7 +7,7 @@
     "standards": "scripts/standards.mjs"
   },
   "scripts": {
-    "test": "node --test \"test/*.test.mjs\"",
+    "test": "node --test test/*.test.mjs",
     "audit": "node scripts/standards.mjs audit examples/compliant",
     "check": "node scripts/standards.mjs check examples/compliant",
     "inventory": "node scripts/inventory.mjs",
