@@ -16,6 +16,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.ci
+      args:
+        # The certified runtime. Overridden by `--node=<version>` for a compatibility run against
+        # the declared floor; see docs/local-ci.md.
+        NODE_VERSION: ${CI_NODE_VERSION:-20}
     # Stated explicitly rather than inherited from the image, so the one authoritative stage list is
     # visibly what runs here.
     command: ["node", "scripts/ci.mjs"]

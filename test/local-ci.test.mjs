@@ -22,7 +22,7 @@ import path from "node:path";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { STAGES } from "../scripts/ci.mjs";
-import { runArgs } from "../scripts/ci-docker.mjs";
+import { runArgs, nodeVersionFrom, CERTIFIED_NODE, SUPPORTED_FLOOR_NODE } from "../scripts/ci-docker.mjs";
 import { preflight, sameCommitVerified, treeUnmodifiedDuringCi, prBody } from "../scripts/submit-pr.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -154,6 +154,42 @@ test("--keep-on-failure keeps the container, not just the image", () => {
   assert.deepEqual(runArgs({ keepOnFailure: false }), ["run", "--rm", "--no-deps", "ci"]);
   assert.deepEqual(runArgs({ keepOnFailure: true }), ["run", "--no-deps", "ci"]);
   assert.ok(!runArgs({ keepOnFailure: true }).includes("--rm"), "a kept container must not be auto-removed");
+});
+
+// --- The runtime the pipeline certifies, and the floor it supports ------------------------------------
+
+test("a normal run uses the certified runtime", () => {
+  assert.equal(nodeVersionFrom([]), CERTIFIED_NODE);
+  assert.equal(nodeVersionFrom(["--verbose", "--keep-on-failure"]), CERTIFIED_NODE);
+});
+
+test("--node runs the same stages against another runtime, including the declared floor", () => {
+  assert.equal(nodeVersionFrom(["--node=18"]), SUPPORTED_FLOOR_NODE);
+  assert.equal(nodeVersionFrom(["--node=22", "--verbose"]), "22");
+});
+
+test("a malformed --node refuses rather than falling back to the certified runtime", () => {
+  // Falling back would run Node 20 while the developer believed they were testing the floor, and
+  // report a pass that answers a question nobody asked.
+  for (const bad of ["--node=", "--node=eighteen", "--node=18.20.8", "--node=v18"]) {
+    const result = nodeVersionFrom([bad]);
+    assert.equal(typeof result, "object", `${bad} must not resolve to a version`);
+    assert.match(result.error, /--node expects a major version/);
+  }
+});
+
+test("the declared engines floor is the version the compatibility run targets", () => {
+  // If someone raises engines.node, the floor this check exercises must move with it, or the
+  // evidence silently starts certifying something other than what the package promises.
+  const pkg = JSON.parse(read("package.json"));
+  const floor = /(\d+)/.exec(pkg.engines.node)[1];
+  assert.equal(floor, SUPPORTED_FLOOR_NODE, "engines.node and the compatibility floor disagree");
+});
+
+test("the Dockerfile defaults to the certified runtime and accepts an override", () => {
+  const dockerfile = read("Dockerfile.ci");
+  assert.match(dockerfile, new RegExp(`ARG NODE_VERSION=${CERTIFIED_NODE}\\b`));
+  assert.match(dockerfile, /FROM node:\$\{NODE_VERSION\}-alpine/);
 });
 
 // --- What may be submitted at all ----------------------------------------------------------------------

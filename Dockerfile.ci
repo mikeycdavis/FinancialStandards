@@ -10,7 +10,14 @@
 # has none: the zero-dependency rule is enforced structurally rather than by policy. Adding a
 # package must break the build rather than pass unnoticed, and an install line here would be a place
 # for one to arrive quietly.
-FROM node:20-alpine
+#
+# NODE_VERSION defaults to the certified runtime and is overridable so the declared lower bound can
+# actually be exercised. `package.json` says `node >= 18`; that is a support claim, and a support
+# claim nothing ever runs is aspirational. `node scripts/ci-docker.mjs --node=18` runs the identical
+# nine stages against the floor. It is not part of a normal run — see docs/local-ci.md for when it
+# is required.
+ARG NODE_VERSION=20
+FROM node:${NODE_VERSION}-alpine
 
 # The source is COPYed, not bind-mounted. A bind mount would let the container write into the
 # developer's working tree, which makes "CI did not modify my repository" a hope rather than a

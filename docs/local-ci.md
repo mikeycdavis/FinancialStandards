@@ -20,6 +20,35 @@ The rule the tooling exists to enforce:
 
 No SDK, database, or service needs to be installed or running. That is the point of the container.
 
+## Runtime support policy
+
+> FinancialStandards supports Node.js 18 and later. The authoritative local CI environment uses
+> Node 20. Node 18 is treated as the compatibility floor and must remain capable of running the
+> repository's validation commands; it is not the primary CI runtime.
+
+```text
+Supported runtime:        Node >= 18          (what package.json promises)
+Primary certified:        Node 20             (what a normal CI run proves)
+Compatibility rule:       changes must not knowingly use APIs unavailable in Node 18
+Lower-bound verification: Node 18 must run the complete nine-stage chain before a release
+                          that changes runtime-sensitive code, or as a dedicated check
+```
+
+**`engines.node` describes support; the Docker image describes certification.** Those are allowed to
+differ — but the lower bound must not be purely aspirational, which is why it is runnable:
+
+```powershell
+.\scripts\ci.ps1 --node=18
+```
+
+Identical stages, identical everything else. The result file records `"runtime": "compatibility"`
+rather than `"certified"`, so a floor run can never be read later as the certified one. **This is not
+part of a normal run**, and deliberately so: a zero-dependency CLI does not need a runtime matrix on
+every invocation, and running one would buy little for the wall-clock it costs.
+
+Node 18 was verified against the complete chain on 2026-08-16 —
+[`artifacts/release/2026-08-16-node18-compatibility.md`](../artifacts/release/2026-08-16-node18-compatibility.md).
+
 ## Running CI
 
 ```powershell

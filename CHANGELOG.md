@@ -34,6 +34,31 @@ or what it concludes about one.
   on every supported runtime; the same 279 tests run, and no test changed. Found by the containerised
   pipeline on its first execution — reproduced directly on Node 20, not inferred.
 
+### Runtime support, made explicit
+
+`engines.node >= 18` is a **support** claim about a range; a CI run proves a **single** version. Both
+statements stay, and the relationship between them is now written down rather than assumed:
+
+> FinancialStandards supports Node.js 18 and later. The authoritative local CI environment uses
+> Node 20. Node 18 is treated as the compatibility floor and must remain capable of running the
+> repository's validation commands; it is not the primary CI runtime.
+
+- **`engines.node` is unchanged at `>=18`.** The glob defect was a portable-command bug, not evidence
+  that Node 18 should be dropped.
+- **The floor is runnable, not aspirational.** `.\scripts\ci.ps1 --node=18` runs the identical nine
+  stages against it. The result file records `"runtime": "compatibility"` rather than `"certified"`,
+  so a floor run can never later be read as the certified one.
+- **It is not part of a normal run.** A zero-dependency CLI does not need a runtime matrix per
+  commit. It is required before a release that changes runtime-sensitive code, or as a dedicated
+  check.
+- **Node 18 was verified against the complete chain**, all nine stages, 281/281 tests, on
+  `node:18-alpine` (v18.20.8) —
+  [`artifacts/release/2026-08-16-node18-compatibility.md`](artifacts/release/2026-08-16-node18-compatibility.md).
+
+Recorded as open rather than settled: Node 18 reached end-of-life in April 2025 and Node 20 in April
+2026, so `>=18` currently promises two runtimes that receive no security updates. Whether that floor
+should move is a support-contract decision, not a CI one.
+
 ### Fixed after review
 
 - **An unchanged `HEAD` did not prove the pipeline saw the commit's bytes.** The image is built from

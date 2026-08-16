@@ -25,6 +25,7 @@
  *   node scripts/ci-docker.mjs                     full pipeline; exit 0 only if everything passes
  *   node scripts/ci-docker.mjs --keep-on-failure   leave the container and image up for debugging
  *   node scripts/ci-docker.mjs --verbose           stream docker's own build output too
+ *   node scripts/ci-docker.mjs --node=18           the same stages against the declared floor
  */
 
 import { spawnSync } from "node:child_process";
@@ -43,9 +44,37 @@ const EXIT_OK = 0;
 const EXIT_FAILED = 1;
 const EXIT_INVOCATION = 2;
 
+/**
+ * The runtime this pipeline certifies.
+ *
+ * `package.json` declares `node >= 18`. That is a *support* claim about a range; this is the single
+ * version a normal run actually proves. The two are allowed to differ, but the floor must not be
+ * purely aspirational — `--node=18` runs the identical nine stages against it, and
+ * docs/local-ci.md states when that is required rather than optional.
+ */
+export const CERTIFIED_NODE = "20";
+export const SUPPORTED_FLOOR_NODE = "18";
+
+/** Read `--node=<version>`, defaulting to the certified runtime. */
+export function nodeVersionFrom(argv) {
+  const flag = argv.find((a) => a.startsWith("--node="));
+  if (!flag) return CERTIFIED_NODE;
+  const value = flag.slice("--node=".length).trim();
+  // A malformed override must not silently fall back to the certified runtime: the run would report
+  // a version nobody asked for while appearing to honour the request.
+  if (!/^\d+$/.test(value)) return { error: `--node expects a major version like 18 or 20, not '${value}'` };
+  return value;
+}
+
 /** Run a command, returning its outcome rather than throwing. */
-function run(exe, args, { capture = false, cwd = ROOT } = {}) {
-  const result = spawnSync(exe, args, { cwd, stdio: capture ? "pipe" : "inherit", encoding: "utf8", shell: false });
+function run(exe, args, { capture = false, cwd = ROOT, env } = {}) {
+  const result = spawnSync(exe, args, {
+    cwd,
+    stdio: capture ? "pipe" : "inherit",
+    encoding: "utf8",
+    shell: false,
+    env: env ? { ...process.env, ...env } : process.env,
+  });
   return {
     ok: !result.error && result.status === 0,
     status: result.status,
@@ -68,8 +97,11 @@ function uniqueProject() {
   return `fs-ci-${randomBytes(5).toString("hex")}`;
 }
 
-function compose(project, args, opts) {
-  return run("docker", ["compose", "-p", project, "-f", COMPOSE_FILE, ...args], opts);
+function compose(project, args, opts = {}) {
+  return run("docker", ["compose", "-p", project, "-f", COMPOSE_FILE, ...args], {
+    ...opts,
+    env: { CI_NODE_VERSION: opts.nodeVersion ?? CERTIFIED_NODE, ...(opts.env ?? {}) },
+  });
 }
 
 /**
@@ -89,11 +121,11 @@ export function runArgs({ keepOnFailure }) {
 }
 
 /** Remove everything this run created, and nothing else. */
-function teardown(project, { verbose }) {
+function teardown(project, { verbose, nodeVersion }) {
   // `down` is scoped to the project by -p. `-v` takes the anonymous volumes this project created;
   // it cannot reach a volume another project owns. `--rmi local` removes the image built here so a
   // run does not leave a new untagged image behind every time.
-  const result = compose(project, ["down", "-v", "--remove-orphans", "--rmi", "local"], { capture: !verbose });
+  const result = compose(project, ["down", "-v", "--remove-orphans", "--rmi", "local"], { capture: !verbose, nodeVersion });
   if (!result.ok) {
     console.error(`\nwarning: teardown of project ${project} did not complete cleanly.`);
     console.error(`         inspect with: docker compose -p ${project} -f compose.ci.yml ps`);
@@ -116,6 +148,12 @@ export function main(argv = process.argv.slice(2)) {
   const verbose = argv.includes("--verbose");
   const keepOnFailure = argv.includes("--keep-on-failure");
 
+  const nodeVersion = nodeVersionFrom(argv);
+  if (typeof nodeVersion !== "string") {
+    console.error(nodeVersion.error);
+    return EXIT_INVOCATION;
+  }
+
   const docker = run("docker", ["version", "--format", "{{.Server.Version}}"], { capture: true });
   if (!docker.ok) {
     console.error("Docker is not available, or its daemon is not running.");
@@ -136,6 +174,7 @@ export function main(argv = process.argv.slice(2)) {
   console.log(`  branch       ${branch}`);
   console.log(`  commit       ${commit}`);
   console.log(`  docker       ${docker.out}`);
+  console.log(`  node         ${nodeVersion}${nodeVersion === CERTIFIED_NODE ? " (certified runtime)" : " (compatibility run — NOT the certified runtime)"}`);
   console.log(`  stages       ${STAGES.length}`);
   if (dirty) {
     // Said plainly rather than buried. The evidence document records it too, so a passing result
@@ -158,7 +197,7 @@ export function main(argv = process.argv.slice(2)) {
   let stageResults = null;
   try {
     console.log("--- Building the CI image ---");
-    const build = compose(project, ["build", ...(verbose ? [] : ["--quiet"])], { capture: false });
+    const build = compose(project, ["build", ...(verbose ? [] : ["--quiet"])], { capture: false, nodeVersion });
     if (!build.ok) {
       console.error("\nThe CI image could not be built. No checks were run.");
       return EXIT_INVOCATION;
@@ -166,12 +205,12 @@ export function main(argv = process.argv.slice(2)) {
 
     // `run` rather than `up`: it propagates the process exit code, which is the entire signal this
     // script exists to relay. `up` reports whether the container started.
-    const result = compose(project, runArgs({ keepOnFailure }), { capture: false });
+    const result = compose(project, runArgs({ keepOnFailure }), { capture: false, nodeVersion });
     stageResults = readStageResults();
     passed = result.ok;
   } finally {
     if (passed || !keepOnFailure) {
-      teardown(project, { verbose });
+      teardown(project, { verbose, nodeVersion });
     } else {
       console.log("\n--keep-on-failure: the failed container and its image were left for inspection.");
       console.log(`  container    docker compose -p ${project} -f compose.ci.yml ps -a`);
@@ -196,6 +235,9 @@ export function main(argv = process.argv.slice(2)) {
     startedAt: startedAt.toISOString(),
     completedAt: completedAt.toISOString(),
     durationSeconds: Math.round((completedAt - startedAt) / 1000),
+    nodeMajor: nodeVersion,
+    // Recorded so a compatibility run's result can never be read later as the certified one.
+    runtime: nodeVersion === CERTIFIED_NODE ? "certified" : "compatibility",
     checks: STAGES.map((s) => s.id),
     stages: stageResults?.executed ?? null,
     failedAt: stageResults?.failedAt ?? null,
