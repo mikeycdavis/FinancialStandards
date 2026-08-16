@@ -218,6 +218,12 @@ The pull request body says `Local CI` and states explicitly that it is not a cla
 Actions. If the hosted workflow cannot run — quota, billing, a disabled Actions setting — local CI is
 unaffected, because it depends on nothing but Docker.
 
+**That is not hypothetical here.** Both Actions runs in this repository's history report
+`conclusion: failure` with zero steps executed and the annotation *"The job was not started because
+recent account payments have failed or your spending limit needs to be increased."* No hosted run has
+ever executed these checks. A red mark on GitHub currently means the job could not start, not that a
+check failed — worth knowing before reading one as evidence about the code.
+
 ## Self-hosted runners
 
 Nothing here needs redesigning to add one later. A self-hosted runner would run

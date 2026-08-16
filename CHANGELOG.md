@@ -30,10 +30,23 @@ or what it concludes about one.
   to Node's own `--test` glob support, which did not exist until after Node 20. `package.json`
   declares `node >= 18` and `.github/workflows/ci.yml` pins Node 20, so on both the command failed
   with `Could not find 'test/*.test.mjs'`. It passed only on newer runtimes, which is what the
-  development machine happened to have. **The single hosted CI run in this repository's history
-  failed for this reason.** Removing the quotes lets the shell expand the glob and works on every
-  supported runtime; the same 279 tests run, and no test changed. Found by the containerised
-  pipeline on its first execution.
+  development machine happened to have. Removing the quotes lets the shell expand the glob and works
+  on every supported runtime; the same 279 tests run, and no test changed. Found by the containerised
+  pipeline on its first execution — reproduced directly on Node 20, not inferred.
+
+### Observed, and not fixed here
+
+- **GitHub-hosted Actions has never executed this repository's checks.** Both runs in the
+  repository's history — the `1.1.0` push and the pull request adding this tooling — report
+  `conclusion: failure` with **zero steps executed** and the annotation *"The job was not started
+  because recent account payments have failed or your spending limit needs to be increased."*
+  The workflow file is not at fault and was not changed to suit; the account cannot currently run
+  hosted jobs at all.
+
+  This is worth stating plainly rather than leaving as a red mark someone later assumes was a code
+  failure: **no hosted run has ever validated anything in this repository.** Until billing is
+  restored, the containerised local pipeline is the only thing that has actually executed these nine
+  checks end to end, which is precisely the independence it was built for.
 
 ## 1.1.0 — 2026-08-09
 
