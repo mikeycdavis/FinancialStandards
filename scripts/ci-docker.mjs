@@ -178,7 +178,9 @@ export function main(argv = process.argv.slice(2)) {
       console.log(`  its output   docker compose -p ${project} -f compose.ci.yml logs`);
       console.log(`  its files    docker compose -p ${project} -f compose.ci.yml cp ci:/repo ./failed-run`);
       console.log(`  a new shell  docker compose -p ${project} -f compose.ci.yml run --rm ci sh`);
-      console.log(`  clean up     docker compose -p ${project} -f compose.ci.yml down -v --rmi local`);
+      // --remove-orphans is required, not decorative: a `run` container is a one-off that a plain
+      // `down` leaves behind, and the image removal then fails with "resource is still in use".
+      console.log(`  clean up     docker compose -p ${project} -f compose.ci.yml down -v --rmi local --remove-orphans`);
     }
   }
 

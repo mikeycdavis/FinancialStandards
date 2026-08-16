@@ -177,7 +177,13 @@ being swallowed.
 
 The failed container is **not** removed, and the exact commands are printed: `ps -a` to see it,
 `logs` for its output, `cp ci:/repo ./failed-run` to pull out the files as the failing stage left
-them, `run --rm ci sh` for a fresh shell in the same image, and `down -v --rmi local` to clean up.
+them, `run --rm ci sh` for a fresh shell in the same image, and
+`down -v --rmi local --remove-orphans` to clean up.
+
+`--remove-orphans` there is required rather than decorative: the pipeline runs as a one-off `run`
+container, which a plain `down` leaves behind, and the image removal then fails with *"resource is
+still in use"*. The automatic teardown has always passed it; the hint printed beside a kept failure
+did not, until it was tested.
 
 The flag drops `--rm` from the container run rather than only skipping teardown. With `--rm`, Docker
 removes the container the moment the command exits, so skipping teardown alone would preserve the
