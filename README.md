@@ -108,7 +108,7 @@ npm run fidelity    # every verbatim quotation still matches its source
 npm run links       # no cross-reference points at nothing
 npm run policy      # this repository's own policy is well-formed
 npm run math        # every stated figure recomputes
-npm test            # 279 tests
+npm test            # 281 tests
 npm run diagrams    # the diagrams match their Mermaid source
 npm run audit       # evidence over the published analyses
 npm run check       # this repository's verdict on itself

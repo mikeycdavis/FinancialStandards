@@ -24,7 +24,7 @@ improvement.
 |---|---|
 | Runtime | Node.js ≥ 18, ESM (`"type": "module"`) |
 | Dependencies | **None.** Zero third-party packages, enforced structurally — CI has no install step, so adding one breaks the build |
-| Tests | `node:test` + `node:assert/strict` — 279 tests, no framework |
+| Tests | `node:test` + `node:assert/strict` — 281 tests, no framework |
 | Config parsing | Hand-written strict YAML subset (`scripts/yaml.mjs`) and JSON Schema evaluator (`scripts/jsonschema.mjs`) |
 | Schema | JSON Schema draft 2020-12 (`schemas/project-policy.schema.json`) |
 | Diagrams | Mermaid `.mmd` canonical; embedded fences and any `.svg` are derived |
@@ -576,7 +576,7 @@ schemas/                            project-policy.schema.json
 scripts/                            18 modules, zero dependencies
 standards/                          29 normative documents
 templates/                          what `standards init` scaffolds
-test/                              11 suites, 279 tests
+test/                              11 suites, 281 tests
 project-policy.yml                  this repository's own policy
 ```
 
