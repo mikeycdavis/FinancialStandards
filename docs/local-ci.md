@@ -66,8 +66,9 @@ What it does, in order:
 5. stops on failure: `CI failed. No branch was pushed and no PR was created.`
 6. resolves `HEAD` again;
 7. refuses if it changed: `HEAD changed after CI verification. The current commit has not been verified. Re-run CI before submitting.`
-8. pushes `<verified-sha>:refs/heads/<branch>` — the SHA by name, so a commit landing in that instant cannot ride along;
-9. creates the pull request with `gh`, using your existing authenticated session. No token is read, stored or written by this repository.
+8. **re-checks that the working tree is still clean**, and refuses if not — see below;
+9. pushes `<verified-sha>:refs/heads/<branch>` — the SHA by name, so a commit landing in that instant cannot ride along;
+10. creates the pull request with `gh`, using your existing authenticated session. No token is read, stored or written by this repository.
 
 It never commits, stages, amends, or pushes on a failed verification.
 
@@ -79,6 +80,17 @@ records `"verified": "working-tree"` in the result file.
 
 `submit-pr` needs a claim about a **commit**. Requiring a clean tree is what makes the two the same
 thing, so the pipeline's subject and the push's subject cannot differ.
+
+The tree is checked **twice** — before the run and again after it. An unchanged `HEAD` is not on its
+own enough: because the image is built from the working tree, a tracked file written while Docker was
+capturing the build context would leave `HEAD` equal on both sides while the container tested bytes
+that are not in the commit. Two checks mean the tree matched `HEAD` at both ends of the run.
+
+**The bound this leaves, stated rather than implied:** a file modified and then reverted entirely
+within the run is invisible to both checks. Closing that means building from `git archive <sha>` so
+the container provably receives the commit and nothing else — a design change, not a check, and one
+that would stop `ci.ps1` verifying uncommitted work, which is most of its day-to-day value. Nothing
+has forced it. It is recorded here as a known window rather than an unexamined assumption.
 
 ## What CI checks
 
@@ -163,8 +175,14 @@ being swallowed.
 .\scripts\ci.ps1 --keep-on-failure
 ```
 
-The environment is left up and the exact commands are printed — `ps` to see it, `run --rm ci sh` for
-a shell inside the image as it was, and the `down` command to clean up when you are finished.
+The failed container is **not** removed, and the exact commands are printed: `ps -a` to see it,
+`logs` for its output, `cp ci:/repo ./failed-run` to pull out the files as the failing stage left
+them, `run --rm ci sh` for a fresh shell in the same image, and `down -v --rmi local` to clean up.
+
+The flag drops `--rm` from the container run rather than only skipping teardown. With `--rm`, Docker
+removes the container the moment the command exits, so skipping teardown alone would preserve the
+image and nothing else — `ps` would show nothing and the writable layer holding the failing stage's
+output would already be gone.
 
 `artifacts/local-ci/latest.json` is written on failure as well as success, and names the stage that
 failed. An evidence file that only appears on success cannot be used to investigate a failure.

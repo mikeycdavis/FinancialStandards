@@ -115,6 +115,40 @@ export function sameCommitVerified(before, after) {
 }
 
 /**
+ * Did the working tree stay identical to the commit for the whole of verification?
+ *
+ * `sameCommitVerified` is not sufficient on its own, and this closes the gap it leaves. The pipeline
+ * builds its image from the **working tree**, not from the commit object. A tracked file written
+ * while Docker was capturing the build context — an editor saving on a timer, a formatter, another
+ * terminal — leaves `HEAD` untouched, so the before/after SHA comparison still succeeds while the
+ * image tested bytes that are not in the commit about to be pushed. The green result would then
+ * honestly describe a tree that exists nowhere.
+ *
+ * Checking cleanliness before the run and again after it means the tree matched `HEAD` at both ends.
+ *
+ * **What this still does not establish**, said plainly rather than left implied: a file modified and
+ * reverted entirely inside the run is invisible to both checks. Closing that completely means
+ * building from `git archive <sha>` so the container provably receives the commit and nothing else.
+ * That is a real design change rather than a check, it would stop `ci.ps1` from verifying
+ * uncommitted work — which is most of its day-to-day value — and nothing has forced it. The window
+ * is named here so it is a known bound rather than an unexamined assumption.
+ */
+export function treeUnmodifiedDuringCi(dirtyAfter) {
+  if (dirtyAfter) {
+    return {
+      ok: false,
+      why:
+        "The working tree changed during verification.\n" +
+        "HEAD did not move, so the commit is the same object — but the pipeline builds its image\n" +
+        "from the working tree, and that tree no longer matches this commit. What was verified is\n" +
+        "therefore not what would be pushed.\n" +
+        "Commit or discard the change, then re-run.",
+    };
+  }
+  return { ok: true, why: null };
+}
+
+/**
  * Compose the pull request body: the author's content first, the verification block appended.
  *
  * Appended, never substituted — a submission tool that overwrites what a developer wrote about their
@@ -190,15 +224,17 @@ export function main(argv = process.argv.slice(2)) {
     return EXIT_REFUSED;
   }
 
-  // (7,8) Resolve HEAD again and refuse on any difference.
+  // (7,8) Resolve HEAD again and refuse on any difference — and re-check the tree, because an
+  // unchanged HEAD does not by itself mean the pipeline saw the commit's bytes.
   const after = git("rev-parse", "HEAD").out;
-  const verified = sameCommitVerified(before, after);
-  if (!verified.ok) {
-    console.error(`\n${verified.why}\n`);
-    console.error("No branch was pushed and no PR was created.");
-    return EXIT_REFUSED;
+  for (const verdict of [sameCommitVerified(before, after), treeUnmodifiedDuringCi(git("status", "--porcelain").out !== "")]) {
+    if (!verdict.ok) {
+      console.error(`\n${verdict.why}\n`);
+      console.error("No branch was pushed and no PR was created.");
+      return EXIT_REFUSED;
+    }
   }
-  console.log(`\nVerified commit unchanged: ${after}`);
+  console.log(`\nVerified commit unchanged, and the tree still matches it: ${after}`);
 
   // (9) Push exactly the verified object. Naming the SHA explicitly, rather than pushing the branch
   // ref, means that even a concurrent commit landing in this instant cannot ride along.

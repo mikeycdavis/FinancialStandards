@@ -34,6 +34,19 @@ or what it concludes about one.
   on every supported runtime; the same 279 tests run, and no test changed. Found by the containerised
   pipeline on its first execution — reproduced directly on Node 20, not inferred.
 
+### Fixed after review
+
+- **An unchanged `HEAD` did not prove the pipeline saw the commit's bytes.** The image is built from
+  the working tree, so a tracked file written while Docker captured the build context would leave the
+  before/after SHA comparison passing while the container tested something that is not in the commit
+  about to be pushed. `submit-pr` now re-checks that the tree is still clean after the run. The
+  remaining window — a change made and reverted entirely inside the run — is documented in
+  [`docs/local-ci.md`](docs/local-ci.md) rather than left implied.
+- **`--keep-on-failure` kept only the image.** The container ran with `--rm`, so Docker removed it as
+  the command exited; skipping teardown preserved nothing to inspect, and the `compose ps` command
+  printed alongside it had nothing to show. The flag now drops `--rm`, so the failed container and
+  its writable layer survive.
+
 ### Observed, and not fixed here
 
 - **GitHub-hosted Actions has never executed this repository's checks.** Both runs in the

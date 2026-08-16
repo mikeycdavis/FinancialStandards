@@ -72,6 +72,22 @@ function compose(project, args, opts) {
   return run("docker", ["compose", "-p", project, "-f", COMPOSE_FILE, ...args], opts);
 }
 
+/**
+ * Arguments for the container run.
+ *
+ * `--rm` is dropped when the caller asked to keep a failed run, and that is not a detail. With
+ * `--rm`, Docker removes the container the moment the command exits — so a failed run would leave
+ * only the image, `compose ps` would show nothing, and the container's writable layer, which is
+ * where a failing stage's output actually lives, would already be gone. Skipping teardown alone does
+ * not preserve a container that was deleted on exit.
+ *
+ * The cost of dropping it is one stopped container per kept failure, which is the thing the caller
+ * explicitly asked for, and `down` removes it during clean-up.
+ */
+export function runArgs({ keepOnFailure }) {
+  return ["run", ...(keepOnFailure ? [] : ["--rm"]), "--no-deps", "ci"];
+}
+
 /** Remove everything this run created, and nothing else. */
 function teardown(project, { verbose }) {
   // `down` is scoped to the project by -p. `-v` takes the anonymous volumes this project created;
@@ -148,18 +164,20 @@ export function main(argv = process.argv.slice(2)) {
       return EXIT_INVOCATION;
     }
 
-    // `run --rm` rather than `up`: it propagates the process exit code, which is the entire signal
-    // this script exists to relay. `up` reports whether the container started.
-    const result = compose(project, ["run", "--rm", "--no-deps", "ci"], { capture: false });
+    // `run` rather than `up`: it propagates the process exit code, which is the entire signal this
+    // script exists to relay. `up` reports whether the container started.
+    const result = compose(project, runArgs({ keepOnFailure }), { capture: false });
     stageResults = readStageResults();
     passed = result.ok;
   } finally {
     if (passed || !keepOnFailure) {
       teardown(project, { verbose });
     } else {
-      console.log("\n--keep-on-failure: the CI environment was left running for inspection.");
-      console.log(`  containers   docker compose -p ${project} -f compose.ci.yml ps`);
-      console.log(`  shell        docker compose -p ${project} -f compose.ci.yml run --rm ci sh`);
+      console.log("\n--keep-on-failure: the failed container and its image were left for inspection.");
+      console.log(`  container    docker compose -p ${project} -f compose.ci.yml ps -a`);
+      console.log(`  its output   docker compose -p ${project} -f compose.ci.yml logs`);
+      console.log(`  its files    docker compose -p ${project} -f compose.ci.yml cp ci:/repo ./failed-run`);
+      console.log(`  a new shell  docker compose -p ${project} -f compose.ci.yml run --rm ci sh`);
       console.log(`  clean up     docker compose -p ${project} -f compose.ci.yml down -v --rmi local`);
     }
   }

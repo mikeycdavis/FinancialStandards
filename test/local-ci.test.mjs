@@ -22,7 +22,8 @@ import path from "node:path";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { STAGES } from "../scripts/ci.mjs";
-import { preflight, sameCommitVerified, prBody } from "../scripts/submit-pr.mjs";
+import { runArgs } from "../scripts/ci-docker.mjs";
+import { preflight, sameCommitVerified, treeUnmodifiedDuringCi, prBody } from "../scripts/submit-pr.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (p) => readFileSync(path.join(ROOT, p), "utf8");
@@ -129,6 +130,30 @@ test("an unresolvable SHA refuses, because unknown is not the same as unchanged"
     assert.equal(verdict.ok, false, `${JSON.stringify(before)} / ${JSON.stringify(after)} must not verify`);
     assert.match(verdict.why, /could not be resolved/);
   }
+});
+
+test("a tree modified during verification refuses, even though HEAD never moved", () => {
+  // The gap an unchanged SHA leaves open. CI builds its image from the working tree, so a tracked
+  // file written while the build context was being captured leaves HEAD equal on both sides while
+  // the container tested bytes that are not in the commit. The SHA check alone cannot see it.
+  assert.equal(sameCommitVerified(A, A).ok, true, "the SHA check passes, which is exactly the problem");
+
+  const verdict = treeUnmodifiedDuringCi(true);
+  assert.equal(verdict.ok, false);
+  assert.match(verdict.why, /working tree changed during verification/i);
+  assert.match(verdict.why, /HEAD did not move/);
+  assert.equal(treeUnmodifiedDuringCi(false).ok, true);
+});
+
+// --- Keeping a failed run ---------------------------------------------------------------------------
+
+test("--keep-on-failure keeps the container, not just the image", () => {
+  // With `--rm`, Docker deletes the container the instant the command exits, so skipping teardown
+  // would preserve only the image: `compose ps` would show nothing and the failing run's writable
+  // layer would already be gone. The flag has to change the run itself, not only the clean-up.
+  assert.deepEqual(runArgs({ keepOnFailure: false }), ["run", "--rm", "--no-deps", "ci"]);
+  assert.deepEqual(runArgs({ keepOnFailure: true }), ["run", "--no-deps", "ci"]);
+  assert.ok(!runArgs({ keepOnFailure: true }).includes("--rm"), "a kept container must not be auto-removed");
 });
 
 // --- What may be submitted at all ----------------------------------------------------------------------
