@@ -56,9 +56,10 @@ That is the argument for keeping this check runnable rather than for running it 
 - **It is not the certified runtime.** `artifacts/local-ci/latest.json` records
   `"runtime": "compatibility"` for a floor run and `"certified"` for a normal one, so this result
   cannot later be mistaken for the certified evidence.
-- Node 18 reached end-of-life in April 2025 and Node 20 in April 2026. Neither receives security
-  updates. That bears on whether `>=18` should remain the declared floor at all, which is a
-  support-contract decision recorded as open rather than settled here.
+- Node 18 reached end-of-life on **2025-03-27** and Node 20 on **2026-03-24**, per the Node.js
+  release schedule. Neither receives security updates, and the certified runtime is one of them. That
+  bears on whether `>=18` should remain the declared floor at all, which is a support-contract
+  decision recorded as open rather than settled here.
 
 ## When to re-run
 

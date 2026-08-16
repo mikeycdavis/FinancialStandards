@@ -55,9 +55,10 @@ statements stay, and the relationship between them is now written down rather th
   `node:18-alpine` (v18.20.8) —
   [`artifacts/release/2026-08-16-node18-compatibility.md`](artifacts/release/2026-08-16-node18-compatibility.md).
 
-Recorded as open rather than settled: Node 18 reached end-of-life in April 2025 and Node 20 in April
-2026, so `>=18` currently promises two runtimes that receive no security updates. Whether that floor
-should move is a support-contract decision, not a CI one.
+Recorded as open rather than settled: Node 18 reached end-of-life on 2025-03-27 and Node 20 on
+2026-03-24 (Node.js release schedule), so `>=18` currently promises two runtimes that receive no
+security updates, and the certified runtime is one of them. Whether that floor should move is a
+support-contract decision, not a CI one.
 
 ### Fixed after review
 
