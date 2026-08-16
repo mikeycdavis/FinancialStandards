@@ -213,6 +213,48 @@ async function commandCheck(catalog, targets, json, policyPath) {
   const policy = policyResult.document;
 
   const files = await auditPaths(targets.length ? targets : ["examples/compliant"]);
+  if (files.length === 0) {
+    // NO SUBJECT, THEREFORE NO VERDICT. Scoring an empty document set produced no failures, and no
+    // failures rendered as COMPLIANT — a confident pass for a subject nobody read, distinguishable
+    // from a real one only by `denominator.scored: 0` sitting inside the report body. `audit` has
+    // always refused the identical empty subject; `check` was the inconsistent half.
+    //
+    // The decision belongs HERE, at discovery, and not at `scored === 0` further down. `scored`
+    // counts required-level rules that were evaluated, which is a conclusion about interpretation
+    // and could reach zero for reasons that have nothing to do with an absent subject. The empty
+    // document set is the actual boundary — and deciding at it also covers a target that does not
+    // exist, since `markdownUnder` collapses that into the same empty set rather than raising.
+    //
+    // NOT_EVALUATED is the pack's existing word for this and needs no new vocabulary: it is already
+    // in STATUS, already declared in standards-adapter.json, and already outside its `passing` set.
+    // The exit code is deliberately left as it is — see the note below.
+    const verdict = {
+      status: STATUS.NOT_EVALUATED,
+      score: null,
+      summary: { passed: 0, failed: 0, warnings: 0, skipped: 0 },
+      assurance: { automated: 0, manualReview: 0, notEvaluated: 0 },
+      denominator: { total: 0, applicable: 0, scored: 0, basis: "required-level rules that were evaluated" },
+      invariantBreaches: [],
+      results: [],
+    };
+    const report = envelope({
+      verdict,
+      project: policy.project,
+      standardVersion: policy.standardVersion,
+      auditedAt: today,
+    });
+    if (json) out(JSON.stringify(report, null, 2));
+    else {
+      err(`standards check: no markdown documents found at ${targets.join(", ") || "examples/compliant"}`);
+      err("Nothing was evaluated, so there is no verdict. This is NOT_EVALUATED, which is not a pass.");
+    }
+    // EXIT 0, ON PURPOSE. The pack maps only NON_COMPLIANT and BLOCKED_BY_INVARIANT to a non-zero
+    // exit, and nothing measured for this release says that mapping is wrong, so this fix does not
+    // renegotiate it on the way past. A consumer must read `status` rather than the exit code, which
+    // is exactly what standards-adapter.json's `passing` set exists to make possible.
+    return EXIT_OK;
+  }
+
   const findings = [];
   const evaluated = new Set();
   for (const file of files) {

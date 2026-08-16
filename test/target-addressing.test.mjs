@@ -104,23 +104,8 @@ function crossVolumeSkip() {
   return false;
 }
 
-test("target · a subject with no Markdown scores nothing, and says so in the denominator", async () => {
-  // NOT a fix, and deliberately not treated as one. A subject with nothing to read still reports
-  // COMPLIANT and exits 0 — recorded here so the behaviour is measured rather than remembered, and
-  // so that a future change to it is visible. `scored: 0` is the discriminator a consumer needs.
-  const dir = await mkdtemp(path.join(tmpdir(), "fs-empty-"));
-  try {
-    const policy = (await readFile(path.join(ROOT, "project-policy.yml"), "utf8"))
-      .replace(/^project:.*$/mu, 'project: "TheGovernedRepository"');
-    await writeFile(path.join(dir, "project-policy.yml"), policy);
-
-    const r = await cli("check", dir, "--policy", path.join(dir, "project-policy.yml"), "--json");
-    const report = JSON.parse(r.stdout);
-    assert.equal(report.status, "COMPLIANT");
-    assert.equal(r.code, 0);
-    assert.equal(report.denominator.scored, 0,
-      "the only signal separating this from a real pass is that nothing was scored");
-  } finally {
-    await rm(dir, { recursive: true, force: true });
-  }
-});
+// The empty-subject behaviour this file used to RECORD as an open finding — a Markdown-free target
+// returning COMPLIANT with `scored: 0` — is now fixed, and falsified in `empty-subject.test.mjs`. It
+// moved rather than being deleted: it was never a fact about addressing, only discovered alongside
+// one. What stays here is the discrimination that keeps THIS file honest — the tests above assert
+// `scored > 0`, so an addressing regression cannot pass by quietly reading nothing.
