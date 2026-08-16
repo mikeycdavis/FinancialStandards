@@ -4,6 +4,89 @@ All notable changes to this framework. A new `required` or `forbidden` rule is M
 turn a compliant project non-compliant. A new `recommended` rule is MINOR. A published rule id stays
 resolvable forever through `aliases` — ids are never reused or respelled.
 
+## Unreleased
+
+Development tooling only. **No standard, rule, catalog, policy, example or verdict changed**, and
+`VERSION` is deliberately not bumped: nothing here alters what this framework requires of an analysis
+or what it concludes about one.
+
+### Added
+
+- **Containerised local CI and verified pull-request submission.** `.\scripts\ci.ps1` runs all nine
+  checks in an ephemeral Docker environment on a pinned Node 20, with no network and no host mounts
+  beyond a result directory. `.\scripts\submit-pr.ps1` pushes and opens a pull request only for a
+  commit that passed that pipeline, resolving `HEAD` before and after and refusing on any difference.
+  See [`docs/local-ci.md`](docs/local-ci.md).
+- **The pipeline is defined once**, in `scripts/ci.mjs`. `.github/workflows/ci.yml` keeps its nine
+  separate steps — `test/integrity.test.mjs` requires each guard to be individually visible, because
+  commenting one out is the least visible way to disable a check — and `test/local-ci.test.mjs` now
+  asserts the two descriptions match command-for-command and in order. The duplication stays; the
+  drift becomes a test failure.
+
+### Fixed
+
+- **`npm test` could not run on the Node version this framework declares.** The script was
+  `node --test "test/*.test.mjs"`; the quotes prevent the shell from expanding the glob, leaving it
+  to Node's own `--test` glob support, which did not exist until after Node 20. `package.json`
+  declares `node >= 18` and `.github/workflows/ci.yml` pins Node 20, so on both the command failed
+  with `Could not find 'test/*.test.mjs'`. It passed only on newer runtimes, which is what the
+  development machine happened to have. Removing the quotes lets the shell expand the glob and works
+  on every supported runtime; the same 279 tests run, and no test changed. Found by the containerised
+  pipeline on its first execution — reproduced directly on Node 20, not inferred.
+
+### Runtime support, made explicit
+
+`engines.node >= 18` is a **support** claim about a range; a CI run proves a **single** version. Both
+statements stay, and the relationship between them is now written down rather than assumed:
+
+> FinancialStandards supports Node.js 18 and later. The authoritative local CI environment uses
+> Node 20. Node 18 is treated as the compatibility floor and must remain capable of running the
+> repository's validation commands; it is not the primary CI runtime.
+
+- **`engines.node` is unchanged at `>=18`.** The glob defect was a portable-command bug, not evidence
+  that Node 18 should be dropped.
+- **The floor is runnable, not aspirational.** `.\scripts\ci.ps1 --node=18` runs the identical nine
+  stages against it. The result file records `"runtime": "compatibility"` rather than `"certified"`,
+  so a floor run can never later be read as the certified one.
+- **It is not part of a normal run.** A zero-dependency CLI does not need a runtime matrix per
+  commit. It is required before a release that changes runtime-sensitive code, or as a dedicated
+  check.
+- **Node 18 was verified against the complete chain**, all nine stages, 281/281 tests, on
+  `node:18-alpine` (v18.20.8) —
+  [`artifacts/release/2026-08-16-node18-compatibility.md`](artifacts/release/2026-08-16-node18-compatibility.md).
+
+Recorded as open rather than settled: Node 18 reached end-of-life on 2025-03-27 and Node 20 on
+2026-03-24 (Node.js release schedule), so `>=18` currently promises two runtimes that receive no
+security updates, and the certified runtime is one of them. Whether that floor should move is a
+support-contract decision, not a CI one.
+
+### Fixed after review
+
+- **An unchanged `HEAD` did not prove the pipeline saw the commit's bytes.** The image is built from
+  the working tree, so a tracked file written while Docker captured the build context would leave the
+  before/after SHA comparison passing while the container tested something that is not in the commit
+  about to be pushed. `submit-pr` now re-checks that the tree is still clean after the run. The
+  remaining window — a change made and reverted entirely inside the run — is documented in
+  [`docs/local-ci.md`](docs/local-ci.md) rather than left implied.
+- **`--keep-on-failure` kept only the image.** The container ran with `--rm`, so Docker removed it as
+  the command exited; skipping teardown preserved nothing to inspect, and the `compose ps` command
+  printed alongside it had nothing to show. The flag now drops `--rm`, so the failed container and
+  its writable layer survive.
+
+### Observed, and not fixed here
+
+- **GitHub-hosted Actions has never executed this repository's checks.** Both runs in the
+  repository's history — the `1.1.0` push and the pull request adding this tooling — report
+  `conclusion: failure` with **zero steps executed** and the annotation *"The job was not started
+  because recent account payments have failed or your spending limit needs to be increased."*
+  The workflow file is not at fault and was not changed to suit; the account cannot currently run
+  hosted jobs at all.
+
+  This is worth stating plainly rather than leaving as a red mark someone later assumes was a code
+  failure: **no hosted run has ever validated anything in this repository.** Until billing is
+  restored, the containerised local pipeline is the only thing that has actually executed these nine
+  checks end to end, which is precisely the independence it was built for.
+
 ## 1.1.0 — 2026-08-09
 
 One substantive change, and everything required to make it truthful. Ninety-six rules, 262 tests.

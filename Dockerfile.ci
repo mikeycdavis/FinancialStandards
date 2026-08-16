@@ -1,0 +1,35 @@
+# The CI environment, and nothing else.
+#
+# WHY A CONTAINER AT ALL for a repository with zero dependencies: the value here is not dependency
+# isolation, because there are no dependencies to isolate. It is that the *runtime* stops being a
+# property of whoever happens to run the checks. This repository declares `node >= 18`, the hosted
+# workflow pins Node 20, and the machine this was written on runs Node 24. Three different runtimes
+# were silently in play. Now a local run and the hosted run agree on one.
+#
+# There is deliberately NO dependency-install step, for the same reason `.github/workflows/ci.yml`
+# has none: the zero-dependency rule is enforced structurally rather than by policy. Adding a
+# package must break the build rather than pass unnoticed, and an install line here would be a place
+# for one to arrive quietly.
+#
+# NODE_VERSION defaults to the certified runtime and is overridable so the declared lower bound can
+# actually be exercised. `package.json` says `node >= 18`; that is a support claim, and a support
+# claim nothing ever runs is aspirational. `node scripts/ci-docker.mjs --node=18` runs the identical
+# nine stages against the floor. It is not part of a normal run — see docs/local-ci.md for when it
+# is required.
+ARG NODE_VERSION=20
+FROM node:${NODE_VERSION}-alpine
+
+# The source is COPYed, not bind-mounted. A bind mount would let the container write into the
+# developer's working tree, which makes "CI did not modify my repository" a hope rather than a
+# structural fact. The only writable path shared with the host is the result directory, mounted at
+# /out by compose.ci.yml.
+WORKDIR /repo
+COPY --chown=node:node . /repo
+
+# CI is untrusted code execution: it runs whatever the branch under test says to run. Root inside
+# the container buys that code nothing it needs.
+USER node
+
+# No ENTRYPOINT wrapper and no shell form. compose.ci.yml states the command, so the one authoritative
+# stage list in scripts/ci.mjs is reached the same way here and on any future self-hosted runner.
+CMD ["node", "scripts/ci.mjs"]

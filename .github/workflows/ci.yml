@@ -6,6 +6,20 @@ on:
   pull_request:
     branches: [main]
 
+# THE PIPELINE IS DEFINED IN scripts/ci.mjs. The steps below must match its `STAGES` list exactly —
+# same commands, same order — and `test/local-ci.test.mjs` fails if they drift. Change the stage list
+# there, then mirror it here; neither copy may move alone.
+#
+# The obvious tidy-up is to replace these nine steps with a single `node scripts/ci.mjs`, and it was
+# rejected. test/integrity.test.mjs requires every mechanical guard to appear here as its own active
+# step, because commenting one out is the least visible way to disable a check — the script it calls
+# stays in the repository looking intact. One opaque command would hide exactly that. So the second
+# copy is kept and its agreement with the first is asserted rather than assumed.
+#
+# `.\scripts\ci.ps1` runs the same stages locally inside Docker, and is what a pull request is
+# verified by (docs/local-ci.md). These hosted checks and that local run are independent evidence:
+# neither is a claim about the other.
+#
 # There is deliberately NO dependency-install step.
 #
 # The zero-dependency rule is enforced structurally rather than by policy: adding a package makes the
