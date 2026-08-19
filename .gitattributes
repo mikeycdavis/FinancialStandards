@@ -1,0 +1,37 @@
+# THE CHECKOUT LINE-ENDING INVARIANT
+#
+#     A FinancialStandards checkout must not let the cloning machine's `core.autocrlf` decide the
+#     bytes of tracked text files. Repository-declared attributes determine checkout line endings,
+#     with explicit exceptions only where this repository has evidence they are required.
+#
+# WHAT THIS FIXES, MEASURED. Before this file existed, a fresh worktree that no editor had touched
+# materialised 201 of 201 tracked files as CRLF while every committed blob was LF. Nothing in the
+# repository said what the bytes should be, so each machine decided.
+#
+# THIS IS NOT A FORMATTING PREFERENCE. `test/init.test.mjs:220` compares templates/AGENTS.md against
+# templates/CLAUDE.md after stripping HTML comments with `/<!--[\s\S]*?-->\n*/`. Under CRLF the `\n*`
+# never matches — the next byte is `\r` — so the two files differ by the newlines the regex failed to
+# consume, and the test FAILED on every Windows checkout and inside the CI container, which is built
+# by COPYing the working tree. It passes on a Linux checkout. That is the whole failure mode: a
+# defect that only appears where the machine translated, invisible to a hosted Linux run.
+#
+# NO EXCEPTIONS ARE DECLARED, AND THAT IS DELIBERATE. Each was tested against this repository's own
+# evidence rather than inherited from a sibling:
+#
+#   * No tracked file is binary. `text=auto` detects that itself, so no `-text` rule is needed; the
+#     measurement found zero tracked files git treats as non-text.
+#   * `*.ps1` (scripts/ci.ps1, scripts/submit-pr.ps1) get LF like everything else. PowerShell reads
+#     LF, and no evidence was found that either file requires CRLF.
+#   * `artifacts/**/retrieved.sha256` digests cover `retrieved.md` files that each directory's own
+#     .gitignore excludes from tracking. Attributes apply to tracked content, so this declaration
+#     cannot move those digests. test/checkout-line-endings.test.mjs pins that.
+#
+# Adding an exception later means adding it to NOT_LF_BY_DECLARATION in
+# test/checkout-line-endings.test.mjs too, with the evidence. The two are read together.
+#
+# THIS DOES NOT REWRITE A CHECKOUT THAT ALREADY EXISTS. Refresh one with:
+#     git rm --cached -r . && git reset --hard
+#
+# It is also not a history renormalisation, and must not become one: every blob here is already LF.
+# The defect is in what lands on disk, never in what was stored.
+* text=auto eol=lf
