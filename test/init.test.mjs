@@ -219,7 +219,13 @@ test("the agent template states that not-evaluated is never a pass", async () =>
 
 test("AGENTS.md and CLAUDE.md do not diverge", async () => {
   // Different tools read each, and duplicated guidance that drifts is worse than none.
-  const strip = (s) => s.replace(/<!--[\s\S]*?-->\n*/g, "").trim();
+  // `\r?\n` rather than `\n`: this repository pins no line endings, so a checkout on a machine with
+  // core.autocrlf=true writes CRLF, the blank lines left by a stripped comment survive as `\r\n`,
+  // and the two files differ by whitespace nobody wrote. The result was a test that passed or failed
+  // according to how the working copy was created rather than what the templates say — and the
+  // container inherits it, because the image is built from the working tree rather than from a
+  // committed archive. The comparison itself is untouched.
+  const strip = (s) => s.replace(/<!--[\s\S]*?-->(\r?\n)*/g, "").trim();
   const agents = strip(await readFile(path.join(ROOT, "templates/AGENTS.md"), "utf8"));
   const claude = strip(await readFile(path.join(ROOT, "templates/CLAUDE.md"), "utf8"));
   assert.equal(agents, claude);

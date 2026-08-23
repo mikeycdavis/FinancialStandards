@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "1.1.0",
+  "standard": {
+    "id": "financial"
+  },
+  "evaluation": {
+    "entrypoint": "scripts/standards.mjs",
+    "arguments": ["check", "{target}", "--policy", "{policy}", "--json"]
+  },
+  "result": {
+    "statuses": [
+      "COMPLIANT",
+      "COMPLIANT_WITH_EXCEPTIONS",
+      "NON_COMPLIANT",
+      "NOT_EVALUATED",
+      "BLOCKED_BY_INVARIANT"
+    ],
+    "passing": ["COMPLIANT", "COMPLIANT_WITH_EXCEPTIONS"]
+  }
+}
