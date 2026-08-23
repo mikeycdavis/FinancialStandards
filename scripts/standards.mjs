@@ -51,24 +51,50 @@ const err = (s) => process.stderr.write(s + "\n");
 
 // --- Input ------------------------------------------------------------------------------------------
 
+/**
+ * Discovered documents keep the address they were found at.
+ *
+ * These used to be returned relative to ROOT and rebuilt with `path.join(ROOT, …)` at every read.
+ * That is a conversion the code does not need, and it is lossy: on Windows there is no relative
+ * path between volumes, so `path.relative` hands back the absolute target and the rejoin yields
+ * `F:\pack\C:\elsewhere\doc.md`. A target on another volume crashed before producing a verdict.
+ *
+ * The fix is to stop converting rather than to special-case the volume, because the identity being
+ * damaged is the filesystem address, and an address that survives one round-trip through a display
+ * form is an address that will be damaged by the next one. A relative form is still wanted for
+ * REPORTING, and `label` derives it separately — never as the way back to the file.
+ */
 async function markdownUnder(target, acc = []) {
   const full = path.resolve(ROOT, target);
   if (!existsSync(full)) return acc;
   if ((await stat(full)).isFile()) {
-    if (full.endsWith(".md")) acc.push(path.relative(ROOT, full).replace(/\\/g, "/"));
+    if (full.endsWith(".md")) acc.push(full);
     return acc;
   }
   for (const entry of await readdir(full, { withFileTypes: true })) {
     if (SKIP_DIRS.has(entry.name) || entry.name.startsWith(".")) continue;
-    await markdownUnder(path.join(target, entry.name), acc);
+    await markdownUnder(path.join(full, entry.name), acc);
   }
   return acc;
 }
 
+/**
+ * How a document is named in a report. Display only.
+ *
+ * Unchanged from what the relative form used to produce, so a document inside the pack still reads
+ * `examples/compliant/x.md`. Where no relative form exists — another volume — the absolute path is
+ * the honest name, and nothing reads it back.
+ */
+function label(file) {
+  const rel = path.relative(ROOT, file);
+  return (rel && !path.isAbsolute(rel) ? rel : file).replace(/\\/g, "/");
+}
+
+/** Absolute addresses, deduplicated, ordered by the name a reader will see. */
 async function auditPaths(targets) {
   const files = [];
   for (const target of targets) files.push(...(await markdownUnder(target)));
-  return [...new Set(files)].sort();
+  return [...new Set(files)].sort((a, b) => label(a).localeCompare(label(b)));
 }
 
 /**
@@ -96,9 +122,14 @@ async function commandAudit(catalog, targets, json) {
 
   const reports = [];
   for (const file of files) {
-    const { doc, findings, evaluated, notApplicable } = auditDocument(catalog, await readFile(path.join(ROOT, file), "utf8"), file);
+    const name = label(file);
+    const { doc, findings, evaluated, notApplicable } = auditDocument(catalog, await readFile(file, "utf8"), name);
     reports.push({
-      file,
+      // The REPORTED name, not the address it was read from. These were the same string before
+      // discovered documents kept their absolute address, and release-isolation caught the day they
+      // stopped being — an audit whose `file` became a machine-specific absolute path would have
+      // silently broken every consumer keyed on it.
+      file: name,
       mode: declaredMode(doc),
       calcBlocks: doc.calcBlocks.length,
       evaluated: evaluated.length,
@@ -182,10 +213,52 @@ async function commandCheck(catalog, targets, json, policyPath) {
   const policy = policyResult.document;
 
   const files = await auditPaths(targets.length ? targets : ["examples/compliant"]);
+  if (files.length === 0) {
+    // NO SUBJECT, THEREFORE NO VERDICT. Scoring an empty document set produced no failures, and no
+    // failures rendered as COMPLIANT — a confident pass for a subject nobody read, distinguishable
+    // from a real one only by `denominator.scored: 0` sitting inside the report body. `audit` has
+    // always refused the identical empty subject; `check` was the inconsistent half.
+    //
+    // The decision belongs HERE, at discovery, and not at `scored === 0` further down. `scored`
+    // counts required-level rules that were evaluated, which is a conclusion about interpretation
+    // and could reach zero for reasons that have nothing to do with an absent subject. The empty
+    // document set is the actual boundary — and deciding at it also covers a target that does not
+    // exist, since `markdownUnder` collapses that into the same empty set rather than raising.
+    //
+    // NOT_EVALUATED is the pack's existing word for this and needs no new vocabulary: it is already
+    // in STATUS, already declared in standards-adapter.json, and already outside its `passing` set.
+    // The exit code is deliberately left as it is — see the note below.
+    const verdict = {
+      status: STATUS.NOT_EVALUATED,
+      score: null,
+      summary: { passed: 0, failed: 0, warnings: 0, skipped: 0 },
+      assurance: { automated: 0, manualReview: 0, notEvaluated: 0 },
+      denominator: { total: 0, applicable: 0, scored: 0, basis: "required-level rules that were evaluated" },
+      invariantBreaches: [],
+      results: [],
+    };
+    const report = envelope({
+      verdict,
+      project: policy.project,
+      standardVersion: policy.standardVersion,
+      auditedAt: today,
+    });
+    if (json) out(JSON.stringify(report, null, 2));
+    else {
+      err(`standards check: no markdown documents found at ${targets.join(", ") || "examples/compliant"}`);
+      err("Nothing was evaluated, so there is no verdict. This is NOT_EVALUATED, which is not a pass.");
+    }
+    // EXIT 0, ON PURPOSE. The pack maps only NON_COMPLIANT and BLOCKED_BY_INVARIANT to a non-zero
+    // exit, and nothing measured for this release says that mapping is wrong, so this fix does not
+    // renegotiate it on the way past. A consumer must read `status` rather than the exit code, which
+    // is exactly what standards-adapter.json's `passing` set exists to make possible.
+    return EXIT_OK;
+  }
+
   const findings = [];
   const evaluated = new Set();
   for (const file of files) {
-    const result = auditDocument(catalog, await readFile(path.join(ROOT, file), "utf8"), file);
+    const result = auditDocument(catalog, await readFile(file, "utf8"), label(file));
     findings.push(...result.findings);
     for (const id of result.evaluated) evaluated.add(id);
   }
