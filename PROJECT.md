@@ -90,7 +90,7 @@ Project-specific constraints, not a restatement of the standards:
 | Adoption guide | `INSTRUCTIONS.md` |
 | Standards | `standards/NN-<kebab-title>.md` |
 | Rule catalog | `rules/*.json` |
-| Project policy | `project-policy.yml` |
+| Project policy | `project-policy.yml` (the only supported filename, [ADR 0009](artifacts/adr/0009-project-policy-yml-is-the-sole-policy-filename.md)) |
 | Schemas | `schemas/` |
 | Templates for adopters | `templates/` |
 | Examples and violation fixtures | `examples/` |

@@ -68,7 +68,12 @@ const ARTIFACTS = [
  */
 const ANALYSIS_MARKERS = ["analyses", "analysis", "reports", "projections", "models"];
 
-const POLICY_MARKERS = ["project-policy.yml", "project-policy.yaml"];
+/**
+ * `project-policy.yml` is the only supported policy filename (ADR 0009). Default discovery reads
+ * nothing else, so a marker for any other spelling would route a project to `governed` on the
+ * strength of a file the framework never evaluates. That is the unsafe direction for this mode.
+ */
+const POLICY_MARKERS = ["project-policy.yml"];
 
 const has = (root, p) => existsSync(path.join(root, p));
 

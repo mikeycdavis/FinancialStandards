@@ -1,15 +1,14 @@
 /**
  * Where a policy is looked for, and what the help says about it.
  *
- * Pins three facts that were measured rather than stated, so that a later decision about the
- * framework's policy-filename vocabulary changes them deliberately and visibly:
+ * Pins the policy-filename decision of ADR 0009 (FE-01):
  *
  *   * default discovery is relative to the framework install directory, not the working directory;
  *   * the help text says so, rather than reading as a cwd-relative path;
- *   * an explicit --policy is filename-agnostic.
+ *   * the supported filename, project-policy.yml, is stated outside any heuristic, and no surface
+ *     describes another spelling as supported (ADR 0009).
  *
- * These tests do NOT assert which filenames are the framework's vocabulary. That is a decision this
- * file does not make.
+ * No test here asserts that a .yaml or any other spelling works.
  */
 
 import test from "node:test";
@@ -17,7 +16,7 @@ import assert from "node:assert/strict";
 import path from "node:path";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
-import { writeFile, mkdtemp, rm } from "node:fs/promises";
+import { writeFile, readFile, mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 
@@ -57,21 +56,32 @@ test("default discovery ignores a project-policy.yml in the working directory", 
   }
 });
 
-test("an explicit --policy is read whatever its filename is", async () => {
-  const dir = await mkdtemp(path.join(tmpdir(), "fs-name-"));
+test("an explicit --policy path to a project-policy.yml evaluates as the default does", async () => {
+  const dir = await mkdtemp(path.join(tmpdir(), "fs-explicit-"));
   try {
-    const body = await (await import("node:fs/promises")).readFile(path.join(ROOT, "project-policy.yml"), "utf8");
-    const results = [];
-    for (const name of ["project-policy.yml", "project-policy.yaml", "anything-at-all.txt"]) {
-      const file = path.join(dir, name);
-      await writeFile(file, body, "utf8");
-      results.push({ name, ...(await cliIn(ROOT, "status", "--policy", file, "--json")) });
-    }
-    for (const r of results) {
-      assert.equal(r.code, 0, `${r.name} exits ${r.code}`);
-      assert.equal(r.stdout, results[0].stdout, `${r.name} evaluates as .yml does`);
-    }
+    const file = path.join(dir, "project-policy.yml");
+    await writeFile(file, await readFile(path.join(ROOT, "project-policy.yml"), "utf8"), "utf8");
+    const explicit = await cliIn(ROOT, "status", "--policy", file, "--json");
+    const byDefault = await cliIn(ROOT, "status", "--json");
+    assert.equal(explicit.code, 0);
+    assert.equal(explicit.stdout, byDefault.stdout);
   } finally {
     await rm(dir, { recursive: true, force: true });
   }
+});
+
+test("neither help nor the architecture reference describes project-policy.yaml as supported", async () => {
+  const { stdout } = await cliIn(ROOT, "--help");
+  const docs = await readFile(path.join(ROOT, "docs/architecture.md"), "utf8");
+  for (const [name, text] of [["help", stdout], ["docs/architecture.md", docs]]) {
+    assert.doesNotMatch(text, /project-policy\.yaml/, `${name} mentions project-policy.yaml`);
+    assert.doesNotMatch(text, /any filename is accepted/, `${name} endorses any filename`);
+  }
+});
+
+test("INSTRUCTIONS.md and PROJECT.md state that project-policy.yml is the only supported name", async () => {
+  const instructions = await readFile(path.join(ROOT, "INSTRUCTIONS.md"), "utf8");
+  const project = await readFile(path.join(ROOT, "PROJECT.md"), "utf8");
+  assert.match(instructions, /`project-policy\.yml`, and that is the only supported spelling/);
+  assert.match(project, /`project-policy\.yml` \(the only supported filename/);
 });

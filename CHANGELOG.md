@@ -10,6 +10,14 @@ Development tooling only. **No standard, rule, catalog, policy, example or verdi
 `VERSION` is deliberately not bumped: nothing here alters what this framework requires of an analysis
 or what it concludes about one.
 
+### Changed
+
+- **`project-policy.yml` is the sole supported policy filename (FE-01, ADR 0009).** `init` no longer
+  treats `project-policy.yaml` as a policy marker: a project holding only that file is detected as having
+  no policy. The help text and `docs/architecture.md` state that the default policy path is relative to
+  the framework install directory, and `INSTRUCTIONS.md` and `PROJECT.md` state the filename outright.
+  No `.yaml` compatibility is added.
+
 ### Added
 
 - **Containerised local CI and verified pull-request submission.** `.\scripts\ci.ps1` runs all nine
