@@ -94,7 +94,7 @@ audit that failed the build would make evidence-gathering something to avoid run
 | Flag | Applies to | Effect |
 |---|---|---|
 | `--json` | all | Machine-readable output |
-| `--policy <path>` | `check`, `status` | Policy to evaluate against (default `./project-policy.yml`) |
+| `--policy <path>` | `check`, `status` | Policy to evaluate against. Default: `project-policy.yml` in the framework install directory (resolved from the script location, never the current directory). An explicit path is read as given: its filename is not checked, so `.yaml` and `.txt` evaluate exactly as `.yml` does (measured, not a stated vocabulary) |
 | `--doc <path>` | `explain` | Show how the rule applies to one document |
 | `--apply` | `init` | Execute the plan; without it nothing is written |
 | `--mode <mode>` | `init` | Override detection: `greenfield`, `governed`, `unaudited-analyses` |

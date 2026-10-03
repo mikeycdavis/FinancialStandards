@@ -559,7 +559,7 @@ standards — financial analysis and decision standards
 
 Options
   --json                machine-readable output
-  --policy <path>       policy to evaluate against (default: ./project-policy.yml)
+  --policy <path>       policy to evaluate against (default: project-policy.yml in the framework install directory, not the current directory; any filename is accepted)
   --doc <path>          with explain: show how the rule applies to one document
   --mode <mode>         with init: ${Object.values(MODES).join(" | ")}
   --force-overwrite=P   with init: approve replacing exactly path P
