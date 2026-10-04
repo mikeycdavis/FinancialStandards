@@ -30,4 +30,5 @@ never evaluated that file.
 
 A project that kept its policy as `project-policy.yaml` must rename it. Until it does, `init` will
 report no policy and, if analyses exist, route it to audit-before-recording. That is the honest
-outcome: the framework does not evaluate that file.
+outcome: the framework neither detects nor discovers that file. (An explicit `--policy <path>` still
+reads whatever path it is given, as stated below; that is not a supported spelling.)
