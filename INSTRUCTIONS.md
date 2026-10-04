@@ -76,6 +76,11 @@ A malformed policy is always `2`. Gate CI on `check`; `audit` never gates, by de
 
 ## 5. Writing the policy
 
+**The policy file is named `project-policy.yml`, and that is the only supported spelling.** It lives
+at the root of your project. `init` scaffolds it under that name and recognises no other; a file
+named `project-policy.yaml` is not a policy, is not detected, and is not evaluated. The decision and
+its reasoning are in [ADR 0009](artifacts/adr/0009-project-policy-yml-is-the-sole-policy-filename.md).
+
 Four mechanisms. They never substitute for one another.
 
 **`applicability`** — the rule has no subject here. Needs a reason and a `revisitWhen` naming the

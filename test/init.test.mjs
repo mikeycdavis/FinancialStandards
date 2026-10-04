@@ -164,6 +164,21 @@ test("a governed project is told to reconcile its policy, not to replace it", as
   assert.match(planned.nextStep, /Do not replace the existing policy/);
 });
 
+test("a project-policy.yaml is not a policy: only project-policy.yml is supported", async () => {
+  const planned = await scratch(
+    (dir) => plan(dir),
+    async (dir) => {
+      await mkdir(path.join(dir, "analyses"));
+      await writeFile(path.join(dir, "analyses", "retirement.md"), "# A projection\n", "utf8");
+      await writeFile(path.join(dir, "project-policy.yaml"), 'standardVersion: "0.1.0"\n', "utf8");
+    },
+  );
+  assert.equal(planned.mode, MODES.UNAUDITED_ANALYSES);
+  assert.equal(planned.auditRequired, true);
+  assert.ok(!planned.modeEvidence.some((e) => /policy present/.test(e)), "the .yaml file is not evidence of a policy");
+  assert.ok(planned.created.includes("project-policy.yml"));
+});
+
 test("the rendering of an unaudited project says unevaluated is a distinct state from compliant", async () => {
   const planned = await scratch(
     (dir) => plan(dir),

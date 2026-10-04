@@ -94,7 +94,7 @@ audit that failed the build would make evidence-gathering something to avoid run
 | Flag | Applies to | Effect |
 |---|---|---|
 | `--json` | all | Machine-readable output |
-| `--policy <path>` | `check`, `status` | Policy to evaluate against (default `./project-policy.yml`) |
+| `--policy <path>` | `check`, `status` | Policy to evaluate against. Default: `project-policy.yml` in the framework install directory (resolved from the script location, never the current directory). The only supported policy filename is `project-policy.yml` ([ADR 0009](../artifacts/adr/0009-project-policy-yml-is-the-sole-policy-filename.md)); an explicit path is read as given and its filename is not validated |
 | `--doc <path>` | `explain` | Show how the rule applies to one document |
 | `--apply` | `init` | Execute the plan; without it nothing is written |
 | `--mode <mode>` | `init` | Override detection: `greenfield`, `governed`, `unaudited-analyses` |
