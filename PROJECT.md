@@ -106,7 +106,7 @@ Project-specific constraints, not a restatement of the standards:
 - **Last evaluated:** 2026-08-09. The full chain ran green: inventory, fidelity, links, policy, math,
   diagrams, test (245), audit (0 findings), check (`COMPLIANT`).
 - **What exists:** 29 standards, 96 rules across 18 categories, 5 commands, 58 detectors, 21 finance
-  functions, 3 compliant examples, 9 violation fixtures, 313 tests, zero dependencies.
+  functions, 3 compliant examples, 9 violation fixtures, 317 tests, zero dependencies.
 - **Known risks, unchanged and disclosed rather than closed:**
   - The rule catalog covers fewer requirements than the standards state in prose. Disclosed per
     standard in its `## Implementation` section and in aggregate as `frameworkCoverage` (53 of 96
