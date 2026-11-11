@@ -7,7 +7,7 @@
 
 ## What it is for
 
-Twenty-nine numbered standards state what a financial analysis must do. Ninety-five catalogued rules
+Twenty-nine numbered standards state what a financial analysis must do. Ninety-six catalogued rules
 make a subset of that machine-checkable. A command line evaluates a document against a project's
 policy and returns one of five verdicts. A suite of guards protects the standards themselves from
 being edited into compliance.
@@ -330,7 +330,7 @@ perfectly while the document's conclusion is false.
 The full path from a document to a verdict, naming real files:
 
 1. `standards check analyses/retirement.md` → `main()` in `scripts/standards.mjs` parses argv.
-2. `loadCatalog("rules/")` reads all nine rule files; a malformed entry throws rather than loading
+2. `loadCatalog("rules/")` reads all twelve rule files; a malformed entry throws rather than loading
    partially, which would silently shrink the denominator every score is computed over.
 3. `assertBindings(catalog, DETECTED_RULES)` — a detector reporting an unknown id fails **here**,
    before any document is read, because that is a defect in this repository rather than a finding
