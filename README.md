@@ -84,7 +84,7 @@ compliance improvement.
 | [22](standards/22-risk-tolerance.md) | Risk Tolerance | 2 | disclosure |
 | [23](standards/23-opportunity-cost.md) | Opportunity Cost | 2 | disclosure |
 | [24](standards/24-behavioral-biases.md) | Behavioral Biases | 3 | bias |
-| [25](standards/25-prohibitions.md) | Prohibitions | 23 | prohibited |
+| [25](standards/25-prohibitions.md) | Prohibitions | 24 | prohibited, review |
 | [26](standards/26-evidence-and-provenance.md) | Evidence and Provenance | 2 | data |
 | [27](standards/27-external-data-and-personal-context.md) | External Data and Personal Context | 2 | data |
 | [28](standards/28-computational-verification.md) | Computational Verification | 2 | math |
@@ -108,7 +108,7 @@ npm run fidelity    # every verbatim quotation still matches its source
 npm run links       # no cross-reference points at nothing
 npm run policy      # this repository's own policy is well-formed
 npm run math        # every stated figure recomputes
-npm test            # 286 tests
+npm test            # 313 tests
 npm run diagrams    # the diagrams match their Mermaid source
 npm run audit       # evidence over the published analyses
 npm run check       # this repository's verdict on itself

@@ -155,7 +155,7 @@ Stated up front rather than discovered.
 |---|---|
 | Only Markdown analyses can be evaluated | A spreadsheet, notebook, or slide deck is `NOT_EVALUATED`, not a pass |
 | 58 of 96 rules are lexical | They establish presence, never correctness. A nominal figure labelled "real" passes every automated check |
-| 33 rules are `manual-review` with `assurance: none` | Including all three fabrication prohibitions. They stay `NOT_EVALUATED` until a person attests |
+| 34 rules are `manual-review` with `assurance: none` | Including all three fabrication prohibitions. They stay `NOT_EVALUATED` until a person attests |
 | No scan detects fabricated data | Establishing a figure was not invented needs the true value — the thing the document was supposed to supply |
 | The guarantee scanner is a word list with a negation window | A guarantee implied without the vocabulary ("you will have £1m at 65") passes |
 | Detectors check presence of sections and phrases | A document can satisfy every check while being wrong throughout |
