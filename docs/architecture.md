@@ -7,13 +7,13 @@
 
 ## What it is for
 
-Twenty-nine numbered standards state what a financial analysis must do. Ninety-five catalogued rules
+Twenty-nine numbered standards state what a financial analysis must do. Ninety-six catalogued rules
 make a subset of that machine-checkable. A command line evaluates a document against a project's
 policy and returns one of five verdicts. A suite of guards protects the standards themselves from
 being edited into compliance.
 
 The system is deliberately honest about its own reach. Of the 96 rules, **3 claim full assurance**,
-58 are lexical checks that establish presence but never correctness, and 33 can only ever be
+58 are lexical checks that establish presence but never correctness, and 34 can only ever be
 established by a person. That distribution is published as `frameworkCoverage` beside every verdict —
 never folded into it, because a coverage improvement must not be able to read as a compliance
 improvement.
@@ -24,7 +24,7 @@ improvement.
 |---|---|
 | Runtime | Node.js ≥ 18, ESM (`"type": "module"`) |
 | Dependencies | **None.** Zero third-party packages, enforced structurally — CI has no install step, so adding one breaks the build |
-| Tests | `node:test` + `node:assert/strict` — 286 tests, no framework |
+| Tests | `node:test` + `node:assert/strict` — 313 tests, no framework |
 | Config parsing | Hand-written strict YAML subset (`scripts/yaml.mjs`) and JSON Schema evaluator (`scripts/jsonschema.mjs`) |
 | Schema | JSON Schema draft 2020-12 (`schemas/project-policy.schema.json`) |
 | Diagrams | Mermaid `.mmd` canonical; embedded fences and any `.svg` are derived |
@@ -120,9 +120,9 @@ The series maps onto the source: Standard 1 is the seven-mode taxonomy, 2–24 a
 bullet in source order, 25 reproduces all 23 prohibitions verbatim, 26–28 are the cross-cutting
 deliverables, and 29 is the integrity invariant.
 
-### `rules/` — 95 machine-readable rules
+### `rules/` — 96 machine-readable rules
 
-Nine files, seventeen categories. Rule ids match `^[a-z][a-z0-9]*(\.[a-z0-9]+(-[a-z0-9]+)*)+$` — the
+Twelve files, eighteen categories. Rule ids match `^[a-z][a-z0-9]*(\.[a-z0-9]+(-[a-z0-9]+)*)+$` — the
 category segment carries no hyphens, and the pattern is enforced both by `scripts/catalog.mjs` and by
 `propertyNames` in the policy schema, so a second spelling of one rule cannot be introduced by
 convention drift.
@@ -140,6 +140,7 @@ convention drift.
 | `rules/bias.json` | `bias` | 3 |
 | `rules/modes.json` | `modes` | 3 |
 | `rules/integrity.json` | `integrity` | 3 |
+| `rules/review.json` | `review` | 1 |
 
 Every rule carries `id`, `title`, `standard` (a backlink), `category`, `level`, `severity`,
 `validationType`, `assurance`, `nonExemptible`, `introducedIn`, `description`, `rationale`,
@@ -159,13 +160,13 @@ section. This is why the catalog is 96 rules rather than several hundred.
 |---|---|---|
 | `level: required` | 68 | Must be done |
 | `level: forbidden` | 24 | Must never be done |
-| `level: recommended` | 3 | Should normally be done |
+| `level: recommended` | 4 | Should normally be done |
 | `validationType: document` | 58 | Lexical — establishes presence, never correctness |
-| `validationType: manual-review` | 33 | Only a person can establish it |
+| `validationType: manual-review` | 34 | Only a person can establish it |
 | `validationType: structural` | 3 | Exact inspection of the repository |
 | `validationType: computational` | 1 | Recomputed arithmetic |
 | `assurance: partial` | 59 | A clean result means nothing was *obviously* wrong |
-| `assurance: none` | 33 | An automated run establishes nothing |
+| `assurance: none` | 34 | An automated run establishes nothing |
 | `assurance: full` | 3 | Exact |
 
 The uncomfortable consequence is stated rather than softened: **the three fabrication prohibitions —
@@ -329,7 +330,7 @@ perfectly while the document's conclusion is false.
 The full path from a document to a verdict, naming real files:
 
 1. `standards check analyses/retirement.md` → `main()` in `scripts/standards.mjs` parses argv.
-2. `loadCatalog("rules/")` reads all nine rule files; a malformed entry throws rather than loading
+2. `loadCatalog("rules/")` reads all twelve rule files; a malformed entry throws rather than loading
    partially, which would silently shrink the denominator every score is computed over.
 3. `assertBindings(catalog, DETECTED_RULES)` — a detector reporting an unknown id fails **here**,
    before any document is read, because that is a defect in this repository rather than a finding
@@ -571,12 +572,12 @@ artifacts/
 docs/                               this file, and the canonical .mmd sources
 examples/compliant/                 3 analyses that audit clean
 examples/violations/                9 known-positive fixtures
-rules/                             10 files, 96 rules
+rules/                             12 files, 96 rules
 schemas/                            project-policy.schema.json
 scripts/                            18 modules, zero dependencies
 standards/                          29 normative documents
 templates/                          what `standards init` scaffolds
-test/                              11 suites, 286 tests
+test/                              17 suites, 313 tests
 project-policy.yml                  this repository's own policy
 ```
 
@@ -588,7 +589,7 @@ Stated here rather than discovered:
   outside what this can assess. The honest report for one is `NOT_EVALUATED`, not a pass.
 - **58 of 96 rules are lexical.** They establish that something is present. A figure labelled "real"
   that is actually nominal passes every automated check here.
-- **33 rules can only be established by a person**, including the three fabrication prohibitions.
+- **34 rules can only be established by a person**, including the three fabrication prohibitions.
   Until someone attests them they report `NOT_EVALUATED`.
 - **No `.svg` is rendered.** The `.mmd` is canonical and the embedded fences are checked against it;
   rendering would need a toolchain the zero-dependency rule excludes.

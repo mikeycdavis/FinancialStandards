@@ -105,14 +105,14 @@ Project-specific constraints, not a restatement of the standards:
 - **Current status:** `COMPLETE` — 1.0.0 released. All six milestone gates passed.
 - **Last evaluated:** 2026-08-09. The full chain ran green: inventory, fidelity, links, policy, math,
   diagrams, test (245), audit (0 findings), check (`COMPLIANT`).
-- **What exists:** 29 standards, 95 rules across 17 categories, 5 commands, 58 detectors, 21 finance
-  functions, 3 compliant examples, 9 violation fixtures, 245 tests, zero dependencies.
+- **What exists:** 29 standards, 96 rules across 18 categories, 5 commands, 58 detectors, 21 finance
+  functions, 3 compliant examples, 9 violation fixtures, 313 tests, zero dependencies.
 - **Known risks, unchanged and disclosed rather than closed:**
   - The rule catalog covers fewer requirements than the standards state in prose. Disclosed per
-    standard in its `## Implementation` section and in aggregate as `frameworkCoverage` (53 of 95
+    standard in its `## Implementation` section and in aggregate as `frameworkCoverage` (53 of 96
     rules evaluated, 10 of 29 standards fully machine-represented). Nothing counts the prose-only
     remainder and nothing notices it going stale.
-  - 33 rules can only be established by a person and report `NOT_EVALUATED` until one attests —
+  - 34 rules can only be established by a person and report `NOT_EVALUATED` until one attests —
     including all three fabrication prohibitions, the most consequential and least checkable rules in
     the domain.
   - Deleting the guards and their tests together cannot be prevented from inside this repository.
