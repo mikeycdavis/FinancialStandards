@@ -1,6 +1,6 @@
 {
   "name": "financial-standards",
-  "version": "1.0.0",
+  "version": "1.1.1",
   "description": "Numbered financial analysis and decision standards, and the commands that check an analysis against them.",
   "type": "module",
   "bin": {
