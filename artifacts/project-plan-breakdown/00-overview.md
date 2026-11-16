@@ -29,24 +29,23 @@ being weakened.
 | | |
 | --- | --- |
 | Branch | `main` |
-| Remote | none configured |
-| Version | `0.1.0` — in construction |
-| Milestone | 0 of 5 |
-| Standards written | 0 of 29 |
-| Rules catalogued | 0 |
-| Tooling | none yet — Milestone 1 |
+| Remote | `origin` — github.com/mikeycdavis/FinancialStandards |
+| Version | see `VERSION`, the single source ([ADR 0010](../adr/0010-version-source.md)) |
+| Milestone | 5 of 5 — every milestone below is `COMPLETE` |
+| Standards written | 29 of 29 |
+| Rules catalogued and tooling | measured counts live in [`PROJECT.md`](../../PROJECT.md), not repeated here |
 | Platform | Windows 11; PowerShell primary, POSIX `sh` also available |
 
 ## Sections
 
 | File | Covers | Status |
 | --- | --- | --- |
-| [`01-provenance-and-identity.md`](01-provenance-and-identity.md) | Source capture, repository identity, this plan | IN_PROGRESS |
-| [`02-tooling-spine.md`](02-tooling-spine.md) | Catalog, policy engine, schema, guards, ADRs, CI | NOT_STARTED |
-| [`03-pattern-proof.md`](03-pattern-proof.md) | `finance.mjs`, `calc.mjs`, Standard 11 as the template | NOT_STARTED |
-| [`04-standards-series.md`](04-standards-series.md) | The 29 standards and 8 rule catalogs | NOT_STARTED |
-| [`05-executable-layer.md`](05-executable-layer.md) | The CLI, examples, and the test suite | NOT_STARTED |
-| [`06-freeze.md`](06-freeze.md) | Dogfooding, documentation, `1.0.0` | NOT_STARTED |
+| [`01-provenance-and-identity.md`](01-provenance-and-identity.md) | Source capture, repository identity, this plan | COMPLETE |
+| [`02-tooling-spine.md`](02-tooling-spine.md) | Catalog, policy engine, schema, guards, ADRs, CI | COMPLETE |
+| [`03-pattern-proof.md`](03-pattern-proof.md) | `finance.mjs`, `calc.mjs`, Standard 11 as the template | COMPLETE |
+| [`04-standards-series.md`](04-standards-series.md) | The 29 standards and 8 rule catalogs | COMPLETE |
+| [`05-executable-layer.md`](05-executable-layer.md) | The CLI, examples, and the test suite | COMPLETE |
+| [`06-freeze.md`](06-freeze.md) | Dogfooding, documentation, `1.0.0` | COMPLETE |
 
 ## Decisions on record
 

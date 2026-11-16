@@ -10,7 +10,7 @@ cross-reference, and a genuine judgement component no checker can settle.
 
 ### Build the financial mathematics library
 
-- **Status:** NOT_STARTED
+- **Status:** COMPLETE
 - **Purpose:** Every worked number in this repository must be recomputable. A projection nobody can
   re-derive is an assertion, and this system exists to stop treating assertions as evidence.
 - **Deliverables:** `scripts/finance.mjs` — pure functions covering growth and compounding, real
@@ -29,7 +29,7 @@ cross-reference, and a genuine judgement component no checker can settle.
 
 ### Build the calc-block checker
 
-- **Status:** NOT_STARTED
+- **Status:** COMPLETE
 - **Purpose:** The link between a number written in prose and the function that produces it must be
   mechanical. Left to review, it drifts the first time a figure is edited.
 - **Deliverables:** `scripts/calc.mjs`; `npm run math`; [ADR 0003](../adr/0003-calc-block-format.md).
@@ -43,7 +43,7 @@ cross-reference, and a genuine judgement component no checker can settle.
 
 ### Write Standard 11 as the template
 
-- **Status:** NOT_STARTED
+- **Status:** COMPLETE
 - **Purpose:** Establish the house format concretely, so the remaining twenty-eight are transcription
   of a known shape rather than twenty-eight fresh judgements about structure.
 - **Deliverables:** `standards/11-nominal-vs-real-returns.md`; the `rules/math.json` slice;
@@ -58,7 +58,7 @@ cross-reference, and a genuine judgement component no checker can settle.
 
 ### Review the pattern before scaling it
 
-- **Status:** NOT_STARTED
+- **Status:** COMPLETE
 - **Purpose:** This is the milestone gate. Twenty-eight documents written against a flawed template
   is twenty-eight documents to revise.
 - **Deliverables:** none — a decision, recorded here as the item's status.

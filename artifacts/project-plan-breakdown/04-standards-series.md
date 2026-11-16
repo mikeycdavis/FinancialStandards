@@ -35,7 +35,7 @@ catalog so the coverage number looks better.
 
 ### Batch A — the frame: modes, prohibitions, integrity
 
-- **Status:** NOT_STARTED
+- **Status:** COMPLETE
 - **Purpose:** These three set the vocabulary every other standard uses. Standard 1 defines what kind
   of communication is being made; Standard 25 defines what may never be done in any of them;
   Standard 29 defines what may never be done to the system itself.
@@ -56,7 +56,7 @@ catalog so the coverage number looks better.
 
 ### Batch B — the inputs: objectives through compounding
 
-- **Status:** NOT_STARTED
+- **Status:** COMPLETE
 - **Purpose:** The standards governing what an analysis must know before it can conclude anything —
   objectives, horizon, liquidity, reserves, debt, rates, taxes, fees, inflation, compounding.
 - **Deliverables:** `standards/02-objectives.md` through `standards/10-inflation.md` and
@@ -72,7 +72,7 @@ catalog so the coverage number looks better.
 
 ### Batch C — the risk standards
 
-- **Status:** NOT_STARTED
+- **Status:** COMPLETE
 - **Purpose:** Diversification, concentration, volatility, downside risk, and sequence risk — the
   standards about what can go wrong and whether the analysis said so.
 - **Deliverables:** `standards/13-diversification.md` through `standards/17-sequence-risk.md`;
@@ -88,7 +88,7 @@ catalog so the coverage number looks better.
 
 ### Batch D — assumptions, scenarios, uncertainty, and the human context
 
-- **Status:** NOT_STARTED
+- **Status:** COMPLETE
 - **Purpose:** The standards that govern how conclusions are qualified: what was assumed, what
   scenarios were run, how uncertainty was expressed, how fresh the data was, whose risk tolerance
   applies, what was given up, and which biases the analysis is exposed to.
@@ -105,7 +105,7 @@ catalog so the coverage number looks better.
 
 ### Batch E — evidence, external context, and computational verification
 
-- **Status:** NOT_STARTED
+- **Status:** COMPLETE
 - **Purpose:** The three cross-cutting deliverables the domain spec states outside its topic list:
   what evidence is required, what must be identified as needing current external data or personal
   financial context, and what mathematics is verified automatically.
@@ -123,7 +123,7 @@ catalog so the coverage number looks better.
 
 ### Publish the standards index
 
-- **Status:** NOT_STARTED
+- **Status:** COMPLETE
 - **Purpose:** A twenty-nine-document series with no index is navigable only by directory listing.
 - **Deliverables:** the index table in `README.md`.
 - **Acceptance Criteria:** One row per standard, each linking to its file and naming the rule
