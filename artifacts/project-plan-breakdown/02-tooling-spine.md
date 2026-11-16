@@ -179,10 +179,10 @@ complete cannot tell you what was silently skipped while you wrote it.
 
 ### Port the init plan/apply tests
 
-- **Status:** DEFERRED
+- **Status:** COMPLETE
 - **Purpose:** `init.mjs`'s dry-run and apply paths derive from one computed plan object, which is
   the source directive's explicit requirement. That contract deserves a test.
-- **Deferred because** `plan()` reads `templates/`, and the templates cannot be written honestly
+- **Was deferred because** (since delivered, once `templates/` existed) `plan()` reads `templates/`, and the templates cannot be written honestly
   until the standards they scaffold exist — an `analysis-template.md` naming sections that no
   standard defines would be an invention. Deferring is recorded rather than silently skipped.
 - **Deliverables:** `test/init.test.mjs`.
