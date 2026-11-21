@@ -21,6 +21,7 @@ import { promisify } from "node:util";
 import { readFile, writeFile, mkdtemp, mkdir, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
+import { detectMode, MODES } from "../scripts/init.mjs";
 
 const run = promisify(execFile);
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -217,5 +218,47 @@ test("fidelity · the subject is a document selection, and is not the policy's l
     assert.ok(report.denominator.scored > 0, "the single document was evaluated");
   } finally {
     await rm(dir, { recursive: true, force: true });
+  }
+});
+
+/**
+ * ADOPTION. The enforcer decides whether a repository has adopted this pack BEFORE it runs the pack,
+ * from the filenames declared here. The declaration is therefore a claim about `init`'s own detection,
+ * and a claim nothing checks is one that drifts: either it admits a file this pack would not treat as a
+ * policy (the enforcer reports "adopted" for a repository this pack calls unaudited), or it omits one
+ * this pack does (a governed repository reported as delinquent, which is the defect that forced the
+ * declaration). Measured by running the real detection, not by comparing to a copy of its constant.
+ */
+const SPELLINGS = ["project-policy.yml", "project-policy.yaml", "project-policy.json", "policy.yml"];
+
+async function governedBy(filename) {
+  const dir = await mkdtemp(path.join(tmpdir(), "fs-adoption-"));
+  try {
+    await mkdir(path.join(dir, "analyses"), { recursive: true });
+    await writeFile(path.join(dir, "analyses", "q3.md"), "# Q3 forecast\n\nProjected growth of 12%.\n");
+    await writeFile(path.join(dir, filename), "project: Probe\n");
+    return detectMode(dir).mode === MODES.GOVERNED;
+  } finally {
+    await rm(dir, { recursive: true, force: true });
+  }
+}
+
+test("adoption · the declaration is schemaVersion 1.2.0, the version that admits `adoption`", () => {
+  assert.equal(declaration.schemaVersion, "1.2.0");
+  assert.deepEqual(Object.keys(declaration.adoption), ["policyFiles"]);
+  assert.ok(Array.isArray(declaration.adoption.policyFiles) && declaration.adoption.policyFiles.length > 0);
+});
+
+test("adoption · every declared filename is one `init` treats as a governing policy", async () => {
+  for (const file of declaration.adoption.policyFiles) {
+    assert.equal(await governedBy(file), true, `${file} is declared as adoption but init does not detect it`);
+  }
+});
+
+test("adoption · no other spelling is detected by `init`, so nothing detected is left undeclared", async () => {
+  for (const file of SPELLINGS) {
+    const declared = declaration.adoption.policyFiles.includes(file);
+    assert.equal(await governedBy(file), declared,
+      `${file}: init ${declared ? "does not detect" : "detects"} it but the declaration ${declared ? "admits" : "omits"} it`);
   }
 });

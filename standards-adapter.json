@@ -1,7 +1,10 @@
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "standard": {
     "id": "financial"
+  },
+  "adoption": {
+    "policyFiles": ["project-policy.yml"]
   },
   "evaluation": {
     "entrypoint": "scripts/standards.mjs",
