@@ -4,11 +4,24 @@ All notable changes to this framework. A new `required` or `forbidden` rule is M
 turn a compliant project non-compliant. A new `recommended` rule is MINOR. A published rule id stays
 resolvable forever through `aliases` — ids are never reused or respelled.
 
-## Unreleased
+## 1.2.0 — 2026-11-21
 
-Development tooling only. **No standard, rule, catalog, policy, example or verdict changed**, and
-`VERSION` is deliberately not bumped: nothing here alters what this framework requires of an analysis
-or what it concludes about one.
+The adapter declaration now states which policy filename means adoption of this pack, and the
+development tooling accumulated since 1.1.1 is released with it. **No standard, rule, catalog, policy,
+example or verdict changed**: nothing here alters what this framework requires of an analysis or what
+it concludes about one. The version moves to 1.2.0 because the adapter contract this pack publishes
+gained a declared capability (MINOR). `package.json` moves with `VERSION` (ADR 0010).
+
+### Adapter
+
+- **`standards-adapter.json` is schemaVersion 1.2.0 and declares `adoption.policyFiles`:
+  `["project-policy.yml"]`.** StandardsEnforcer decides whether a repository has adopted a pack
+  before it ever runs the pack, so the pack has to say which filename counts (StandardsEnforcer FE-21,
+  [#78](https://github.com/mikeycdavis/StandardsEnforcer/issues/78)). The set is exactly the one
+  filename `init` detects, per ADR 0009; `project-policy.yaml` is not admitted. Because that
+  filename was already the enforcer's legacy default, this closes a contract gap and does not change
+  any repository's classification. `test/adapter-fidelity.test.mjs` now asserts that the declared set
+  and `init`'s detection cannot drift apart.
 
 ### Changed
 
